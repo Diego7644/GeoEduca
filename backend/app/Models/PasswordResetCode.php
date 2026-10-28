@@ -12,6 +12,7 @@ class PasswordResetCode extends Model
         'code_hash',
         'expires_at',
         'used_at',
+        'attempts',
     ];
 
     protected $hidden = [
@@ -23,6 +24,7 @@ class PasswordResetCode extends Model
         return [
             'expires_at' => 'datetime',
             'used_at' => 'datetime',
+            'attempts' => 'integer',
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserRole;
 use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Auth\AuthenticationException;
@@ -21,6 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(SecurityHeaders::class);
         $middleware->api(prepend: [
             ForceJsonResponse::class,
+        ]);
+        $middleware->alias([
+            'role' => EnsureUserRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

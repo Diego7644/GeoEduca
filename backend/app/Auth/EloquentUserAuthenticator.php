@@ -31,41 +31,6 @@ class EloquentUserAuthenticator implements UserAuthenticator
         return $this->issue($user);
     }
 
-    public function authenticateCredential(array $credentials): array
-    {
-        $dni = preg_replace('/\D/', '', (string) ($credentials['credential'] ?? '')) ?? '';
-        $role = (string) ($credentials['role'] ?? '');
-        $user = $this->findAccount($dni, $role);
-
-        if ($user === null) {
-            $this->reject('El carnet no corresponde a una cuenta de este perfil.', [], 401);
-        }
-
-        return $this->issue($user);
-    }
-
-    public function detectCredential(array $payload): array
-    {
-        $role = (string) ($payload['role'] ?? '');
-        $user = User::query()->where('role', $role)->orderBy('id')->first();
-
-        if ($user === null) {
-            throw new HttpResponseException(response()->json([
-                'message' => 'No hay una cuenta para ese perfil.',
-            ], 404));
-        }
-
-        return [
-            'method' => $payload['method'],
-            'credential' => $user->dni,
-            'preview' => [
-                'name' => $user->name,
-                'roleLabel' => $user->role_label,
-                'identifier' => $user->dni,
-            ],
-        ];
-    }
-
     public static function payload(User $user): array
     {
         return [

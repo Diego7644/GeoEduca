@@ -24,5 +24,12 @@ class AppServiceProvider extends ServiceProvider
 
             return Limit::perMinute(5)->by($dni.'|'.$request->ip());
         });
+
+        RateLimiter::for('recovery', function (Request $request) {
+            $dni = $request->input('identifier', '');
+            $dni = is_scalar($dni) ? preg_replace('/\D/', '', (string) $dni) : 'invalid';
+
+            return Limit::perMinute(10)->by($dni.'|'.$request->ip());
+        });
     }
 }

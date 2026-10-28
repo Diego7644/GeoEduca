@@ -38,43 +38,6 @@ class MockUserAuthenticator implements UserAuthenticator
         ], 401));
     }
 
-    public function authenticateCredential(array $credentials): array
-    {
-        $dni = preg_replace('/\D/', '', $credentials['credential'] ?? '') ?? '';
-        $role = $credentials['role'] ?? '';
-
-        foreach (DemoAccounts::all() as $account) {
-            if ($account['dni'] === $dni && $account['role'] === $role) {
-                return $this->issue($account);
-            }
-        }
-
-        throw new HttpResponseException(response()->json([
-            'message' => 'El carnet no corresponde a una cuenta de este perfil.',
-        ], 401));
-    }
-
-    public function detectCredential(array $payload): array
-    {
-        foreach (DemoAccounts::all() as $account) {
-            if ($account['role'] === ($payload['role'] ?? '')) {
-                return [
-                    'method' => $payload['method'],
-                    'credential' => $account['dni'],
-                    'preview' => [
-                        'name' => $account['name'],
-                        'roleLabel' => $account['roleLabel'],
-                        'identifier' => $account['dni'],
-                    ],
-                ];
-            }
-        }
-
-        throw new HttpResponseException(response()->json([
-            'message' => 'No hay un carnet de demostración para ese perfil.',
-        ], 404));
-    }
-
     private function issue(array $account): array
     {
         $token = 'mock-'.bin2hex(random_bytes(16));
