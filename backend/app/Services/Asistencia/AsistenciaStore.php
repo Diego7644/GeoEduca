@@ -3,6 +3,7 @@
 namespace App\Services\Asistencia;
 
 use App\Auth\DemoAccounts;
+use App\Models\User;
 
 /**
  * Estado de demostración (archivo JSON, sin BD).
@@ -36,6 +37,49 @@ class AsistenciaStore
         'tardy_excuse' => 'Tardanza excepcional',
         'absence' => 'Inasistencia programada',
     ];
+
+    /**
+     * Traduce un usuario persistido al actor del prototipo JSON (ids 1, 2, 3 y catálogo).
+     * Las sesiones nuevas no se guardan en el JSON: el token vive en Sanctum.
+     *
+     * @return array{id: int, name: string, roleLabel: ?string, identifier: string, role: string}
+     */
+    public function actorForUser(User $user): array
+    {
+        foreach (DemoAccounts::all() as $account) {
+            if ($account['dni'] === $user->dni && $account['role'] === $user->role) {
+                return [
+                    'id' => $account['id'],
+                    'name' => $account['name'],
+                    'roleLabel' => $account['roleLabel'],
+                    'identifier' => $account['dni'],
+                    'role' => $account['role'],
+                ];
+            }
+        }
+
+        if ($user->role === User::ROLE_STUDENT) {
+            foreach ($this->catalog() as $student) {
+                if ($student['dni'] === $user->dni) {
+                    return [
+                        'id' => $student['id'],
+                        'name' => $user->name,
+                        'roleLabel' => $user->role_label,
+                        'identifier' => $user->dni,
+                        'role' => $user->role,
+                    ];
+                }
+            }
+        }
+
+        return [
+            'id' => (int) $user->id,
+            'name' => $user->name,
+            'roleLabel' => $user->role_label,
+            'identifier' => $user->dni,
+            'role' => $user->role,
+        ];
+    }
 
     public function userForToken(string $token): ?array
     {

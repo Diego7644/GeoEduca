@@ -17,9 +17,10 @@ class LoginRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('identifier')) {
+        $identifier = $this->input('identifier');
+        if (is_string($identifier) || is_numeric($identifier)) {
             $this->merge([
-                'identifier' => preg_replace('/\D/', '', (string) $this->input('identifier')),
+                'identifier' => preg_replace('/\D/', '', (string) $identifier),
             ]);
         }
     }
@@ -27,9 +28,9 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identifier' => ['required', 'digits:8'],
-            'password' => ['required', 'string', 'min:8', 'max:128'],
-            'role' => ['required', 'in:student,parent,staff'],
+            'identifier' => ['required', 'string', 'bail', 'digits:8'],
+            'password' => ['required', 'string', 'bail', 'min:8', 'max:128'],
+            'role' => ['required', 'string', 'bail', 'in:student,parent,staff'],
         ];
     }
 

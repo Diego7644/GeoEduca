@@ -13,9 +13,10 @@ class AccesoRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('credential')) {
+        $credential = $this->input('credential');
+        if (is_string($credential) || is_numeric($credential)) {
             $this->merge([
-                'credential' => preg_replace('/\D/', '', (string) $this->input('credential')),
+                'credential' => preg_replace('/\D/', '', (string) $credential),
             ]);
         }
     }
@@ -25,7 +26,7 @@ class AccesoRequest extends FormRequest
         return [
             'method' => ['required', 'in:nfc,qr'],
             'role' => ['required', 'in:student,parent,staff'],
-            'credential' => ['required', 'digits:8'],
+            'credential' => ['required', 'string', 'bail', 'digits:8'],
         ];
     }
 
