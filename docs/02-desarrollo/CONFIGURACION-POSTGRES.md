@@ -1,6 +1,6 @@
 # Configuración local de PostgreSQL (F1.1)
 
-El prototipo **arranca sin base de datos**. Login y asistencia siguen en JSON. PostgreSQL hace falta para crear el esquema, sembrar datos de desarrollo y, a partir de F1.2, autenticar contra `users`.
+PostgreSQL es la fuente de login, asistencia, justificaciones y notificaciones. El JSON original se conserva como respaldo y no alimenta los paneles.
 
 ## Requisitos
 

@@ -2,7 +2,7 @@
 
 Prototipo web de control de asistencia escolar. El repositorio principal del proyecto es [Diego7644/GeoEduca](https://github.com/Diego7644/GeoEduca).
 
-Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistema de asistencia real**: el historial, el QR, el GPS y las notificaciones no ejecutan un proceso productivo. El login sí es real (Sanctum contra `users`). La asistencia sigue en JSON. El detalle está en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
+La asistencia, las justificaciones, las notificaciones internas y el QR se guardan en PostgreSQL. El login es Sanctum. El detalle y la matriz de cumplimiento están en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
 
 ## Tecnologías
 
@@ -10,8 +10,8 @@ Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistem
 |---|---|
 | Backend | PHP 8.2, Laravel 11, Laravel Sanctum |
 | Frontend | React 18, Vite 5, React Router, Tailwind CSS, Axios |
-| Pruebas | PHPUnit 11, Mockery |
-| Persistencia actual | `users`, tokens y recuperación en PostgreSQL. Asistencia aún en JSON local (`storage/app/geoeduca-state.json`) |
+| Pruebas | PHPUnit 11, Vitest 2 |
+| Persistencia | PostgreSQL. El JSON de prototipo se conserva como respaldo y no es la fuente de la asistencia |
 
 ## Estructura
 
@@ -29,16 +29,15 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 
 | Capacidad | Qué hay hoy |
 |---|---|
-| Paneles por rol (estudiante, padre/tutor, auxiliar) | La interfaz carga datos de la API |
-| Autenticación | F1.2: `users` + Sanctum (hash, caducidad, revocación). F1.3: el carnet no inicia sesión; recuperación hasheada |
-| Autorización | `auth:sanctum` + middleware `role:` sobre el usuario del token |
-| Asistencia | El historial se genera por fórmula; no hay registros reales |
-| QR | Patrón visual de 8×8; no es un código QR escaneable ni se valida en el servidor |
-| GPS | El navegador calcula si está en el perímetro; la coordenada no se envía |
-| Notificaciones | Lista dentro de la aplicación; no hay correo, SMS ni push |
-| Base de datos | Login, tokens y recuperación en PostgreSQL. Asistencia aún en JSON |
+| Roles | Estudiante, apoderado, auxiliar, docente y administración. El personal se distingue por `staff_members.kind`, no por el id numérico |
+| Autenticación | Sanctum. El carnet NFC no inicia sesión |
+| Asistencia | Entrada, salida, tardanza y cierre de jornada en PostgreSQL. La ausencia no se marca antes de la hora de salida |
+| QR | Token de un solo uso, 60 segundos, dibujado como QR. Lo valida solo el auxiliar |
+| Notificaciones | Campana interna por destinatario. Sin correo, SMS ni WhatsApp |
+| Justificaciones | El apoderado envía; auxiliar, docente de tutoría o administración revisan |
+| GPS y NFC | El GPS no marca asistencia. No hay molinetes ni lector NFC |
 
-Las cuentas de demostración viven en el código del prototipo. No se documentan aquí. Hay que rotarlas antes de cualquier despliegue.
+Las cuentas locales salen de `db:seed` cuando `APP_ENV=local` y `GEO_SEED_PROTOTYPE=true`. La contraseña es `GEO_DEV_PASSWORD` en `backend/.env` y no se publica. La matriz está en [`docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md).
 
 ## Instalación y ejecución
 
@@ -73,6 +72,9 @@ Vite reenvía `/api` al backend. Los dos servidores tienen que estar en marcha.
 ```bash
 cd backend
 php vendor/bin/phpunit
+cd ../frontend
+npm test
+npm run build
 ```
 
 Hay cuatro suites:

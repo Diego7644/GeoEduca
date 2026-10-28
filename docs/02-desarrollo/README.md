@@ -1,8 +1,8 @@
 # Documentación técnica de desarrollo
 
-`main` incluye F1.1 (`6678249`), F1.2 (`3ea06ad`) y F1.3 (`c50a911`). F1.4 (sesión del frontend contra `/me`) está en `feature/f1-sesiones-frontend`, sin publicar.
+`main` incluye hasta el desarrollo integral (`354190f`). La rama local `feature/geoeduca-version-final` completa los flujos de administración, QR, salida, justificaciones y reportes. No está publicada.
 
-El JSON sigue siendo el almacén de **asistencia**. Login, recuperación y autorización usan PostgreSQL / SQLite de prueba.
+PostgreSQL es el almacén de asistencia. El JSON original permanece como respaldo.
 
 | Documento | Contenido |
 |---|---|
@@ -18,7 +18,9 @@ El JSON sigue siendo el almacén de **asistencia**. Login, recuperación y autor
 | [`RIESGOS.md`](RIESGOS.md) | Riesgos de integración y de producto |
 | [`DEPENDENCIAS.md`](DEPENDENCIAS.md) | Orden entre módulos y decisiones |
 | [`CRITERIOS-DE-ACEPTACION.md`](CRITERIOS-DE-ACEPTACION.md) | Cómo se da por hecha cada etapa |
-| [`PROXIMAS-TAREAS.md`](PROXIMAS-TAREAS.md) | Siguiente etapa: asistencia fuera del JSON |
+| [`MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](MATRIZ-CUMPLIMIENTO-FUNCIONAL.md) | Requisitos de esta entrega, estado y evidencia |
+| [`ESTADO-VERSION-FINAL.md`](ESTADO-VERSION-FINAL.md) | Cómo ejecutar la versión local y qué queda pendiente |
+| [`PROXIMAS-TAREAS.md`](PROXIMAS-TAREAS.md) | Siguiente etapa histórica: asistencia fuera del JSON |
 | [`RESULTADOS-PHPUNIT-F1.1.md`](RESULTADOS-PHPUNIT-F1.1.md) | PHPUnit de F1.1 |
 | [`RESULTADOS-PHPUNIT-F1.2.md`](RESULTADOS-PHPUNIT-F1.2.md) | PHPUnit de F1.2 (148 OK) |
 | [`RESULTADOS-PHPUNIT-F1.3.md`](RESULTADOS-PHPUNIT-F1.3.md) | PHPUnit de F1.3 (173 OK) |
