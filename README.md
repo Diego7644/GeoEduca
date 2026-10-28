@@ -2,16 +2,16 @@
 
 Prototipo web de control de asistencia escolar. El repositorio principal del proyecto es [Diego7644/GeoEduca](https://github.com/Diego7644/GeoEduca).
 
-Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistema funcional**: la autenticación es simulada y el historial de asistencia, el QR, el GPS y las notificaciones no ejecutan un proceso real. En la rama `feature/f1-persistencia` existe un esquema PostgreSQL con modelos Eloquent; **la API todavía no lo usa** (sigue el JSON). El siguiente objetivo es el login real (F1.2). El detalle está en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
+Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistema de asistencia real**: el historial, el QR, el GPS y las notificaciones no ejecutan un proceso productivo. El login sí es real (Sanctum contra `users`). La asistencia sigue en JSON. El detalle está en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
 
 ## Tecnologías
 
 | Capa | Stack |
 |---|---|
-| Backend | PHP 8.2, Laravel 11, Laravel Sanctum (instalado, aún no usado) |
+| Backend | PHP 8.2, Laravel 11, Laravel Sanctum |
 | Frontend | React 18, Vite 5, React Router, Tailwind CSS, Axios |
 | Pruebas | PHPUnit 11, Mockery |
-| Persistencia actual | JSON local (`storage/app/geoeduca-state.json`, ignorado por Git) para la API. Esquema PostgreSQL 16 y modelos Eloquent en F1.1, aún no cableados |
+| Persistencia actual | `users`, tokens y recuperación en PostgreSQL. Asistencia aún en JSON local (`storage/app/geoeduca-state.json`) |
 
 ## Estructura
 
@@ -30,19 +30,19 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 | Capacidad | Qué hay hoy |
 |---|---|
 | Paneles por rol (estudiante, padre/tutor, auxiliar) | La interfaz carga datos de la API |
-| Autenticación | F1.2: `users` + Sanctum (hash, caducidad, revocación). Las cuentas históricas se siembran solo en local |
-| Autorización | El servidor comprueba el rol en el controlador; no hay middleware Sanctum |
+| Autenticación | F1.2: `users` + Sanctum (hash, caducidad, revocación). F1.3: el carnet no inicia sesión; recuperación hasheada |
+| Autorización | `auth:sanctum` + middleware `role:` sobre el usuario del token |
 | Asistencia | El historial se genera por fórmula; no hay registros reales |
 | QR | Patrón visual de 8×8; no es un código QR escaneable ni se valida en el servidor |
 | GPS | El navegador calcula si está en el perímetro; la coordenada no se envía |
 | Notificaciones | Lista dentro de la aplicación; no hay correo, SMS ni push |
-| Base de datos | Esquema F1.1 en PostgreSQL; la API no lo consulta. JSON intacto |
+| Base de datos | Login, tokens y recuperación en PostgreSQL. Asistencia aún en JSON |
 
 Las cuentas de demostración viven en el código del prototipo. No se documentan aquí. Hay que rotarlas antes de cualquier despliegue.
 
 ## Instalación y ejecución
 
-Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. **No hace falta PostgreSQL** para arrancar el prototipo (login y asistencia siguen en JSON). El esquema real se instala con Docker; ver [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
+Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. El login real necesita las tablas (`php artisan migrate`). Sin PostgreSQL se puede usar SQLite solo para arrancar. Ver [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
 
 ### Backend
 
@@ -54,7 +54,7 @@ php artisan key:generate
 php artisan serve             # http://127.0.0.1:8000
 ```
 
-El prototipo no necesita `migrate`. Si va a trabajar el esquema F1.1: defina `DB_PASSWORD` en `backend/.env`, levante Docker y ejecute `php artisan migrate` (instrucciones en la guía de PostgreSQL).
+Para login y recuperación: defina `DB_PASSWORD` en `backend/.env`, levante Docker si usa PostgreSQL y ejecute `php artisan migrate` (instrucciones en la guía de PostgreSQL).
 
 ### Frontend
 
@@ -80,7 +80,7 @@ Hay cuatro suites:
 - `Caracterizacion`: describe el comportamiento actual y debe aprobar.
 - `Persistencia`: esquema y relaciones Eloquent en SQLite. Debe aprobar.
 - `Autenticacion`: login Sanctum, revocación y aislamiento. Debe aprobar.
-- `RequisitosSeguridad`: comportamiento seguro esperado. En F1.2 estas pruebas aprueban.
+- `RequisitosSeguridad`: comportamiento seguro esperado. En F1.2/F1.3 estas pruebas aprueban.
 
 ```bash
 php vendor/bin/phpunit --testsuite Caracterizacion
