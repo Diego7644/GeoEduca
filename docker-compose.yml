@@ -1,0 +1,25 @@
+# PostgreSQL local para GEOEDUCA (F1.1). No sustituye el JSON del prototipo.
+# Uso: copiar backend/.env.example a backend/.env, definir DB_PASSWORD y GEO_DEV_PASSWORD,
+# luego desde la raiz: docker compose --env-file backend/.env up -d
+# Si 5432 esta ocupado, ponga DB_PORT=5433 en backend/.env.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: geoeduca-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-geoeduca}
+      POSTGRES_USER: ${DB_USERNAME:-geoeduca}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD en el archivo .env de la raiz o exporte la variable}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - geoeduca_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-geoeduca} -d ${DB_DATABASE:-geoeduca}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  geoeduca_pgdata:
