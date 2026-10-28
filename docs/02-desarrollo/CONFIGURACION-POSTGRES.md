@@ -5,13 +5,7 @@ El prototipo **arranca sin base de datos**. Login y asistencia siguen en JSON. P
 ## Requisitos
 
 - Docker Engine (imagen `postgres:16-alpine` en `docker-compose.yml` de la raíz).
-- PHP 8.2 con `pdo_pgsql`. En XAMPP la extensión suele estar comentada en `php.ini`. No hace falta editar el `php.ini` si se invoca:
-
-```bash
-php -d extension=pdo_pgsql artisan migrate
-```
-
-En Windows, si `php -m` no lista `pdo_pgsql`, compruebe que existen `php_pdo_pgsql.dll` y `libpq.dll` junto al PHP.
+- PHP 8.2 con `pdo_pgsql` cargado en el CLI. En XAMPP hay que quitar el comentario de `extension=pdo_pgsql` en `D:\xampp\php\php.ini` (el DLL `php_pdo_pgsql.dll` y `libpq.dll` ya vienen con PHP). Después, `php -m` debe listar `pdo_pgsql`. Sin eso, `artisan serve` responde 500 en cuanto consulta PostgreSQL, porque el servidor hijo no hereda `php -d`.
 
 ## Instalación
 
@@ -39,8 +33,8 @@ Compose lee variables del entorno o de `--env-file`. Desde la raíz:
 ```bash
 docker compose --env-file backend/.env up -d
 cd backend
-php -d extension=pdo_pgsql artisan migrate
-php -d extension=pdo_pgsql artisan db:seed
+php artisan migrate
+php artisan db:seed
 ```
 
 `db:seed` crea la fila de `school_settings`. Con `GEO_DEV_PASSWORD` siembra `10000001`–`10000003`. Con `GEO_SEED_PROTOTYPE=true` (solo `APP_ENV=local`) siembra hasheadas las cuentas históricas del prototipo para que el frontend de demostración pueda entrar. El autenticador nunca lee `DemoAccounts`.

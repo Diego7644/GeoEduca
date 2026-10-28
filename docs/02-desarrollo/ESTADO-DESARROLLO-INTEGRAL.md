@@ -18,8 +18,8 @@ Rama local: `feature/desarrollo-integral`. No está publicada. Base: `main` en `
 - El panel del apoderado y el del auxiliar todavía muestran piezas visuales del prototipo (casos de contingencia vacíos, horario de clases vacío). No se rellenan con datos inventados.
 - No hay lector NFC, cámara de torniquete ni proveedor de correo.
 - La cookie HttpOnly no se activó: el frontend y la API siguen en orígenes distintos.
-- PHPUnit de esta rama: 178 pruebas, 654 aserciones, 0 fallos. Vitest: 13 pruebas, 0 fallos.
-- No se volvió a recorrer el navegador después de estos cambios. La verificación de pantalla de F1.4 sigue siendo la de `main`.
+- PHPUnit: 178 pruebas, 655 aserciones, 0 fallos. Vitest: 13 pruebas, 0 fallos. `npm run build` genera el bundle.
+- Navegador en `http://127.0.0.1:5174` contra `artisan serve` con `pdo_pgsql` habilitado en `php.ini`: estudiante, apoderado, docente, auxiliar y administración. El QR generado en pantalla se validó y el segundo uso respondió que ya fue utilizado. Un código de más de 60 segundos respondió que expiró.
 - Falta sembrar en PostgreSQL local el catálogo con `geoeduca:import-json` si se quiere ver más estudiantes que el grafo de prueba.
 
 ## Cómo retomar

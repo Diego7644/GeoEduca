@@ -53,6 +53,13 @@ class AttendancePortal
             ],
             'kpis' => $this->kpis($student, $settings),
             'today' => $today,
+            'scheduleTitle' => 'Sin horario institucional cargado',
+            'subjectCount' => 0,
+            'exitLabel' => $settings->exit_time,
+            'campus' => [
+                'name' => $settings->school.' • '.$settings->campus,
+                'address' => $settings->address,
+            ],
             'classes' => [],
             'weekly' => [],
             'attendance' => $rows,
@@ -166,13 +173,7 @@ class AttendancePortal
         if ($user->wards()->where('students.id', $student->id)->exists()) {
             throw new \RuntimeException('Ese estudiante ya está vinculado a su cuenta.');
         }
-        if ($student->guardians()->exists() && ! $student->guardians()->where('users.id', $user->id)->exists()) {
-            throw new \RuntimeException('Ese estudiante no está registrado a su cargo.');
-        }
-        $user->wards()->syncWithoutDetaching([$student->id]);
-        $this->audit($user, $student->id, 'guardian_linked', 'El apoderado vinculó al estudiante.');
-
-        return ['message' => 'Estudiante vinculado a su cuenta.', 'panel' => $this->padre($user)];
+        throw new \RuntimeException('La vinculación la realiza administración. No puede reclamar un estudiante por su cuenta.');
     }
 
     public function justificar(User $user, array $data): array
@@ -579,9 +580,15 @@ class AttendancePortal
                 'date' => $row->attended_on->format('j M'),
                 'status' => $row->status === AttendanceRecord::STATUS_ON_TIME ? 'puntual' : ($row->status === AttendanceRecord::STATUS_LATE ? 'tardanza' : 'falta'),
                 'time' => $row->entry_time ? substr((string) $row->entry_time, 0, 5) : '—',
+                'sub' => $row->source,
                 'gate' => $row->gate,
+                'gateIcon' => 'meeting_room',
                 'method' => $row->method,
+                'methodIcon' => $row->source === 'qr' ? 'qr_code_scanner' : 'badge',
+                'exit' => $row->exit_time ? substr((string) $row->exit_time, 0, 5) : '—',
+                'minutes' => $row->late_minutes,
                 'justified' => Justification::query()->where('student_id', $student->id)->whereDate('event_date', $row->attended_on)->exists(),
+                'justificationNote' => null,
             ])->all();
     }
 

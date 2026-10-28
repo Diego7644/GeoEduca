@@ -188,8 +188,9 @@ export default function DashboardEstudiante() {
                     </div>
                   </div>
                   <p className="font-body-sm text-on-surface-variant text-center mb-space-md">
-                    Presenta este código en los torniquetes. Cambia solo con cada renovación.
+                    El auxiliar valida este código en el servidor. El dibujo no es un QR de cámara.
                   </p>
+                  <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value">{data.token.value}</p>
                   <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
                     <QrGraphic seed={data.token.value} dimmed={flash} />
                   </div>

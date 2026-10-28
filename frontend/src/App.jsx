@@ -33,8 +33,10 @@ export default function App() {
       <Route element={<ProtectedRoute roles={['parent']} />}>
         <Route path="/padre" element={<DashboardPadre />} />
       </Route>
-      <Route element={<ProtectedRoute roles={['staff']} />}>
+      <Route element={<ProtectedRoute roles={['staff']} staffKinds={['auxiliar']} />}>
         <Route path="/auxiliar" element={<DashboardAuxiliar />} />
+      </Route>
+      <Route element={<ProtectedRoute roles={['staff']} staffKinds={['docente']} />}>
         <Route path="/docente" element={<DashboardDocente />} />
       </Route>
       <Route element={<ProtectedRoute roles={['admin']} />}>

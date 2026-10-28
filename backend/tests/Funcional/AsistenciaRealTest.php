@@ -46,6 +46,7 @@ final class AsistenciaRealTest extends TestCase
         ])->assertOk()->json('token');
 
         $this->withToken($token)->getJson('/api/asistencia/padre')->assertOk()->assertJsonPath('children', []);
+        $this->withToken($token)->postJson('/api/asistencia/padre/vincular', ['dni' => '71405255'])->assertStatus(422);
         $this->withToken($token)->postJson('/api/asistencia/justificacion', [
             'child_id' => Student::query()->where('dni', '71405255')->value('id'),
             'type' => 'medical',

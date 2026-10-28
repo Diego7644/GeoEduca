@@ -9,7 +9,7 @@ import Toast, { useToast } from '../components/Toast';
 import { IMAGES } from '../config/images';
 import useApiResource from '../hooks/useApiResource';
 import useValidatedField from '../hooks/useValidatedField';
-import { approveManualEntry, getAuxiliar } from '../services/asistenciaService';
+import { approveManualEntry, getAuxiliar, validateQr } from '../services/asistenciaService';
 import { downloadCsv } from '../utils/attendance';
 import { validateStudentId } from '../validation/rules';
 
@@ -33,6 +33,7 @@ export default function DashboardAuxiliar() {
   const [reasons, setReasons] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [qrValue, setQrValue] = useState('');
   const studentId = useValidatedField(validateStudentId);
   const [form, setForm] = useState({ reason: 'Falla de Batería / Sin Dispositivo', notes: '', notify: true });
 
@@ -182,6 +183,29 @@ export default function DashboardAuxiliar() {
                 </div>
               </div>
 
+              <form
+                className="mb-4 flex flex-col sm:flex-row gap-2"
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  try {
+                    const result = await validateQr(qrValue.trim());
+                    setData(result.panel);
+                    setQrValue('');
+                    showToast(result.message);
+                  } catch (err) {
+                    showToast(err.message);
+                  }
+                }}
+              >
+                <input
+                  value={qrValue}
+                  onChange={(event) => setQrValue(event.target.value)}
+                  placeholder="Código QR del estudiante"
+                  className="flex-1 bg-surface-container-low rounded-lg px-3 py-2 font-mono"
+                  aria-label="Código QR del estudiante"
+                />
+                <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Validar QR</button>
+              </form>
               <div className="relative">
                 <Icon name="qr_code_scanner" className="absolute left-4 top-3.5 text-primary" />
                 <input

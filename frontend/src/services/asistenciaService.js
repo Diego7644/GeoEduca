@@ -27,3 +27,4 @@ export const markNotificacionesRead = () => request('post', '/asistencia/notific
 export const linkChild = (dni) => request('post', '/asistencia/padre/vincular', { dni });
 export const submitJustification = (payload) => request('post', '/asistencia/justificacion', payload);
 export const approveManualEntry = (payload) => request('post', '/asistencia/auxiliar/aprobar', payload);
+export const validateQr = (value) => request('post', '/asistencia/qr/validar', { value });
