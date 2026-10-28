@@ -8,9 +8,9 @@ En `main` (`6678249`, PR #3). PostgreSQL, modelos, seeders de desarrollo, suite 
 
 En `main` (`3ea06ad`, PR #4). Sanctum, `Hash::check`, `/me` 401, throttle de login, sin mock en el frontend.
 
-## Hecho: F1.3 – Accesos y recuperación (esta rama, local)
+## Hecho: F1.3 – Accesos y recuperación
 
-Rama `feature/f1-seguridad-accesos`, **sin push**.
+En `main` (`c50a911`, PR #5).
 
 - `POST /api/auth/acceso` ya no emite sesión: solo personal autenticado identifica un DNI.
 - Recuperación en `password_reset_codes` con hash, caducidad, un solo uso y límite de intentos.
@@ -19,11 +19,22 @@ Rama `feature/f1-seguridad-accesos`, **sin push**.
 
 Detalle: [`AUTENTICACION.md`](AUTENTICACION.md), [`RECUPERACION.md`](RECUPERACION.md), [`PERMISOS.md`](PERMISOS.md), [`RESULTADOS-PHPUNIT-F1.3.md`](RESULTADOS-PHPUNIT-F1.3.md).
 
-## Ahora: F1.5 / M4
+## Hecho: F1.4 – Sesión del frontend (esta rama, local)
 
-- Cada carga protegida consulta `/api/auth/me` (hoy el frontend aún confía en `localStorage`).
-- Mensaje claro si el backend no responde (UI-12).
-- Migrar asistencia fuera del JSON cuando se autorice.
+Rama `feature/f1-sesiones-frontend`, **sin push**.
+
+- Cada arranque confirma la sesión con `GET /api/auth/me`.
+- Un 401, un token expirado o un rol guardado distinto no abren el panel.
+- Logout revoca el PAT. Una respuesta tardía de `/me` no restaura la sesión.
+- La recuperación en pantalla no simula correo ni SMS.
+
+Detalle: [`SESIONES.md`](SESIONES.md), [`RESULTADOS-PRUEBAS-F1.4.md`](RESULTADOS-PRUEBAS-F1.4.md).
+
+## Ahora: asistencia real
+
+- Sacar el historial de `AsistenciaStore` cuando se autorice.
+- No usar el id de `users` como id del catálogo JSON (el usuario local 1 cae en el estudiante de demostración).
+- Cookie HttpOnly de Sanctum cuando frontend y API compartan dominio.
 
 ## Más adelante
 
