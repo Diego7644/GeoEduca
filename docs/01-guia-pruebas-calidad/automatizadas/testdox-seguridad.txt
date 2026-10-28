@@ -1,0 +1,47 @@
+Autenticacion Requerida (Tests\Seguridad\AutenticacionRequerida)
+ [ ] Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/auth/me"
+ [ ] Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/asistencia/estudiante"
+ [ ] Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/asistencia/padre"
+ [ ] Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/asistencia/auxiliar/casos"
+ [ ] Sin credenciales la ruta responde 401 Unauthorized with data set "POST /api/asistencia/auxiliar/aprobar"
+ [ ] Sin credenciales la ruta responde 401 Unauthorized with data set "POST /api/asistencia/justificacion"
+ [ ] Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/auth/me"
+ [ ] Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/asistencia/estudiante"
+ [ ] Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/asistencia/padre"
+ [ ] Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/asistencia/auxiliar/casos"
+ [ ] Con un token inventado la ruta responde 401 Unauthorized with data set "POST /api/asistencia/auxiliar/aprobar"
+ [ ] Con un token inventado la ruta responde 401 Unauthorized with data set "POST /api/asistencia/justificacion"
+
+Autorizacion Por Rol (Tests\Seguridad\AutorizacionPorRol)
+ [ ] Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "estudiante → GET auxiliar/casos"
+ [ ] Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "estudiante → POST auxiliar/aprobar"
+ [ ] Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "estudiante → GET padre"
+ [ ] Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "padre → GET auxiliar/casos"
+ [ ] Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "padre → POST auxiliar/aprobar"
+ [ ] Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "padre → GET estudiante"
+
+Endurecimiento Http (Tests\Seguridad\EndurecimientoHttp)
+ [ ] Las respuestas incluyen X-Content-Type-Options: nosniff
+ [ ] Con la configuración por defecto del proyecto (.env.example) un 404 de API no filtra traza ni rutas
+ [ ] Un error de validación sin cabecera Accept responde 422 JSON, no una redirección
+
+Entradas Hostiles (Tests\Seguridad\EntradasHostiles)
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL en el DNI (OR 1=1)"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL con comentario en el DNI"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL en la contraseña (OR 1=1)"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL con punto y coma en la contraseña"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "script HTML en la contraseña"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "perfil con SQL"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "contraseña enviada como arreglo"
+ [x] Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "perfil enviado como arreglo"
+ [ ] Un DNI enviado como arreglo u objeto se rechaza con 422, no con error 500 with data set "DNI enviado como arreglo"
+ [ ] Un DNI enviado como arreglo u objeto se rechaza con 422, no con error 500 with data set "DNI enviado como objeto"
+
+Limite Intentos Login (Tests\Seguridad\LimiteIntentosLogin)
+ [ ] Tras varios intentos fallidos seguidos el servidor responde 429 Too Many Requests
+
+Sesion YLogout (Tests\Seguridad\SesionYLogout)
+ [ ] Tras cerrar sesión, /api/auth/me con el mismo token responde 401
+ [ ] Tras cerrar sesión, una ruta de asistencia con el mismo token responde 401
+ [ ] Con la sesión abierta, /api/auth/me identifica al usuario del token
+

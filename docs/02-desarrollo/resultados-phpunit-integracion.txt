@@ -1,0 +1,256 @@
+PHPUnit 11.5.57 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: <RAIZ_PROYECTO>\backend\phpunit.xml
+
+...............................................................  63 / 125 ( 50%)
+...........................F.....F...........FFF........FFFF..  125 / 125 (100%)
+
+Time: 00:12.164, Memory: 34.00 MB
+
+Asistencia Contrato (Tests\Caracterizacion\Feature\AsistenciaContrato)
+ Ô£ö Justificaci├│n v├ílida de un tutor: 200, mensaje de env├¡o y el panel del padre actualizado
+ Ô£ö La justificaci├│n sin hora (event_time es opcional) tambi├®n se acepta
+ Ô£ö Aprobaci├│n manual v├ílida del auxiliar: 200, mensaje de bit├ícora y el panel actualizado
+ Ô£ö Los campos extra enviados (role, is_admin) no se reflejan en la respuesta
+ Ô£ö Las consultas de asistencia ya NO son marcadores de posici├│n: devuelven un panel con datos with data set "GET /api/asistencia/estudiante (estudiante)"
+ Ô£ö Las consultas de asistencia ya NO son marcadores de posici├│n: devuelven un panel con datos with data set "GET /api/asistencia/padre (padre)"
+ Ô£ö Las consultas de asistencia ya NO son marcadores de posici├│n: devuelven un panel con datos with data set "GET /api/asistencia/auxiliar/casos (auxiliar)"
+ Ô£ö Una justificaci├│n enviada S├ì aparece despu├®s en el panel del padre (se guarda en el estado, no en base de datos)
+
+Asistencia Validacion (Tests\Caracterizacion\Feature\AsistenciaValidacion)
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-07 motivo de 5 caracteres"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-07 motivo ausente"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-07 motivo de 1001 caracteres"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-08 tipo inexistente"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-08 fecha ausente"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-08 fecha no v├ílida"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-08 hora con formato inv├ílido"
+ Ô£ö Justificaci├│n inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-08 formulario vac├¡o"
+ Ô£ö Aprobaci├│n manual inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-09 sin motivo"
+ Ô£ö Aprobaci├│n manual inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-09 motivo de 3 caracteres"
+ Ô£ö Aprobaci├│n manual inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-09 identificador de 3 caracteres"
+ Ô£ö Aprobaci├│n manual inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-09 identificador ausente"
+ Ô£ö Aprobaci├│n manual inv├ílida responde 422 y marca solo los campos err├│neos with data set "V-09 formulario vac├¡o"
+ Ô£ö El mensaje de motivo obligatorio est├í en espa├▒ol
+
+Autenticacion Requerida (Tests\Seguridad\AutenticacionRequerida)
+ Ô£ÿ Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/auth/me"
+   Ôöé
+   Ôöé Expected response status code [401] but received 200.
+   Ôöé Failed asserting that 200 is identical to 401.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+   Ôöé
+ Ô£ö Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/asistencia/estudiante"
+ Ô£ö Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/asistencia/padre"
+ Ô£ö Sin credenciales la ruta responde 401 Unauthorized with data set "GET /api/asistencia/auxiliar/casos"
+ Ô£ö Sin credenciales la ruta responde 401 Unauthorized with data set "POST /api/asistencia/auxiliar/aprobar"
+ Ô£ö Sin credenciales la ruta responde 401 Unauthorized with data set "POST /api/asistencia/justificacion"
+ Ô£ÿ Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/auth/me"
+   Ôöé
+   Ôöé Expected response status code [401] but received 200.
+   Ôöé Failed asserting that 200 is identical to 401.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+   Ôöé
+ Ô£ö Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/asistencia/estudiante"
+ Ô£ö Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/asistencia/padre"
+ Ô£ö Con un token inventado la ruta responde 401 Unauthorized with data set "GET /api/asistencia/auxiliar/casos"
+ Ô£ö Con un token inventado la ruta responde 401 Unauthorized with data set "POST /api/asistencia/auxiliar/aprobar"
+ Ô£ö Con un token inventado la ruta responde 401 Unauthorized with data set "POST /api/asistencia/justificacion"
+
+Auth Service (Tests\Caracterizacion\Unit\AuthService)
+ Ô£ö AuthService delega en UserAuthenticator exactamente una vez y devuelve su resultado sin modificarlo
+ Ô£ö El contenedor resuelve UserAuthenticator como MockUserAuthenticator (binding actual)
+
+Autorizacion Por Rol (Tests\Seguridad\AutorizacionPorRol)
+ Ô£ö Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "estudiante ÔåÆ GET auxiliar/casos"
+ Ô£ö Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "estudiante ÔåÆ POST auxiliar/aprobar"
+ Ô£ö Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "estudiante ÔåÆ GET padre"
+ Ô£ö Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "padre ÔåÆ GET auxiliar/casos"
+ Ô£ö Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "padre ÔåÆ POST auxiliar/aprobar"
+ Ô£ö Un perfil autenticado que usa la ruta de otro perfil recibe 403 Forbidden with data set "padre ÔåÆ GET estudiante"
+
+Comportamiento Actual Inseguro (Tests\Caracterizacion\Feature\ComportamientoActualInseguro)
+ Ô£ö HOY: /api/auth/me sin credenciales responde 200 con {"user":null} (deber├¡a ser 401)
+ Ô£ö HOY: /api/auth/me con un token inventado tambi├®n responde 200 con {"user":null} (deber├¡a ser 401)
+ Ô£ö AHORA: las rutas de asistencia responden 401 sin ninguna credencial with data set "GET /api/asistencia/estudiante"
+ Ô£ö AHORA: las rutas de asistencia responden 401 sin ninguna credencial with data set "GET /api/asistencia/padre"
+ Ô£ö AHORA: las rutas de asistencia responden 401 sin ninguna credencial with data set "GET /api/asistencia/auxiliar/casos"
+ Ô£ö AHORA: las rutas de asistencia responden 401 sin ninguna credencial with data set "POST /api/asistencia/auxiliar/aprobar"
+ Ô£ö AHORA: las rutas de asistencia responden 401 sin ninguna credencial with data set "POST /api/asistencia/justificacion"
+ Ô£ö AHORA: un token inventado se rechaza con 401 en las rutas de asistencia with data set "GET /api/asistencia/estudiante"
+ Ô£ö AHORA: un token inventado se rechaza con 401 en las rutas de asistencia with data set "GET /api/asistencia/padre"
+ Ô£ö AHORA: un token inventado se rechaza con 401 en las rutas de asistencia with data set "GET /api/asistencia/auxiliar/casos"
+ Ô£ö AHORA: un token inventado se rechaza con 401 en las rutas de asistencia with data set "POST /api/asistencia/auxiliar/aprobar"
+ Ô£ö AHORA: un token inventado se rechaza con 401 en las rutas de asistencia with data set "POST /api/asistencia/justificacion"
+ Ô£ö HOY: una justificaci├│n inv├ílida SIN credenciales responde 422, no 401 (la validaci├│n se ejecuta antes que la autenticaci├│n)
+ Ô£ö AHORA: el token de un estudiante recibe 403 en las rutas del auxiliar
+ Ô£ö AHORA: un token v├ílido identifica al usuario: /api/auth/me devuelve su rol y su DNI, sin contrase├▒a
+ Ô£ö HOY: logout SIN token responde 200 y no invalida ninguna sesi├│n (el token sigue acept├índose)
+ Ô£ö AHORA: logout CON token invalida la sesi├│n: las rutas de asistencia responden 401, pero /api/auth/me responde 200 con user null
+ Ô£ö HOY: 12 contrase├▒as err├│neas seguidas reciben siempre 401, nunca 429
+ Ô£ö HOY: ninguna ruta de la API tiene middleware de autenticaci├│n ni de l├¡mite de peticiones (el 401 lo decide el controlador)
+ Ô£ö HOY: un DNI enviado como arreglo JSON provoca HTTP 500 (deber├¡a ser 422); causa en LoginRequest.php:22
+ Ô£ö Con APP_DEBUG desactivado un 404 de API no filtra traza ni rutas de archivo
+ Ô£ö Con APP_DEBUG activado un 404 de API S├ì filtra traza y rutas de archivo (comportamiento de Laravel)
+
+Contrato Rutas (Tests\Caracterizacion\Feature\ContratoRutas)
+ Ô£ö La API expone exactamente las 20 rutas de negocio y salud documentadas (9 del c├│digo base + 11 de la rama de Diego)
+ Ô£ö No existe ninguna ruta de QR din├ímico (emisi├│n o validaci├│n)
+ Ô£ö No existe ninguna ruta de geolocalizaci├│n o geocerca
+ Ô£ö Existen rutas de notificaciones, pero solo entregan avisos dentro de la aplicaci├│n (no hay env├¡o por correo, SMS ni push)
+ Ô£ö Ninguna acci├│n de la API usa Eloquent: no hay modelos en app/Models
+
+Cors (Tests\Caracterizacion\Feature\Cors)
+ Ô£ö El preflight de un origen del frontend recibe Access-Control-Allow-Origin igual al origen with data set "localhost:5173"
+ Ô£ö El preflight de un origen del frontend recibe Access-Control-Allow-Origin igual al origen with data set "127.0.0.1:5173"
+ Ô£ö El preflight de un origen no autorizado NO recibe Access-Control-Allow-Origin
+ Ô£ö Una petici├│n real desde un origen no autorizado tampoco recibe Access-Control-Allow-Origin
+
+Demo Accounts (Tests\Caracterizacion\Unit\DemoAccounts)
+ Ô£ö Hay exactamente tres cuentas, una por perfil: student, parent y staff
+ Ô£ö Todos los DNI tienen 8 d├¡gitos y los identificadores internos son ├║nicos
+ Ô£ö LIMITACI├ôN: dos perfiles distintos comparten el mismo DNI (se distinguen por perfil y contrase├▒a)
+ Ô£ö LIMITACI├ôN: las contrase├▒as est├ín en texto plano (ninguna parece un hash bcrypt/argon)
+
+Endurecimiento Http (Tests\Seguridad\EndurecimientoHttp)
+ Ô£ÿ Las respuestas incluyen X-Content-Type-Options: nosniff
+   Ôöé
+   Ôöé Header [X-Content-Type-Options] not present on response.
+   Ôöé Failed asserting that false is true.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:303
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EndurecimientoHttpTest.php:26
+   Ôöé
+ Ô£ÿ Con la configuraci├│n por defecto del proyecto (.env.example) un 404 de API no filtra traza ni rutas
+   Ôöé
+   Ôöé Con APP_DEBUG=true (valor de .env.example) la respuesta de error expone: trace, file, line, exception
+   Ôöé Failed asserting that two arrays are identical.
+   Ôöé --- Expected
+   Ôöé +++ Actual
+   Ôöé @@ @@
+   Ôöé -Array &0 []
+   Ôöé +Array &0 [
+   Ôöé +    0 => 'trace',
+   Ôöé +    1 => 'file',
+   Ôöé +    2 => 'line',
+   Ôöé +    3 => 'exception',
+   Ôöé +]
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EndurecimientoHttpTest.php:44
+   Ôöé
+ Ô£ÿ Un error de validaci├│n sin cabecera Accept responde 422 JSON, no una redirecci├│n
+   Ôöé
+   Ôöé Expected response status code [422] but received 302.
+   Ôöé Failed asserting that 302 is identical to 422.
+   Ôöé
+   Ôöé The following errors occurred during the last request:
+   Ôöé
+   Ôöé El DNI debe tener 8 d├¡gitos.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EndurecimientoHttpTest.php:59
+   Ôöé
+
+Entradas Hostiles (Tests\Seguridad\EntradasHostiles)
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL en el DNI (OR 1=1)"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL con comentario en el DNI"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL en la contrase├▒a (OR 1=1)"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "SQL con punto y coma en la contrase├▒a"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "script HTML en la contrase├▒a"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "perfil con SQL"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "contrase├▒a enviada como arreglo"
+ Ô£ö Una entrada hostil se rechaza con 401 o 422: sin error 500, sin token y sin detalles internos with data set "perfil enviado como arreglo"
+ Ô£ÿ Un DNI enviado como arreglo u objeto se rechaza con 422, no con error 500 with data set "DNI enviado como arreglo"
+   Ôöé
+   Ôöé Una entrada hostil debe responder 401 o 422; respondi├│ 500
+   Ôöé Failed asserting that an array contains 500.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:91
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:79
+   Ôöé
+ Ô£ÿ Un DNI enviado como arreglo u objeto se rechaza con 422, no con error 500 with data set "DNI enviado como objeto"
+   Ôöé
+   Ôöé Una entrada hostil debe responder 401 o 422; respondi├│ 500
+   Ôöé Failed asserting that an array contains 500.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:91
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:79
+   Ôöé
+
+Limite Intentos Login (Tests\Seguridad\LimiteIntentosLogin)
+ Ô£ÿ Tras varios intentos fallidos seguidos el servidor responde 429 Too Many Requests
+   Ôöé
+   Ôöé Se esperaba al menos un 429 en 12 intentos fallidos seguidos. Estados obtenidos: 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401
+   Ôöé Failed asserting that an array contains 429.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\LimiteIntentosLoginTest.php:34
+   Ôöé
+
+Login Perfiles (Tests\Caracterizacion\Feature\LoginPerfiles)
+ Ô£ö Estudiante: 200, token Bearer y usuario con rol student
+ Ô£ö Padre/tutor: 200, token Bearer y usuario con rol parent
+ Ô£ö Personal (docente/auxiliar): 200, token Bearer y usuario con rol staff
+ Ô£ö Cada login emite un token distinto
+ Ô£ö El DNI con separadores se normaliza a d├¡gitos antes de validar (LoginRequest)
+
+Login Rechazo (Tests\Caracterizacion\Feature\LoginRechazo)
+ Ô£ö Contrase├▒a incorrecta: 401 con mensaje gen├®rico y sin token
+ Ô£ö La contrase├▒a de otro perfil no abre el perfil de estudiante
+ Ô£ö El DNI del personal no abre el perfil de estudiante, aunque la contrase├▒a sea la del personal
+ Ô£ö No se puede enumerar usuarios: DNI inexistente y contrase├▒a err├│nea dan la misma respuesta
+
+Login Validacion (Tests\Caracterizacion\Feature\LoginValidacion)
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-01 DNI de 7 d├¡gitos"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-01 DNI de 9 d├¡gitos"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-05 DNI solo con letras"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-02 contrase├▒a de 3 caracteres"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-02 contrase├▒a de 7 caracteres"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-06 contrase├▒a de 129 caracteres"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-03 perfil inexistente (admin)"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-03 perfil ausente"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-04 formulario vac├¡o"
+ Ô£ö Login con datos inv├ílidos responde 422, marca solo los campos err├│neos y no emite token with data set "V-04 solo el DNI"
+ Ô£ö El mensaje de DNI corto est├í en espa├▒ol y es claro
+ Ô£ö El mensaje de contrase├▒a corta indica el m├¡nimo de 8 caracteres
+
+Mock User Authenticator (Tests\Caracterizacion\Unit\MockUserAuthenticator)
+ Ô£ö Con credenciales de demostraci├│n devuelve token, tipo Bearer y el usuario del perfil with data set "student"
+ Ô£ö Con credenciales de demostraci├│n devuelve token, tipo Bearer y el usuario del perfil with data set "parent"
+ Ô£ö Con credenciales de demostraci├│n devuelve token, tipo Bearer y el usuario del perfil with data set "staff"
+ Ô£ö Con contrase├▒a incorrecta lanza una respuesta HTTP 401
+ Ô£ö Exige que el perfil coincida con el de la cuenta (DNI correcto, perfil distinto)
+ Ô£ö Ignora los caracteres no num├®ricos del DNI
+
+Salud (Tests\Caracterizacion\Feature\Salud)
+ Ô£ö GET /api/health responde 200 con exactamente {"status":"ok"}
+ Ô£ö GET /api/health no requiere autenticaci├│n y devuelve JSON
+ Ô£ö GET / identifica la API y apunta a /api/health
+ Ô£ö GET /up (health check de Laravel) responde 200
+
+Sesion YLogout (Tests\Seguridad\SesionYLogout)
+ Ô£ÿ Tras cerrar sesi├│n, /api/auth/me con el mismo token responde 401
+   Ôöé
+   Ôöé Expected response status code [401] but received 200.
+   Ôöé Failed asserting that 200 is identical to 401.
+   Ôöé
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+   Ôöé <RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+   Ôöé <RAIZ_PROYECTO>\backend\tests\Seguridad\SesionYLogoutTest.php:32
+   Ôöé
+ Ô£ö Tras cerrar sesi├│n, una ruta de asistencia con el mismo token responde 401
+ Ô£ö Con la sesi├│n abierta, /api/auth/me identifica al usuario del token
+
+FAILURES!
+Tests: 125, Assertions: 426, Failures: 9.

@@ -1,0 +1,38 @@
+{
+  "descripcion": "Metricas del modelo MQR (Multi-Quality Rule) del analisis vigente, que son las que muestra el panel de SonarQube. Complementa metricas.json, que contiene las metricas del modelo clasico.",
+  "procedencia": "Consulta de solo lectura GET /api/measures/component desde la sesion ya autenticada del navegador integrado, el 2026-10-28T05:03Z (2026-10-27, 23:03 hora local, UTC-5). HTTP 200. No se manejaron credenciales ni tokens.",
+  "proyecto": "geoeduca-pruebas-calidad",
+  "nombre": "GEOEDUCA - Pruebas y calidad",
+  "analisisVigente": "bc4c4544",
+  "modeloMQR": {
+    "software_quality_security_rating": "3.0 (C)",
+    "software_quality_reliability_rating": "3.0 (C)",
+    "software_quality_maintainability_rating": "1.0 (A)",
+    "software_quality_security_issues": 2,
+    "software_quality_reliability_issues": 9,
+    "software_quality_maintainability_issues": 3,
+    "software_quality_security_remediation_effort_min": 60,
+    "software_quality_reliability_remediation_effort_min": 45,
+    "software_quality_maintainability_remediation_effort_min": 15,
+    "software_quality_maintainability_debt_ratio": 0.0,
+    "software_quality_blocker_issues": 0,
+    "software_quality_high_issues": 0,
+    "software_quality_medium_issues": 11,
+    "software_quality_low_issues": 3,
+    "software_quality_info_issues": 0
+  },
+  "modeloClasico": {
+    "reliability_rating": "1.0 (A)",
+    "security_rating": "3.0 (C)",
+    "sqale_rating": "1.0 (A)",
+    "bugs": 0,
+    "vulnerabilities": 2,
+    "code_smells": 9,
+    "violations": 11
+  },
+  "interpretacion": {
+    "porQueFiabilidadEsAyEsC": "La calificacion clasica de fiabilidad (A) solo cuenta bugs, y hay 0. El modelo MQR clasifica las 9 incidencias de accesibilidad (reglas S6853 y S6848) con impacto de fiabilidad MEDIO, lo que da una calificacion C. Son dos formas de medir sobre los mismos 11 hallazgos; ninguna es un error.",
+    "porQueSumanMasDe11": "En MQR una misma incidencia puede afectar a varias cualidades: las 3 incidencias S6848 impactan en fiabilidad (medio) y en mantenibilidad (bajo). Por eso 2 + 9 + 3 = 14 impactos para 11 incidencias."
+  },
+  "nota": "Valores transcritos tal como los devolvio la API; no se alteraron."
+}

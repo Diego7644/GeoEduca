@@ -1,0 +1,25 @@
+{
+    "task":  {
+                 "id":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+                 "type":  "REPORT",
+                 "componentId":  "baaff592-9090-4d79-a7a0-b9dcf1502ce1",
+                 "componentKey":  "geoeduca-pruebas-calidad",
+                 "componentName":  "GEOEDUCA - Pruebas y calidad",
+                 "componentQualifier":  "TRK",
+                 "analysisId":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                 "status":  "SUCCESS",
+                 "submittedAt":  "2026-10-28T04:07:48+0000",
+                 "submitterLogin":  "admin",
+                 "startedAt":  "2026-10-28T04:07:50+0000",
+                 "executedAt":  "2026-10-28T04:07:53+0000",
+                 "executionTimeMs":  3750,
+                 "hasScannerContext":  true,
+                 "warningCount":  0,
+                 "warnings":  [
+
+                              ],
+                 "infoMessages":  [
+
+                                  ]
+             }
+}

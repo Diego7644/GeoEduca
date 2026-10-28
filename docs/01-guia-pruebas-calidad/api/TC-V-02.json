@@ -1,0 +1,34 @@
+{
+    "id":  "V-02",
+    "funcionalidad":  "Validación de contraseña corta",
+    "tipo":  "Validación de datos",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "DNI <DNI-DEMO-ESTUDIANTE>, contraseña de 3 caracteres",
+    "procedimiento":  "POST /api/auth/login",
+    "esperado":  "422 con error en el campo password (mínimo 8)",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 422; errors.password=La contraseña debe tener al menos 8 caracteres.",
+    "ejecutado":  "2026-10-27T20:08:20",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  422,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:20 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"La contrase\\u00f1a debe tener al menos 8 caracteres.\",\"errors\":{\"password\":[\"La contrase\\u00f1a debe tener al menos 8 caracteres.\"]}}",
+                           "ms":  649
+                       }
+                   ]
+}

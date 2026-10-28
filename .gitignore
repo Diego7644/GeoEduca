@@ -14,3 +14,44 @@ backend/bootstrap/cache/*.php
 backend/database/*.sqlite
 backend/database/*.sqlite-*
 .DS_Store
+Thumbs.db
+
+# Variables de entorno: nunca versionar, salvo las plantillas .env.example
+.env.*
+!.env.example
+
+# Credenciales y claves
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+auth.json
+
+# Bases de datos locales y volcados
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+*.bak
+
+# Logs
+*.log
+npm-debug.log*
+
+# Caches y reportes de pruebas / calidad
+backend/.phpunit.cache/
+backend/.phpunit.result.cache
+coverage/
+frontend/coverage/
+backend/coverage/
+.scannerwork/
+
+# Editores
+.idea/
+.vscode/
+
+# SonarQube local: configuracion con secretos y artefactos generados (no versionar)
+sonar/.env
+sonar/truststore/
+backend/build/

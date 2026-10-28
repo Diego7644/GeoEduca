@@ -1,0 +1,15 @@
+{
+    "fecha":  "2026-10-27T20:08:42",
+    "api":  "http://127.0.0.1:8000",
+    "frontend":  "http://localhost:5173",
+    "commit":  "5766b24",
+    "rama":  "practica-pruebas-calidad",
+    "php":  "8.2.12",
+    "node":  "v24.19.0",
+    "total":  38,
+    "aprobados":  23,
+    "fallidos":  11,
+    "bloqueados":  4,
+    "ejecutados":  34,
+    "porcentajeAprobacion":  67.6
+}

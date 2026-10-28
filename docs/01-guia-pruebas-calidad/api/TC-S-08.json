@@ -1,0 +1,254 @@
+{
+    "id":  "S-08",
+    "funcionalidad":  "Limitación de intentos de login (fuerza bruta)",
+    "tipo":  "Seguridad",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "DNI <DNI-DEMO-ESTUDIANTE> con 12 contraseñas incorrectas seguidas",
+    "procedimiento":  "12 × POST /api/auth/login",
+    "esperado":  "Sistema seguro: algún intento recibe 429 Too Many Requests",
+    "resultado":  "Fallido",
+    "real":  "Estados obtenidos: 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401",
+    "ejecutado":  "2026-10-27T20:08:39",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:33 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  531
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:34 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  485
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:35 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  557
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:35 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  497
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:35 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  440
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:36 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  555
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:37 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  554
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:37 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  494
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:38 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  473
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:38 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  515
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:39 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  488
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:39 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  486
+                       }
+                   ]
+}

@@ -1,0 +1,36 @@
+{
+    "id":  "I-04",
+    "funcionalidad":  "CORS: origen no autorizado",
+    "tipo":  "Seguridad",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Origin: http://evil.example",
+    "procedimiento":  "OPTIONS /api/auth/login (preflight)",
+    "esperado":  "Sin cabecera Access-Control-Allow-Origin (el navegador bloquea al origen ajeno)",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 204; Allow-Origin=\u0027\u0027",
+    "ejecutado":  "2026-10-27T20:08:27",
+    "peticiones":  [
+                       {
+                           "metodo":  "OPTIONS",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Origin":  "http://evil.example",
+                                                     "Access-Control-Request-Method":  "POST"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  204,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin,Access-Control-Request-Method",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "text/html; charset=UTF-8",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:27 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "",
+                           "ms":  440
+                       }
+                   ]
+}

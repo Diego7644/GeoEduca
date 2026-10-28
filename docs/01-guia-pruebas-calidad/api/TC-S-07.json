@@ -1,0 +1,54 @@
+{
+    "id":  "S-07",
+    "funcionalidad":  "Resistencia a inyección SQL en el login",
+    "tipo":  "Seguridad",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Identificador con payload SQL; contraseña con payload SQL",
+    "procedimiento":  "POST /api/auth/login (dos peticiones)",
+    "esperado":  "401 o 422, sin token, sin error de base de datos ni 500",
+    "resultado":  "Aprobado",
+    "real":  "identificador: HTTP 422; contraseña: HTTP 401; sin trazas SQL: True",
+    "ejecutado":  "2026-10-27T20:08:33",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\\u0027 OR \\u00271\\u0027=\\u00271\",\"role\":\"student\"}",
+                           "estado":  422,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:32 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"El DNI debe tener 8 d\\u00edgitos.\",\"errors\":{\"identifier\":[\"El DNI debe tener 8 d\\u00edgitos.\"]}}",
+                           "ms":  522
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:33 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  444
+                       }
+                   ]
+}

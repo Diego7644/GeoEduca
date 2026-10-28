@@ -1,0 +1,207 @@
+{
+    "proyecto":  "geoeduca-pruebas-calidad",
+    "nombre":  "GEOEDUCA - Pruebas y calidad",
+    "metricas":  {
+                     "complexity":  "333",
+                     "duplicated_lines_density":  "0.0",
+                     "functions":  "196",
+                     "classes":  "11",
+                     "statements":  "465",
+                     "sqale_index":  "45",
+                     "sqale_rating":  "1.0",
+                     "test_execution_time":  "3825",
+                     "test_failures":  "27",
+                     "bugs":  "0",
+                     "lines_to_cover":  "398",
+                     "ncloc":  "3242",
+                     "duplicated_files":  "0",
+                     "lines":  "3594",
+                     "line_coverage":  "0.0",
+                     "test_errors":  "0",
+                     "coverage":  "0.0",
+                     "reliability_rating":  "1.0",
+                     "ncloc_language_distribution":  "css=18;js=2718;php=506",
+                     "code_smells":  "9",
+                     "security_rating":  "3.0",
+                     "violations":  "11",
+                     "sqale_debt_ratio":  "0.0",
+                     "security_hotspots":  "0",
+                     "security_review_rating":  "1.0",
+                     "test_success_density":  "78.2",
+                     "alert_status":  "OK",
+                     "tests":  "124",
+                     "uncovered_lines":  "398",
+                     "cognitive_complexity":  "128",
+                     "duplicated_blocks":  "0",
+                     "files":  "48",
+                     "vulnerabilities":  "2",
+                     "skipped_tests":  "0"
+                 },
+    "coberturaDeCodigo":  "NO MEDIDA: no se importo ningun informe de cobertura (no hay Xdebug ni PCOV). Sonar muestra 0.0 % solo porque su sensor Zero Coverage asigna 0 a los archivos sin informe; no es cobertura real.",
+    "metricasSolicitadasSinValor":  [
+                                        "branch_coverage"
+                                    ],
+    "metricasInexistentesEnEstaVersion":  [
+
+                                          ],
+    "medicionesCrudas":  [
+                             {
+                                 "metric":  "complexity",
+                                 "value":  "333"
+                             },
+                             {
+                                 "metric":  "duplicated_lines_density",
+                                 "value":  "0.0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "functions",
+                                 "value":  "196"
+                             },
+                             {
+                                 "metric":  "classes",
+                                 "value":  "11"
+                             },
+                             {
+                                 "metric":  "statements",
+                                 "value":  "465"
+                             },
+                             {
+                                 "metric":  "sqale_index",
+                                 "value":  "45",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "sqale_rating",
+                                 "value":  "1.0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "test_execution_time",
+                                 "value":  "3825"
+                             },
+                             {
+                                 "metric":  "test_failures",
+                                 "value":  "27",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "bugs",
+                                 "value":  "0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "lines_to_cover",
+                                 "value":  "398"
+                             },
+                             {
+                                 "metric":  "ncloc",
+                                 "value":  "3242"
+                             },
+                             {
+                                 "metric":  "duplicated_files",
+                                 "value":  "0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "lines",
+                                 "value":  "3594"
+                             },
+                             {
+                                 "metric":  "line_coverage",
+                                 "value":  "0.0",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "test_errors",
+                                 "value":  "0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "coverage",
+                                 "value":  "0.0",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "reliability_rating",
+                                 "value":  "1.0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "ncloc_language_distribution",
+                                 "value":  "css=18;js=2718;php=506"
+                             },
+                             {
+                                 "metric":  "code_smells",
+                                 "value":  "9",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "security_rating",
+                                 "value":  "3.0",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "violations",
+                                 "value":  "11",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "sqale_debt_ratio",
+                                 "value":  "0.0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "security_hotspots",
+                                 "value":  "0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "security_review_rating",
+                                 "value":  "1.0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "test_success_density",
+                                 "value":  "78.2",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "alert_status",
+                                 "value":  "OK"
+                             },
+                             {
+                                 "metric":  "tests",
+                                 "value":  "124"
+                             },
+                             {
+                                 "metric":  "uncovered_lines",
+                                 "value":  "398",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "cognitive_complexity",
+                                 "value":  "128",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "duplicated_blocks",
+                                 "value":  "0",
+                                 "bestValue":  true
+                             },
+                             {
+                                 "metric":  "files",
+                                 "value":  "48"
+                             },
+                             {
+                                 "metric":  "vulnerabilities",
+                                 "value":  "2",
+                                 "bestValue":  false
+                             },
+                             {
+                                 "metric":  "skipped_tests",
+                                 "value":  "0",
+                                 "bestValue":  true
+                             }
+                         ]
+}

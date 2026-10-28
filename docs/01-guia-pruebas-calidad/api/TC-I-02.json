@@ -1,0 +1,35 @@
+{
+    "id":  "I-02",
+    "funcionalidad":  "Login a través del proxy (frontend a backend)",
+    "tipo":  "Integración",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 y Vite en localhost:5173 activos.",
+    "entrada":  "DNI <DNI-DEMO-ESTUDIANTE> (ficticio), contraseña demo de estudiante \u003cMASKED\u003e, perfil student",
+    "procedimiento":  "POST http://localhost:5173/api/auth/login",
+    "esperado":  "200 con token y usuario, igual que contra Laravel directo",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 200; rol=student; token presente=True (valor oculto)",
+    "ejecutado":  "2026-10-27T20:08:26",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://localhost:5173/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Transfer-Encoding":  "chunked",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:26 GMT",
+                                                      "connection":  "close",
+                                                      "host":  "127.0.0.1:8000",
+                                                      "Cache-Control":  "no-cache, private"
+                                                  },
+                           "cuerpoRecibido":  "{\"token\":\"\u003cREDACTED\u003e\",\"token_type\":\"Bearer\",\"user\":{\"id\":1,\"name\":\"Mateo Valenzuela\",\"roleLabel\":\"Estudiante 4to Secundaria B\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}}",
+                           "ms":  545
+                       }
+                   ]
+}

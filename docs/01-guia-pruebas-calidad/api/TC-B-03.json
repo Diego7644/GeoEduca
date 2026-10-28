@@ -1,0 +1,20 @@
+{
+    "id":  "B-03",
+    "funcionalidad":  "Notificaciones a apoderados",
+    "tipo":  "Funcional (no implementado)",
+    "precondiciones":  "Apoderado vinculado a un estudiante.",
+    "entrada":  "Ninguna",
+    "procedimiento":  "Buscar rutas de notificaciones en route:list",
+    "esperado":  "Existen endpoints y mecanismo de envío con registro de intentos",
+    "resultado":  "Bloqueado",
+    "real":  "Rutas coincidentes: 0.",
+    "ejecutado":  "2026-10-27T20:08:41",
+    "peticiones":  [
+                       {
+                           "metodo":  "CLI",
+                           "url":  "php artisan route:list --json --except-vendor",
+                           "estado":  0,
+                           "cuerpoRecibido":  "Rutas registradas: /, api/asistencia/auxiliar/aprobar, api/asistencia/auxiliar/casos, api/asistencia/estudiante, api/asistencia/justificacion, api/asistencia/padre, api/auth/login, api/auth/logout, api/auth/me, api/health"
+                       }
+                   ]
+}

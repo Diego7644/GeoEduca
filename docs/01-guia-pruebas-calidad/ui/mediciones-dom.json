@@ -1,0 +1,44 @@
+{
+  "descripcion": "Mediciones literales obtenidas con el navegador integrado de Cursor (Runtime.evaluate) el 2026-10-27. Los tokens solo muestran el prefijo.",
+  "entorno": { "frontend": "http://localhost:5173", "api": "http://127.0.0.1:8000", "rama": "practica-pruebas-calidad", "commit": "5766b24" },
+  "UI-01": {
+    "accion": "Login de estudiante desde la interfaz",
+    "resultado": {
+      "ruta": "/estudiante",
+      "usuario": { "nombre": "Mateo Valenzuela", "rol": "student", "dni": "<DNI-DEMO-ESTUDIANTE>" },
+      "tokenPrefijo": "mock-<REDACTED>",
+      "h1": "¡Buenos días, Mateo Valenzuela!"
+    },
+    "registroLaravel": "POST /api/auth/login a las 20:10:21 (confirmado en la salida de php artisan serve)"
+  },
+  "UI-03": {
+    "accion": "Abrir /auxiliar sin sesión (localStorage vacío)",
+    "resultado": { "urlFinal": "http://localhost:5173/login" }
+  },
+  "UI-04": {
+    "accion": "Login con contraseña incorrecta",
+    "resultado": { "ruta": "/login", "sesionGuardada": false, "tokenGuardado": false },
+    "mensajeVisibleEnPantalla": "DNI o contraseña incorrectos para este perfil.",
+    "registroLaravel": "POST /api/auth/login a las 20:10:00"
+  },
+  "UI-05": {
+    "accion": "Pulsar Cerrar sesión desde /auxiliar",
+    "resultado": { "ruta": "/login", "claves": [], "sesionGuardada": false, "tokenGuardado": false }
+  },
+  "UI-06": {
+    "accion": "Con sesión de estudiante, editar geoeduca_user.role de 'student' a 'staff' y abrir /auxiliar",
+    "resultado": { "rolAntes": "student", "rolAhora": "staff", "urlFinal": "http://localhost:5173/auxiliar", "panelMostrado": "Panel Auxiliar / Contingencias con 4 casos de alumnos" }
+  },
+  "UI-07": {
+    "accion": "Comparar la fecha mostrada por el panel con la fecha real del navegador",
+    "resultado": { "fechaMostrada": "Lunes, 24 Octubre 2025", "fechaRealNavegador": "martes, 27 de octubre de 2026", "puntualidad": "96.4%", "gps": "a 12 metros de distancia" }
+  },
+  "UI-08": {
+    "accion": "Huella (hash djb2) del contenido del SVG del QR antes y después de pulsar 'Generar Nuevo Código QR'",
+    "resultado": {
+      "antes": { "huella": "744b6508", "elementosRect": 40, "contadorSegundos": 34 },
+      "despues": { "huella": "744b6508", "elementosRect": 40, "contadorSegundos": 58 },
+      "mismaHuella": true
+    }
+  }
+}

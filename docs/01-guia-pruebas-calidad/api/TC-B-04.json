@@ -1,0 +1,56 @@
+{
+    "id":  "B-04",
+    "funcionalidad":  "Persistencia y consulta de justificaciones",
+    "tipo":  "Funcional (no implementado)",
+    "precondiciones":  "Sesión de padre iniciada (token simulado).",
+    "entrada":  "type=absence, event_date=2026-10-27, motivo ficticio",
+    "procedimiento":  "1) POST /api/asistencia/justificacion  2) GET /api/asistencia/padre",
+    "esperado":  "La justificación enviada aparece en la consulta del padre",
+    "resultado":  "Bloqueado",
+    "real":  "POST HTTP 200; GET HTTP 200; mensaje del GET: Pendiente de implementación; justificación encontrada: False",
+    "ejecutado":  "2026-10-27T20:08:42",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/asistencia/justificacion",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  "{\"event_date\":\"2026-10-27\",\"reason\":\"Justificacion para verificar persistencia (ficticia)\",\"type\":\"absence\"}",
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:42 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"Solicitud enviada a Coordinaci\\u00f3n Acad\\u00e9mica.\",\"data\":{\"type\":\"absence\",\"event_date\":\"2026-10-27\",\"reason\":\"Justificacion para verificar persistencia (ficticia)\"}}",
+                           "ms":  559
+                       },
+                       {
+                           "metodo":  "GET",
+                           "url":  "http://127.0.0.1:8000/api/asistencia/padre",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:42 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"data\":[],\"message\":\"Pendiente de implementaci\\u00f3n\"}",
+                           "ms":  443
+                       }
+                   ]
+}

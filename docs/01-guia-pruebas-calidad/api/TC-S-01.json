@@ -1,0 +1,34 @@
+{
+    "id":  "S-01",
+    "funcionalidad":  "Perfil autenticado sin credenciales",
+    "tipo":  "Seguridad",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Sin cabecera Authorization",
+    "procedimiento":  "GET /api/auth/me",
+    "esperado":  "Sistema seguro: 401 Unauthorized",
+    "resultado":  "Fallido",
+    "real":  "HTTP 200; cuerpo: {\"user\":null}",
+    "ejecutado":  "2026-10-27T20:08:28",
+    "peticiones":  [
+                       {
+                           "metodo":  "GET",
+                           "url":  "http://127.0.0.1:8000/api/auth/me",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:28 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"user\":null}",
+                           "ms":  463
+                       }
+                   ]
+}

@@ -1,0 +1,34 @@
+{
+    "id":  "F-01",
+    "funcionalidad":  "Endpoint de salud",
+    "tipo":  "Funcional",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Ninguna",
+    "procedimiento":  "GET /api/health con Accept: application/json",
+    "esperado":  "200 y cuerpo {\"status\":\"ok\"}",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 200 en 542 ms; cuerpo: {\"status\":\"ok\"}",
+    "ejecutado":  "2026-10-27T20:08:16",
+    "peticiones":  [
+                       {
+                           "metodo":  "GET",
+                           "url":  "http://127.0.0.1:8000/api/health",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:16 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"status\":\"ok\"}",
+                           "ms":  542
+                       }
+                   ]
+}

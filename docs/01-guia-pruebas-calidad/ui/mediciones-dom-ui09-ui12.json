@@ -1,0 +1,69 @@
+{
+  "descripcion": "Mediciones literales de los casos UI-09 a UI-12, ejecutados en el navegador integrado de Cursor el 2026-10-28 entre 04:58 y 05:02 UTC (2026-10-27, 23:58 a 00:02 hora local, UTC-5). Archivo nuevo: no modifica mediciones-dom.json. Los valores de token y contraseña no se registran; solo el prefijo publico 'mock-'.",
+  "entorno": {
+    "frontend": "Vite 5.4.21 en http://localhost:5173",
+    "backend": "Laravel 11.57.0 en http://127.0.0.1:8000 (detenido deliberadamente en UI-12)",
+    "rama": "practica-pruebas-calidad",
+    "commit": "b326574 (HEAD; los archivos de produccion no se modificaron)"
+  },
+  "UI-09": {
+    "perfil": "Padre / Tutor",
+    "dni": "<DNI-DEMO-ESTUDIANTE>",
+    "contrasena": "<MASKED> (cuenta de demostracion)",
+    "rutaFinal": "/padre",
+    "usuarioGuardado": { "id": 2, "name": "Rosa Valenzuela", "role": "parent", "roleLabel": "Padre / Tutor", "identifier": "<DNI-DEMO-ESTUDIANTE>" },
+    "tokenGuardado": "mock-<OMITIDO>",
+    "momento": "2026-10-28T04:58:53Z",
+    "estado": "Aprobado",
+    "evidencia": "UI-09_login-padre-redirige-a-panel-padre.png"
+  },
+  "UI-10": {
+    "perfil": "Docente",
+    "dni": "40111222",
+    "contrasena": "<MASKED> (cuenta de demostracion)",
+    "rutaFinal": "/auxiliar",
+    "usuarioGuardado": { "id": 3, "name": "Aux. Ricardo Paz", "role": "staff", "roleLabel": "Auxiliar de Puerta", "identifier": "40111222" },
+    "tokenGuardado": "mock-<OMITIDO>",
+    "momento": "2026-10-28T04:59:40Z",
+    "estado": "Aprobado",
+    "evidencia": "UI-10_login-docente-redirige-a-panel-auxiliar.png"
+  },
+  "UI-11": {
+    "viewport": "375 x 812, movil, factor 2 (Emulation.setDeviceMetricsOverride; restaurado al terminar)",
+    "pantalla": "/auxiliar con sesion de docente",
+    "momento": "2026-10-28T05:00:03Z",
+    "innerWidth": 375,
+    "scrollWidthDocumento": 375,
+    "scrollWidthBody": 375,
+    "desbordeHorizontalDeLaPagina": false,
+    "menuLateral": { "posicion": "fixed", "x": -256, "ancho": 256, "visibleEnViewport": false, "botonDeMenu": "Abrir menu (hamburguesa)" },
+    "elementosCuyoBordeDerechoSuperaElViewport": 41,
+    "clasificacion": {
+      "dentroDeContenedorConDesplazamiento": 39,
+      "recortadosPorUnContenedor": 2,
+      "sinContenedor": 0
+    },
+    "elementosRecortados": [
+      "select de motivo de registro: borde derecho en 414 px (39 px fuera de un viewport de 375 px)",
+      "etiqueta 'Tardanza Medica Pre-Justificada': borde derecho en 382 px (7 px fuera)"
+    ],
+    "observacionVisual": "En la captura de 375 px los nombres de los alumnos aparecen cortados por la izquierda ('alentina amos uispe'), el selector sobrepasa el borde derecho y la etiqueta de tardanza se corta. El encabezado repetido al pie de la captura es un artefacto de la captura por CDP, no de la aplicacion.",
+    "alcance": "Solo se midio el panel auxiliar. Los paneles de estudiante y padre no se midieron en 375 px.",
+    "estado": "Fallido",
+    "evidencia": ["UI-11_vista-movil-375px-panel-auxiliar.png", "UI-11_contenido-recortado-en-375px.png"]
+  },
+  "UI-12": {
+    "preparacion": "Se detuvo el servidor Laravel del puerto 8000. GET http://127.0.0.1:8000/api/health: 'No es posible conectar con el servidor remoto'. Vite siguio activo.",
+    "entrada": "DNI <DNI-DEMO-ESTUDIANTE> y una contrasena ficticia de 17 caracteres. Con el backend apagado la validez de la credencial no influye en el resultado; no se uso la contrasena de la cuenta de demostracion.",
+    "momento": "2026-10-28T05:01:28Z",
+    "rutaFinal": "/login",
+    "mensajeMostrado": "Request failed with status code 500",
+    "sesionGuardada": false,
+    "tokenGuardado": false,
+    "botonDeEnvio": "habilitado de nuevo tras el error",
+    "causaVerificada": "El proxy de Vite (frontend/vite.config.js, '/api' -> 127.0.0.1:8000) responde HTTP 500 cuando Laravel no esta disponible; el terminal de Vite registro 'http proxy error: /api/auth/login - Error: connect ECONNREFUSED 127.0.0.1:8000'. frontend/src/pages/Login.jsx (linea 59) muestra err.message tal cual.",
+    "alcance": "Se observo el comportamiento con el proxy de desarrollo. No se probo un despliegue sin proxy, donde el error de axios seria distinto.",
+    "estado": "Fallido",
+    "evidencia": "UI-12_backend-caido-mensaje-tecnico-500.png"
+  }
+}

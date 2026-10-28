@@ -1,0 +1,103 @@
+{
+    "generadoEl":  "2026-10-27T23:15:22",
+    "metodo":  "Calculado sin credenciales: lee los archivos locales de docs/01-guia-pruebas-calidad/sonarqube y hace consultas de solo lectura (SELECT) a la base de datos de SonarQube. No ejecuta PHPUnit ni el escaner.",
+    "analisisVigente":  {
+                            "id":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                            "fechaUtc":  "2026-10-28 04:07:52",
+                            "commit":  "b326574",
+                            "tareaDeProcesamiento":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+                            "estadoDeLaTarea":  "SUCCESS"
+                        },
+    "analisisRegistradosEnElServidor":  3,
+    "notaAnalisis":  "Hay 3 analisis del mismo proyecto; el 1.o y el 2.o estan purgados. Todas las evidencias vigentes pertenecen al 3.o.",
+    "comprobaciones":  [
+                           {
+                               "comprobacion":  "ce-task.json pertenece al analisis vigente",
+                               "esperado":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                               "obtenido":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "la tarea del analisis vigente en la BD es la de ce-task.json",
+                               "esperado":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+                               "obtenido":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "salida-escaner.txt registra la misma tarea",
+                               "esperado":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+                               "obtenido":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "resumen-sonarqube.json apunta al analisis vigente",
+                               "esperado":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                               "obtenido":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "estado de la tarea en la BD",
+                               "esperado":  "SUCCESS",
+                               "obtenido":  "SUCCESS",
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "vulnerabilities (metrica) = incidencias VULNERABILITY",
+                               "esperado":  2,
+                               "obtenido":  2,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "code_smells (metrica) = incidencias CODE_SMELL",
+                               "esperado":  9,
+                               "obtenido":  9,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "bugs (metrica) = incidencias BUG",
+                               "esperado":  0,
+                               "obtenido":  0,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "violations (metrica) = total de incidencias",
+                               "esperado":  11,
+                               "obtenido":  11,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "security_hotspots (metrica) = hotspots devueltos por la API",
+                               "esperado":  0,
+                               "obtenido":  0,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "tests importados en Sonar = casos del informe JUnit local",
+                               "esperado":  124,
+                               "obtenido":  124,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "fallos en Sonar = fallos del informe JUnit local",
+                               "esperado":  27,
+                               "obtenido":  27,
+                               "ok":  true
+                           },
+                           {
+                               "comprobacion":  "estado del Quality Gate coincide entre archivos",
+                               "esperado":  "OK",
+                               "obtenido":  "OK",
+                               "ok":  true
+                           }
+                       ],
+    "todoCoincide":  true,
+    "aclaracionSobreCoherenciaDelScript":  {
+                                               "archivo":  "coherencia-del-analisis.json",
+                                               "valorOriginal":  false,
+                                               "motivo":  "En esa ejecucion el script comparo el ce-task.json y el metricas.json PREVIOS (del 2.o analisis, ya reemplazados) con el 3.o analisis, y marco evidenciaGuardadaCorrespondeAlAnalisisVigente=false y test_execution_time distinto. Es un artefacto de la logica del script (corregida despues: la comparacion con archivos previos solo se aplica con -Completar), no una incoherencia entre las evidencias actuales.",
+                                               "banderasEnFalso":  [
+                                                                       "evidenciaGuardadaCorrespondeAlAnalisisVigente",
+                                                                       "metricasGuardadasDistintasDeLaLecturaActual: test_execution_time"
+                                                                   ]
+                                           }
+}
