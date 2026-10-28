@@ -6,6 +6,7 @@
   - Suites:
       Caracterizacion      -> fija el comportamiento ACTUAL (debe aprobar, incluso los defectos conocidos).
       RequisitosSeguridad  -> comprueba el comportamiento SEGURO esperado (hoy falla donde hay defectos).
+      Persistencia         -> esquema, relaciones y CRUD Eloquent en SQLite :memory: (F1.1).
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
@@ -23,6 +24,9 @@
         <testsuite name="RequisitosSeguridad">
             <directory>tests/Seguridad</directory>
         </testsuite>
+        <testsuite name="Persistencia">
+            <directory>tests/Persistencia</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
@@ -38,6 +42,7 @@
         <env name="CACHE_STORE" value="array" force="true"/>
         <env name="DB_CONNECTION" value="sqlite" force="true"/>
         <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="DB_FOREIGN_KEYS" value="true" force="true"/>
         <env name="LOG_CHANNEL" value="null" force="true"/>
         <env name="MAIL_MAILER" value="array" force="true"/>
         <env name="QUEUE_CONNECTION" value="sync" force="true"/>

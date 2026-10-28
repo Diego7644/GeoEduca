@@ -2,7 +2,7 @@
 
 Prototipo web de control de asistencia escolar. El repositorio principal del proyecto es [Diego7644/GeoEduca](https://github.com/Diego7644/GeoEduca).
 
-Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistema funcional**: no hay base de datos, la autenticación es simulada y el historial de asistencia, el QR, el GPS y las notificaciones no ejecutan un proceso real. El siguiente objetivo de desarrollo es persistencia, autenticación segura y gestión de roles. El detalle está en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
+Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistema funcional**: la autenticación es simulada y el historial de asistencia, el QR, el GPS y las notificaciones no ejecutan un proceso real. En la rama `feature/f1-persistencia` existe un esquema PostgreSQL con modelos Eloquent; **la API todavía no lo usa** (sigue el JSON). El siguiente objetivo es el login real (F1.2). El detalle está en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
 
 ## Tecnologías
 
@@ -11,7 +11,7 @@ Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistem
 | Backend | PHP 8.2, Laravel 11, Laravel Sanctum (instalado, aún no usado) |
 | Frontend | React 18, Vite 5, React Router, Tailwind CSS, Axios |
 | Pruebas | PHPUnit 11, Mockery |
-| Persistencia actual | archivo JSON local (`storage/app/geoeduca-state.json`, ignorado por Git). No hay migraciones ni modelos |
+| Persistencia actual | JSON local (`storage/app/geoeduca-state.json`, ignorado por Git) para la API. Esquema PostgreSQL 16 y modelos Eloquent en F1.1, aún no cableados |
 
 ## Estructura
 
@@ -36,13 +36,13 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 | QR | Patrón visual de 8×8; no es un código QR escaneable ni se valida en el servidor |
 | GPS | El navegador calcula si está en el perímetro; la coordenada no se envía |
 | Notificaciones | Lista dentro de la aplicación; no hay correo, SMS ni push |
-| Base de datos | No existe |
+| Base de datos | Esquema F1.1 en PostgreSQL; la API no lo consulta. JSON intacto |
 
 Las cuentas de demostración viven en el código del prototipo. No se documentan aquí. Hay que rotarlas antes de cualquier despliegue.
 
 ## Instalación y ejecución
 
-Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. **No hace falta un motor de base de datos** para arrancar el prototipo.
+Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. **No hace falta PostgreSQL** para arrancar el prototipo (login y asistencia siguen en JSON). El esquema real se instala con Docker; ver [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
 
 ### Backend
 
@@ -54,7 +54,7 @@ php artisan key:generate
 php artisan serve             # http://127.0.0.1:8000
 ```
 
-No ejecutes `php artisan migrate`: todavía no hay migraciones.
+El prototipo no necesita `migrate`. Si va a trabajar el esquema F1.1: defina `DB_PASSWORD` en `backend/.env`, levante Docker y ejecute `php artisan migrate` (instrucciones en la guía de PostgreSQL).
 
 ### Frontend
 
@@ -75,13 +75,15 @@ cd backend
 php vendor/bin/phpunit
 ```
 
-Hay dos suites:
+Hay tres suites:
 
 - `Caracterizacion`: describe el comportamiento actual y debe aprobar.
+- `Persistencia`: esquema y relaciones Eloquent en SQLite. Debe aprobar.
 - `RequisitosSeguridad`: describe el comportamiento seguro esperado. Hoy falla a propósito (defecto de autenticación, cabeceras, límite de intentos, etc.). No se modifican esas expectativas para ocultar fallos.
 
 ```bash
 php vendor/bin/phpunit --testsuite Caracterizacion
+php vendor/bin/phpunit --testsuite Persistencia
 php vendor/bin/phpunit --testsuite RequisitosSeguridad
 ```
 

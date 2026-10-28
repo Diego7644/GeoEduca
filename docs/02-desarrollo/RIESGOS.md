@@ -13,8 +13,8 @@
 | R7 | Trabajo concurrente en `AsistenciaStore.php` | Media | Coordinar módulos; PRs pequeños |
 | R8 | `composer.lock` | Baja | Producción 73/73 idéntica; solo se añadieron paquetes de desarrollo |
 | R9 | Dependencias vulnerables | Alta al conectar auth real | M0.2: actualizar Laravel y evaluar Vite en PRs aparte |
-| R10 | JSON de estado con sesiones y contraseñas | Alta si se despliega | El archivo está ignorado; se elimina en M1/M2 |
-| R11 | README de `main` habla de MySQL y `migrate` | Baja | Corregir al implementar M1 |
+| R10 | JSON de estado con sesiones y contraseñas | Alta si se despliega | El archivo está ignorado; F1.1 no lo borra; se retira cuando F1.2/F1.3 cubran el contrato |
+| R11 | README de `main` habla de MySQL y `migrate` | Baja | README de `main` ya describe JSON; esta rama documenta PostgreSQL opcional |
 | R12 | Saltos de línea en scripts | Baja | `.gitattributes` añadido |
 
 ## Producto
@@ -29,4 +29,4 @@
 
 ## Operación de esta entrega
 
-No se hizo push, PR, merge a `main` ni force push. El clon de integración tiene el push deshabilitado. El repositorio original de la práctica no se alteró. Si un paso arriesgara PII o pérdida de trabajo, se detuvo ese paso y se conservaron los originales.
+M0 sí se publicó (PRs #1 y #2, `main` = `4992279`). F1.1 **no** hace push, merge a `main` ni force push. El JSON del prototipo no se eliminó. El repositorio académico original no se alteró.

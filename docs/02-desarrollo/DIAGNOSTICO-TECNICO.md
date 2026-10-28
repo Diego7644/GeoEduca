@@ -1,6 +1,8 @@
 # Diagnóstico técnico actual
 
-Fecha: 2026-10-28. Lectura estática del commit `800e5e2` más una ejecución real de PHPUnit (ver `RESULTADOS-PHPUNIT-INTEGRACION.md`). **No se considera implementada una pantalla:** hace falta un proceso de servidor o de navegador con datos que no sean fijos y un resultado comprobable.
+Fecha original: 2026-10-28, commit `800e5e2`. PHPUnit de M0: `RESULTADOS-PHPUNIT-INTEGRACION.md`.
+
+**Actualización F1.1** (`feature/f1-persistencia`): existen migraciones, modelos Eloquent y PostgreSQL 16 local. La API **no los usa**. Login y asistencia siguen en JSON. Ver `MODELO-DE-DATOS.md` y `RESULTADOS-PHPUNIT-F1.1.md`. **No se considera implementada una pantalla:** hace falta un proceso de servidor o de navegador con datos que no sean fijos y un resultado comprobable.
 
 Etiquetas: **Real**, **Parcial**, **Simulada**, **No existe**.
 
@@ -10,8 +12,8 @@ Etiquetas: **Real**, **Parcial**, **Simulada**, **No existe**.
 |---|---|---|
 | Backend Laravel | **Parcial** | 20 rutas de API. Lógica en `AsistenciaStore` (~1.400 líneas) sobre un JSON |
 | Frontend React | **Parcial** | Paneles cargan la API; Reportes y Configuración activos; GPS local; CSV en el navegador |
-| Modelos y migraciones | **No existe** | `app/Models` y `database/migrations` vacíos |
-| Base de datos | **No existe** | SQLite configurada y vacía. Estado en `storage/app/geoeduca-state.json` (ignorado por Git) |
+| Modelos y migraciones | **Parcial (F1.1)** | Tablas y modelos creados; la API no los consulta |
+| Base de datos | **Parcial (F1.1)** | PostgreSQL 16 con esquema; el estado de la API sigue en `storage/app/geoeduca-state.json` |
 | Autenticación | **Parcial / simulada** | Token `mock-<hex>` guardado y validado en el JSON; sin expiración; cuentas de demostración |
 | Autorización | **Parcial** | `guard()` y `guardianId` en el almacén; sin middleware Sanctum |
 | Personas | **Simulada** | 3 cuentas y 8 estudiantes fijos en código |

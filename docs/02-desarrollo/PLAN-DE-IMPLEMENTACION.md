@@ -32,7 +32,7 @@ M0 Integración ─┬─► M1 Persistencia ─► M2 AuthZ/AuthN ─┬─► 
 | — | M9 Frontend | M | Bajo | Paralelo a M2–M8 |
 | — | M10 Calidad continua | M | Bajo | Transversal |
 
-M0 está **preparado en local** (esta rama). Falta autorización para commit, push y Pull Request. Ver `GRUPOS-DE-COMMIT.md`.
+M0 está en `main` (`4992279`). F1.1 (esquema, modelos, seeders, pruebas) está en `feature/f1-persistencia`, sin fusionar. La API sigue en JSON.
 
 ## Primera funcionalidad: F1 = M1 + M2
 
@@ -40,7 +40,7 @@ Por qué primero: todo lo demás la necesita; cierra los defectos críticos de s
 
 Pull Requests previstos:
 
-1. **PR-F1.1** Migraciones y modelos de `users`, `personal_access_tokens` y datos de arranque solo para desarrollo.
+1. **PR-F1.1** Migraciones y modelos (users, personal, estudiantes, tutores, asistencia, etc.) y datos de arranque solo para desarrollo. Implementado en local; falta autorizar push y PR.
 2. **PR-F1.2** Login contra la base de datos, contraseñas con hash, tokens Sanctum con expiración, `logout` que revoca.
 3. **PR-F1.3** Middleware `auth:sanctum` salvo `health` y `login`; middleware de rol y políticas tutor→hijo. Retirar la sesión del JSON.
 4. **PR-F1.4** `throttle`, `LoginRequest` (DNI como arreglo → 422), `APP_DEBUG=false` en la plantilla, cabeceras, recuperación con código hasheado y sin devolverlo.
