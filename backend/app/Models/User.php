@@ -17,11 +17,13 @@ class User extends Authenticatable
     public const ROLE_STUDENT = 'student';
     public const ROLE_PARENT = 'parent';
     public const ROLE_STAFF = 'staff';
+    public const ROLE_ADMIN = 'admin';
 
     public const ROLES = [
         self::ROLE_STUDENT,
         self::ROLE_PARENT,
         self::ROLE_STAFF,
+        self::ROLE_ADMIN,
     ];
 
     protected $fillable = [
@@ -77,5 +79,10 @@ class User extends Authenticatable
     public function isStaff(): bool
     {
         return $this->role === self::ROLE_STAFF;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
     }
 }

@@ -39,6 +39,7 @@ class EloquentUserAuthenticator implements UserAuthenticator
             'roleLabel' => $user->role_label,
             'identifier' => $user->dni,
             'role' => $user->role,
+            'staffKind' => $user->staffProfile?->kind,
         ];
     }
 

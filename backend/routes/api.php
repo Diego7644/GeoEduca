@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->prefix('asistencia')->group(function () {
     Route::middleware('role:student')->group(function () {
         Route::get('/estudiante', [AsistenciaController::class, 'estudiante']);
         Route::post('/estudiante/token', [AsistenciaController::class, 'refreshToken']);
+        Route::post('/estudiante/ubicacion', [AsistenciaController::class, 'ubicacion']);
     });
 
     Route::middleware('role:parent')->group(function () {
@@ -47,6 +48,8 @@ Route::middleware('auth:sanctum')->prefix('asistencia')->group(function () {
     Route::middleware('role:staff')->group(function () {
         Route::get('/auxiliar/casos', [AsistenciaController::class, 'casosAuxiliar']);
         Route::post('/auxiliar/aprobar', [AsistenciaController::class, 'aprobarIngreso']);
+        Route::post('/qr/validar', [AsistenciaController::class, 'validarQr']);
+        Route::get('/docente', [AsistenciaController::class, 'docente']);
         Route::put('/configuracion', [AsistenciaController::class, 'actualizarConfiguracion']);
     });
 
@@ -54,4 +57,10 @@ Route::middleware('auth:sanctum')->prefix('asistencia')->group(function () {
     Route::get('/configuracion', [AsistenciaController::class, 'configuracion']);
     Route::get('/notificaciones', [AsistenciaController::class, 'notificaciones']);
     Route::post('/notificaciones/leidas', [AsistenciaController::class, 'leerNotificaciones']);
+});
+
+Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/directorio', [\App\Http\Controllers\AdminController::class, 'directorio']);
+    Route::post('/apoderados', [\App\Http\Controllers\AdminController::class, 'vincular']);
+    Route::get('/actividad', [\App\Http\Controllers\AdminController::class, 'actividad']);
 });

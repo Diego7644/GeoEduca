@@ -30,7 +30,7 @@ class LoginRequest extends FormRequest
         return [
             'identifier' => ['required', 'string', 'bail', 'digits:8'],
             'password' => ['required', 'string', 'bail', 'min:8', 'max:128'],
-            'role' => ['required', 'string', 'bail', 'in:student,parent,staff'],
+            'role' => ['required', 'string', 'bail', 'in:student,parent,staff,admin'],
         ];
     }
 

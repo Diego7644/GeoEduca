@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureUserRole;
 use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\ResetAuthGuard;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: ['api/*']);
         $middleware->append(SecurityHeaders::class);
         $middleware->api(prepend: [
+            ResetAuthGuard::class,
             ForceJsonResponse::class,
         ]);
         $middleware->alias([
