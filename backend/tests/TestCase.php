@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use App\Auth\DemoAccounts;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Base de las pruebas de GEOEDUCA. Arranca la aplicación real (bootstrap/app.php)
@@ -17,6 +22,8 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
  */
 abstract class TestCase extends BaseTestCase
 {
+    use RefreshDatabase;
+
     private ?string $almacenamientoTemporal = null;
 
     /**
@@ -38,6 +45,8 @@ abstract class TestCase extends BaseTestCase
         $this->almacenamientoTemporal = sys_get_temp_dir().DIRECTORY_SEPARATOR.'geoeduca-pruebas-'.bin2hex(random_bytes(6));
         mkdir($this->almacenamientoTemporal.DIRECTORY_SEPARATOR.'app', 0777, true);
         $this->app->useStoragePath($this->almacenamientoTemporal);
+        Cache::flush();
+        $this->sembrarCuentasDePrueba();
     }
 
     protected function tearDown(): void
@@ -47,6 +56,24 @@ abstract class TestCase extends BaseTestCase
         }
 
         parent::tearDown();
+    }
+
+    private function sembrarCuentasDePrueba(): void
+    {
+        if (! Schema::hasTable('users')) {
+            return;
+        }
+
+        foreach (DemoAccounts::all() as $account) {
+            User::query()->firstOrCreate(
+                ['dni' => $account['dni'], 'role' => $account['role']],
+                [
+                    'name' => $account['name'],
+                    'role_label' => $account['roleLabel'],
+                    'password' => $account['password'],
+                ]
+            );
+        }
     }
 
     private function forzarEntornoSqliteDePrueba(): void

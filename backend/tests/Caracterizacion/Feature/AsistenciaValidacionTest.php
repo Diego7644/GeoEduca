@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use Tests\Support\Cargas;
+use Tests\Support\IniciaSesion;
 use Tests\TestCase;
 
 /**
@@ -16,6 +17,8 @@ use Tests\TestCase;
  */
 final class AsistenciaValidacionTest extends TestCase
 {
+    use IniciaSesion;
+
     /**
      * @return array<string, array{0: array<string, mixed>, 1: list<string>}>
      */
@@ -47,7 +50,7 @@ final class AsistenciaValidacionTest extends TestCase
     #[TestDox('Justificación inválida responde 422 y marca solo los campos erróneos')]
     public function test_justificacion_invalida(array $carga, array $camposConError): void
     {
-        $respuesta = $this->postJson('/api/asistencia/justificacion', $carga);
+        $respuesta = $this->withToken($this->tokenDe('parent'))->postJson('/api/asistencia/justificacion', $carga);
 
         $respuesta->assertStatus(422)->assertJsonStructure(['message', 'errors']);
         $this->assertCamposConError($camposConError, $respuesta->json('errors'));
@@ -76,7 +79,7 @@ final class AsistenciaValidacionTest extends TestCase
     #[TestDox('Aprobación manual inválida responde 422 y marca solo los campos erróneos')]
     public function test_aprobacion_invalida(array $carga, array $camposConError): void
     {
-        $respuesta = $this->postJson('/api/asistencia/auxiliar/aprobar', $carga);
+        $respuesta = $this->withToken($this->tokenDe('staff'))->postJson('/api/asistencia/auxiliar/aprobar', $carga);
 
         $respuesta->assertStatus(422)->assertJsonStructure(['message', 'errors']);
         $this->assertCamposConError($camposConError, $respuesta->json('errors'));
@@ -86,7 +89,7 @@ final class AsistenciaValidacionTest extends TestCase
     #[TestDox('El mensaje de motivo obligatorio está en español')]
     public function test_mensaje_de_motivo_obligatorio(): void
     {
-        $this->postJson('/api/asistencia/auxiliar/aprobar', ['student_id' => '74829104'])
+        $this->withToken($this->tokenDe('staff'))->postJson('/api/asistencia/auxiliar/aprobar', ['student_id' => '74829104'])
             ->assertStatus(422)
             ->assertJsonPath('errors.reason.0', 'El motivo de contingencia es obligatorio.');
     }

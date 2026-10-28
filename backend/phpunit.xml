@@ -7,6 +7,7 @@
       Caracterizacion      -> fija el comportamiento ACTUAL (debe aprobar, incluso los defectos conocidos).
       RequisitosSeguridad  -> comprueba el comportamiento SEGURO esperado (hoy falla donde hay defectos).
       Persistencia         -> esquema, relaciones y CRUD Eloquent en SQLite :memory: (F1.1).
+      Autenticacion        -> login Sanctum, expiración, revocación y aislamiento (F1.2).
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
@@ -26,6 +27,9 @@
         </testsuite>
         <testsuite name="Persistencia">
             <directory>tests/Persistencia</directory>
+        </testsuite>
+        <testsuite name="Autenticacion">
+            <directory>tests/Autenticacion</directory>
         </testsuite>
     </testsuites>
     <source>
@@ -48,5 +52,6 @@
         <env name="QUEUE_CONNECTION" value="sync" force="true"/>
         <env name="SESSION_DRIVER" value="array" force="true"/>
         <env name="BCRYPT_ROUNDS" value="4" force="true"/>
+        <env name="SANCTUM_EXPIRATION" value="120" force="true"/>
     </php>
 </phpunit>
