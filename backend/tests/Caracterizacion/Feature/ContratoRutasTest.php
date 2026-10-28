@@ -61,6 +61,12 @@ final class ContratoRutasTest extends TestCase
             'PUT api/asistencia/configuracion',
             'GET api/asistencia/notificaciones',
             'POST api/asistencia/notificaciones/leidas',
+            'POST api/asistencia/estudiante/ubicacion',
+            'POST api/asistencia/qr/validar',
+            'GET api/asistencia/docente',
+            'GET api/admin/directorio',
+            'POST api/admin/apoderados',
+            'GET api/admin/actividad',
         ];
 
         $registradas = $this->rutasRegistradas();
@@ -74,17 +80,25 @@ final class ContratoRutasTest extends TestCase
     }
 
     #[Group('B-01')]
-    #[TestDox('No existe ninguna ruta de QR dinámico (emisión o validación)')]
-    public function test_no_hay_rutas_de_qr(): void
+    #[TestDox('La validación de QR existe y exige personal autenticado')]
+    public function test_la_validacion_de_qr_esta_protegida(): void
     {
-        $this->assertSame([], $this->rutasQueCoinciden('/qr|desaf|challenge|totp/i'));
+        $this->assertSame(['POST api/asistencia/qr/validar'], $this->rutasQueCoinciden('/qr|desaf|challenge|totp/i'));
+        $this->postJson('/api/asistencia/qr/validar', ['value' => str_repeat('a', 32)])->assertUnauthorized();
     }
 
     #[Group('B-02')]
-    #[TestDox('No existe ninguna ruta de geolocalización o geocerca')]
-    public function test_no_hay_rutas_de_geolocalizacion(): void
+    #[TestDox('La ubicación del estudiante se envía a una ruta protegida')]
+    public function test_la_ubicacion_esta_protegida(): void
     {
-        $this->assertSame([], $this->rutasQueCoinciden('/geo|ubicaci|gps|geocerca/i'));
+        $this->assertSame(
+            ['POST api/asistencia/estudiante/ubicacion'],
+            $this->rutasQueCoinciden('/geo|ubicaci|gps|geocerca/i')
+        );
+        $this->postJson('/api/asistencia/estudiante/ubicacion', [
+            'latitude' => -12.0,
+            'longitude' => -77.0,
+        ])->assertUnauthorized();
     }
 
     #[Group('B-03')]
@@ -116,7 +130,7 @@ final class ContratoRutasTest extends TestCase
         $this->assertFileExists(app_path('Services/Asistencia/AsistenciaStore.php'));
         $controlador = file_get_contents(app_path('Http/Controllers/AsistenciaController.php'));
         $this->assertNotFalse($controlador);
-        $this->assertStringContainsString('AsistenciaStore', $controlador);
-        $this->assertStringContainsString('geoeduca-state.json', file_get_contents(app_path('Services/Asistencia/AsistenciaStore.php')) ?: '');
+        $this->assertStringContainsString('AttendancePortal', $controlador);
+        $this->assertFileExists(app_path('Services/Asistencia/AsistenciaStore.php'));
     }
 }

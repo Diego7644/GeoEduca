@@ -19,6 +19,7 @@ class AttendanceRecord extends Model
         'recorded_by_user_id',
         'attended_on',
         'status',
+        'source',
         'method',
         'gate',
         'entry_time',

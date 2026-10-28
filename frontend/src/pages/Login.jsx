@@ -6,7 +6,7 @@ import RecoveryModal from '../components/RecoveryModal';
 import SafeImage from '../components/SafeImage';
 import SessionStatus from '../components/SessionStatus';
 import { IMAGES } from '../config/images';
-import { ROLE_HOME } from '../config/roles';
+import { homeFor } from '../config/roles';
 import { useAuth } from '../context/AuthContext';
 import useValidatedField from '../hooks/useValidatedField';
 import { validateIdentifier, validatePassword } from '../validation/rules';
@@ -14,7 +14,8 @@ import { validateIdentifier, validatePassword } from '../validation/rules';
 const ROLES = [
   { key: 'student', label: 'Estudiante', icon: 'school' },
   { key: 'parent', label: 'Padre / Tutor', icon: 'family_restroom' },
-  { key: 'staff', label: 'Docente', icon: 'badge' },
+  { key: 'staff', label: 'Personal', icon: 'badge' },
+  { key: 'admin', label: 'Admin', icon: 'admin_panel_settings' },
 ];
 
 const inputShell = (hasError) =>
@@ -43,7 +44,7 @@ export default function Login() {
   if (status === 'offline' || status === 'error') {
     return <SessionStatus status={status} onRetry={retry} onAbandon={abandonSession} />;
   }
-  if (user) return <Navigate to={ROLE_HOME[user.role] ?? '/login'} replace />;
+  if (user) return <Navigate to={homeFor(user)} replace />;
 
   const canSubmit = identifier.isValid && password.isValid && !loading;
 
@@ -61,7 +62,7 @@ export default function Login() {
         identifier: identifier.value.trim(),
         password: password.value,
       });
-      navigate(ROLE_HOME[loggedUser.role], { replace: true });
+      navigate(homeFor(loggedUser), { replace: true });
     } catch (err) {
       if (err.fieldErrors?.identifier) identifier.setError(err.fieldErrors.identifier);
       if (err.fieldErrors?.password) password.setError(err.fieldErrors.password);
@@ -96,7 +97,7 @@ export default function Login() {
             </div>
 
             <div className="mt-8">
-              <div className="bg-surface-container p-1 rounded-lg grid grid-cols-3 gap-1">
+              <div className="bg-surface-container p-1 rounded-lg grid grid-cols-2 sm:grid-cols-4 gap-1">
                 {ROLES.map((r) => (
                   <button
                     key={r.key}

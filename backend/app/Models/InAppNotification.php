@@ -16,6 +16,7 @@ class InAppNotification extends Model
         'title',
         'body',
         'read_at',
+        'dedupe_key',
     ];
 
     protected function casts(): array

@@ -31,6 +31,9 @@
         <testsuite name="Autenticacion">
             <directory>tests/Autenticacion</directory>
         </testsuite>
+        <testsuite name="Funcional">
+            <directory>tests/Funcional</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

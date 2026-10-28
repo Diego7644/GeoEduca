@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ROLE_HOME } from '../config/roles';
+import { homeFor } from '../config/roles';
 import SessionStatus from './SessionStatus';
 
 /** Exige una sesión confirmada por el backend y, si se pide, un rol de esa sesión. */
-export default function ProtectedRoute({ roles }) {
+export default function ProtectedRoute({ roles, staffKinds }) {
   const { user, status, retry, abandonSession } = useAuth();
 
   if (status === 'checking') return <SessionStatus status="checking" />;
@@ -12,7 +12,8 @@ export default function ProtectedRoute({ roles }) {
     return <SessionStatus status={status} onRetry={retry} onAbandon={abandonSession} />;
   }
   if (!user) return <Navigate to="/login" replace />;
-  if (roles && !roles.includes(user.role)) return <Navigate to={ROLE_HOME[user.role] ?? '/login'} replace />;
+  if (roles && !roles.includes(user.role)) return <Navigate to={homeFor(user)} replace />;
+  if (staffKinds && !staffKinds.includes(user.staffKind)) return <Navigate to={homeFor(user)} replace />;
 
   return <Outlet />;
 }

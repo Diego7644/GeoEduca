@@ -34,7 +34,7 @@ final class LoginValidacionTest extends TestCase
             'V-02 contraseña de 3 caracteres' => ['base', ['password' => 'abc'], ['password']],
             'V-02 contraseña de 7 caracteres' => ['base', ['password' => 'abcdefg'], ['password']],
             'V-06 contraseña de 129 caracteres' => ['base', ['password' => str_repeat('a', 129)], ['password']],
-            'V-03 perfil inexistente (admin)' => ['base', ['role' => 'admin'], ['role']],
+            'V-03 perfil inexistente' => ['base', ['role' => 'invitado'], ['role']],
             'V-03 perfil ausente' => ['base', ['role' => null], ['role']],
             'V-04 formulario vacío' => ['vacio', [], ['identifier', 'password', 'role']],
             'V-04 solo el DNI' => ['vacio', ['identifier' => $dni], ['password', 'role']],
