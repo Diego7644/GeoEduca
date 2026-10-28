@@ -67,6 +67,15 @@ final class ContratoRutasTest extends TestCase
             'GET api/admin/directorio',
             'POST api/admin/apoderados',
             'GET api/admin/actividad',
+            'POST api/admin/estudiantes',
+            'PUT api/admin/estudiantes/{student}',
+            'POST api/admin/cuentas',
+            'POST api/admin/usuarios/{user}/clave',
+            'DELETE api/admin/apoderados',
+            'GET api/asistencia/justificaciones',
+            'POST api/asistencia/justificaciones/{id}/revisar',
+            'POST api/asistencia/salida',
+            'POST api/asistencia/jornada/cerrar',
         ];
 
         $registradas = $this->rutasRegistradas();

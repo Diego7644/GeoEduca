@@ -55,12 +55,21 @@ Route::middleware('auth:sanctum')->prefix('asistencia')->group(function () {
 
     Route::get('/reportes', [AsistenciaController::class, 'reportes']);
     Route::get('/configuracion', [AsistenciaController::class, 'configuracion']);
+    Route::get('/justificaciones', [AsistenciaController::class, 'justificaciones']);
+    Route::post('/justificaciones/{id}/revisar', [AsistenciaController::class, 'revisarJustificacion']);
+    Route::post('/salida', [AsistenciaController::class, 'salida']);
+    Route::post('/jornada/cerrar', [AsistenciaController::class, 'cerrarJornada']);
     Route::get('/notificaciones', [AsistenciaController::class, 'notificaciones']);
     Route::post('/notificaciones/leidas', [AsistenciaController::class, 'leerNotificaciones']);
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/directorio', [\App\Http\Controllers\AdminController::class, 'directorio']);
+    Route::post('/estudiantes', [\App\Http\Controllers\AdminController::class, 'crearEstudiante']);
+    Route::put('/estudiantes/{student}', [\App\Http\Controllers\AdminController::class, 'editarEstudiante']);
+    Route::post('/cuentas', [\App\Http\Controllers\AdminController::class, 'crearCuenta']);
+    Route::post('/usuarios/{user}/clave', [\App\Http\Controllers\AdminController::class, 'clave']);
     Route::post('/apoderados', [\App\Http\Controllers\AdminController::class, 'vincular']);
+    Route::delete('/apoderados', [\App\Http\Controllers\AdminController::class, 'desvincular']);
     Route::get('/actividad', [\App\Http\Controllers\AdminController::class, 'actividad']);
 });

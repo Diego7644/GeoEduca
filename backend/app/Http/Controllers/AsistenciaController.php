@@ -80,12 +80,44 @@ class AsistenciaController extends Controller
 
     public function docente(Request $request): JsonResponse
     {
-        return $this->run(fn (User $user) => $this->portal->docente($user), $request);
+        $date = $request->query('date');
+
+        return $this->run(fn (User $user) => $this->portal->docente($user, is_string($date) ? $date : null), $request);
+    }
+
+    public function salida(Request $request): JsonResponse
+    {
+        $data = $request->validate(['student_id' => ['required', 'string', 'min:4', 'max:40']]);
+
+        return $this->run(fn (User $user) => $this->portal->salida($user, $data['student_id']), $request);
+    }
+
+    public function cerrarJornada(Request $request): JsonResponse
+    {
+        return $this->run(fn (User $user) => $this->portal->cerrarJornada($user), $request);
+    }
+
+    public function justificaciones(Request $request): JsonResponse
+    {
+        return $this->run(fn (User $user) => $this->portal->justificaciones($user), $request);
+    }
+
+    public function revisarJustificacion(Request $request, int $id): JsonResponse
+    {
+        $data = $request->validate(['decision' => ['required', 'in:approved,rejected']]);
+
+        return $this->run(fn (User $user) => $this->portal->revisarJustificacion($user, $id, $data['decision']), $request);
     }
 
     public function reportes(Request $request): JsonResponse
     {
-        return $this->run(fn (User $user) => $this->portal->reportes($user), $request);
+        $filters = $request->validate([
+            'from' => ['nullable', 'date_format:Y-m-d'],
+            'to' => ['nullable', 'date_format:Y-m-d'],
+            'student' => ['nullable', 'string', 'max:80'],
+        ]);
+
+        return $this->run(fn (User $user) => $this->portal->reportes($user, $filters), $request);
     }
 
     public function configuracion(Request $request): JsonResponse
