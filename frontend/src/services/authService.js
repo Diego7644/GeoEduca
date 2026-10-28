@@ -2,12 +2,6 @@ import apiClient from './apiClient';
 import { AUTH_RULES, validateIdentifier, validatePassword } from '../validation/rules';
 import { toApiError } from './httpErrors';
 
-const ROLE_LABELS = {
-  student: 'Estudiante 4to Secundaria B',
-  parent: 'Padre / Tutor',
-  staff: 'Auxiliar de Puerta',
-};
-
 function assertClientRules({ identifier, password, role }) {
   const identifierError = validateIdentifier(identifier);
   const passwordError = validatePassword(password);
@@ -28,10 +22,16 @@ function assertClientRules({ identifier, password, role }) {
   }
 }
 
-/**
- * Login de producto: valida en cliente y llama a POST /auth/login.
- * No hay autenticación de demostración en el cliente: el backend resuelve DNI+rol contra la BD.
- */
+function confirmedAccount(data) {
+  const account = data?.user;
+  if (!data?.token || !account?.role || !AUTH_RULES.roles.includes(account.role)) {
+    const error = new Error('La sesión no se pudo confirmar.');
+    error.status = 502;
+    throw error;
+  }
+  return { token: data.token, user: account };
+}
+
 async function postAuth(url, payload) {
   try {
     const { data } = await apiClient.post(url, payload);
@@ -56,10 +56,9 @@ export async function loginWithAccess(payload) {
       data?.message || 'El carnet no inicia sesión en el portal. Use DNI y contraseña.'
     );
     error.status = 403;
-    error.fieldErrors = {};
     throw error;
   }
-  return data;
+  return confirmedAccount(data);
 }
 
 export function requestRecovery(payload) {
@@ -70,8 +69,32 @@ export function confirmRecovery(payload) {
   return postAuth('/auth/recuperar/confirmar', payload);
 }
 
-export function logout() {
-  return postAuth('/auth/logout', {});
+/** Revoca el PAT. El token va explícito porque el almacenamiento ya pudo limpiarse. */
+export async function logout(token) {
+  try {
+    await apiClient.post('/auth/logout', {}, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+  } catch (error) {
+    throw toApiError(error);
+  }
+}
+
+/** Usuario confirmado por GET /api/auth/me. El rol sale del backend. */
+export async function currentUser() {
+  try {
+    const { data } = await apiClient.get('/auth/me');
+    const account = data?.user;
+    if (!account?.role || !AUTH_RULES.roles.includes(account.role)) {
+      const error = new Error('No autenticado.');
+      error.status = 401;
+      throw error;
+    }
+    return account;
+  } catch (error) {
+    if (error.status) throw error;
+    throw toApiError(error);
+  }
 }
 
 export async function login(credentials) {
@@ -79,15 +102,9 @@ export async function login(credentials) {
 
   try {
     const { data } = await apiClient.post('/auth/login', credentials);
-    return {
-      token: data.token,
-      user: {
-        roleLabel: ROLE_LABELS[credentials.role],
-        ...data.user,
-        role: data.user?.role ?? credentials.role,
-      },
-    };
+    return confirmedAccount(data);
   } catch (error) {
+    if (error.status) throw error;
     throw toApiError(error);
   }
 }
