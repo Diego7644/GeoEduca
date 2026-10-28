@@ -35,15 +35,44 @@ function assertClientRules({ identifier, password, role }) {
  * El backend vuelve a validar y, si pasa, devuelve el mock (o la BD más adelante).
  * VITE_USE_MOCK_AUTH=true solo como respaldo offline; mismas reglas.
  */
+async function postAuth(url, payload) {
+  try {
+    const { data } = await apiClient.post(url, payload);
+    return data;
+  } catch (error) {
+    throw toApiError(error);
+  }
+}
+
+export function detectAccess(payload) {
+  return postAuth('/auth/acceso/detectar', payload);
+}
+
+export function loginWithAccess(payload) {
+  return postAuth('/auth/acceso', payload);
+}
+
+export function requestRecovery(payload) {
+  return postAuth('/auth/recuperar', payload);
+}
+
+export function confirmRecovery(payload) {
+  return postAuth('/auth/recuperar/confirmar', payload);
+}
+
+export function logout() {
+  return postAuth('/auth/logout', {});
+}
+
 export async function login(credentials) {
   assertClientRules(credentials);
 
   if (USE_MOCK) {
     await new Promise((resolve) => setTimeout(resolve, 350));
     const accounts = {
-      student: { dni: '12345678', password: 'estudiante123', id: 1, name: 'Mateo Valenzuela' },
-      parent: { dni: '87654321', password: 'padre123', id: 2, name: 'Rosa Valenzuela' },
-      staff: { dni: '11223344', password: 'docente123', id: 3, name: 'Aux. Ricardo Paz' },
+      student: { dni: '71405255', password: 'estudiante123', id: 1, name: 'Mateo Valenzuela' },
+      parent: { dni: '71405255', password: 'padre123', id: 2, name: 'Rosa Valenzuela' },
+      staff: { dni: '40111222', password: 'docente123', id: 3, name: 'Aux. Ricardo Paz' },
     };
     const account = accounts[credentials.role];
     if (!account || account.dni !== credentials.identifier || account.password !== credentials.password) {

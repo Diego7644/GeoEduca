@@ -16,6 +16,9 @@ class AprobarIngresoRequest extends FormRequest
         return [
             'student_id' => ['required', 'string', 'min:4', 'max:40'],
             'reason' => ['required', 'string', 'min:4', 'max:255'],
+            'case_id' => ['nullable', 'string', 'max:40'],
+            'notes' => ['nullable', 'string', 'max:500'],
+            'notify' => ['sometimes', 'boolean'],
         ];
     }
 
