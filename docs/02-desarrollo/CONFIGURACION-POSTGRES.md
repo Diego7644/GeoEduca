@@ -43,7 +43,7 @@ php -d extension=pdo_pgsql artisan migrate
 php -d extension=pdo_pgsql artisan db:seed
 ```
 
-`db:seed` crea la fila de `school_settings` (Colegio San Gabriel, mismo texto que `freshState()`). Los usuarios ficticios `10000001` (student), `10000002` (parent) y `10000003` (staff) solo se insertan si `GEO_DEV_PASSWORD` está definido. Esas cuentas **no inician sesión** mientras el login siga en `DemoAccounts`.
+`db:seed` crea la fila de `school_settings`. Con `GEO_DEV_PASSWORD` siembra `10000001`–`10000003`. Con `GEO_SEED_PROTOTYPE=true` (solo `APP_ENV=local`) siembra hasheadas las cuentas históricas del prototipo para que el frontend de demostración pueda entrar. El autenticador nunca lee `DemoAccounts`.
 
 ## Arranque del prototipo sin PostgreSQL
 

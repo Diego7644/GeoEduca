@@ -6,6 +6,7 @@ use App\Http\Requests\Asistencia\AprobarIngresoRequest;
 use App\Http\Requests\Asistencia\ConfiguracionRequest;
 use App\Http\Requests\Asistencia\JustificacionRequest;
 use App\Http\Requests\Asistencia\VincularRequest;
+use App\Models\User;
 use App\Services\Asistencia\AsistenciaStore;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
@@ -112,11 +113,11 @@ class AsistenciaController extends Controller
 
     private function actor(Request $request): array
     {
-        $user = $this->store->userForToken((string) $request->bearerToken());
-        if (! $user) {
-            throw new HttpResponseException(response()->json(['message' => 'Sesión no válida.'], 401));
+        $user = $request->user();
+        if (! $user instanceof User) {
+            throw new HttpResponseException(response()->json(['message' => 'No autenticado.'], 401));
         }
 
-        return $user;
+        return $this->store->actorForUser($user);
     }
 }

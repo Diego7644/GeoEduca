@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SchoolSettingSeeder::class,
             DevelopmentUserSeeder::class,
+            PrototypeAccountSeeder::class,
         ]);
     }
 }

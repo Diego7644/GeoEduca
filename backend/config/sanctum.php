@@ -37,7 +37,9 @@ return [
     |
     */
 
-    'guard' => ['web'],
+    // API con Bearer: no consultar la sesión web. Si no, un usuario autenticado
+    // por token quedaría en el guard `web` y /me seguiría vivo tras revocar el PAT.
+    'guard' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +52,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => (int) env('SANCTUM_EXPIRATION', 120),
 
     /*
     |--------------------------------------------------------------------------

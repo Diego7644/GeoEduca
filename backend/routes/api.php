@@ -15,18 +15,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
 Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
     Route::post('/acceso/detectar', [AuthController::class, 'detectar']);
-    Route::post('/acceso', [AuthController::class, 'acceso']);
+    Route::post('/acceso', [AuthController::class, 'acceso'])->middleware('throttle:login');
     Route::post('/recuperar', [AuthController::class, 'recuperar']);
     Route::post('/recuperar/confirmar', [AuthController::class, 'confirmarRecuperacion']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'me']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'me']);
+    });
 });
 
-// TODO: proteger con middleware('auth:sanctum') cuando exista autenticación real
-
-Route::prefix('asistencia')->group(function () {
+Route::middleware('auth:sanctum')->prefix('asistencia')->group(function () {
     Route::get('/estudiante', [AsistenciaController::class, 'estudiante']);
     Route::post('/estudiante/token', [AsistenciaController::class, 'refreshToken']);
     Route::get('/padre', [AsistenciaController::class, 'padre']);

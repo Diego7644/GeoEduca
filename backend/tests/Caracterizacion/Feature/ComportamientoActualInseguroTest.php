@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Caracterizacion\Feature;
 
+use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -33,18 +34,18 @@ final class ComportamientoActualInseguroTest extends TestCase
     use IniciaSesion;
 
     #[Group('S-01')]
-    #[TestDox('HOY: /api/auth/me sin credenciales responde 200 con {"user":null} (debería ser 401)')]
-    public function test_me_sin_token_responde_200_con_usuario_nulo(): void
+    #[TestDox('AHORA: /api/auth/me sin credenciales responde 401')]
+    public function test_me_sin_token_responde_401(): void
     {
-        $this->getJson('/api/auth/me')->assertOk()->assertExactJson(['user' => null]);
+        $this->getJson('/api/auth/me')->assertUnauthorized();
     }
 
     #[Group('S-01')]
     #[Group('S-04')]
-    #[TestDox('HOY: /api/auth/me con un token inventado también responde 200 con {"user":null} (debería ser 401)')]
-    public function test_me_con_token_inventado_responde_200_con_usuario_nulo(): void
+    #[TestDox('AHORA: /api/auth/me con un token inventado responde 401')]
+    public function test_me_con_token_inventado_responde_401(): void
     {
-        $this->withToken('token.falso.inventado')->getJson('/api/auth/me')->assertOk()->assertExactJson(['user' => null]);
+        $this->withToken('token.falso.inventado')->getJson('/api/auth/me')->assertUnauthorized();
     }
 
     #[Group('S-01')]
@@ -66,10 +67,10 @@ final class ComportamientoActualInseguroTest extends TestCase
     }
 
     #[Group('S-01')]
-    #[TestDox('HOY: una justificación inválida SIN credenciales responde 422, no 401 (la validación se ejecuta antes que la autenticación)')]
-    public function test_la_validacion_se_ejecuta_antes_que_la_autenticacion(): void
+    #[TestDox('AHORA: una justificación inválida SIN credenciales responde 401 (la autenticación corre antes que la validación)')]
+    public function test_la_autenticacion_se_ejecuta_antes_que_la_validacion(): void
     {
-        $this->postJson('/api/asistencia/justificacion', ['reason' => 'corto'])->assertStatus(422);
+        $this->postJson('/api/asistencia/justificacion', ['reason' => 'corto'])->assertUnauthorized();
     }
 
     #[Group('S-05')]
@@ -97,17 +98,14 @@ final class ComportamientoActualInseguroTest extends TestCase
     }
 
     #[Group('S-06')]
-    #[TestDox('HOY: logout SIN token responde 200 y no invalida ninguna sesión (el token sigue aceptándose)')]
-    public function test_logout_sin_token_no_invalida_nada(): void
+    #[TestDox('AHORA: logout SIN token responde 401')]
+    public function test_logout_sin_token_responde_401(): void
     {
-        $token = $this->tokenDe('student');
-
-        $this->postJson('/api/auth/logout')->assertOk()->assertExactJson(['message' => 'Sesión cerrada']);
-        $this->withToken($token)->getJson('/api/asistencia/estudiante')->assertOk();
+        $this->postJson('/api/auth/logout')->assertUnauthorized();
     }
 
     #[Group('S-06')]
-    #[TestDox('AHORA: logout CON token invalida la sesión: las rutas de asistencia responden 401, pero /api/auth/me responde 200 con user null')]
+    #[TestDox('AHORA: logout CON token revoca la sesión: asistencia y /me responden 401')]
     public function test_logout_con_token_invalida_la_sesion(): void
     {
         $token = $this->tokenDe('student');
@@ -115,12 +113,12 @@ final class ComportamientoActualInseguroTest extends TestCase
         $this->withToken($token)->postJson('/api/auth/logout')->assertOk();
 
         $this->withToken($token)->getJson('/api/asistencia/estudiante')->assertUnauthorized();
-        $this->withToken($token)->getJson('/api/auth/me')->assertOk()->assertExactJson(['user' => null]);
+        $this->withToken($token)->getJson('/api/auth/me')->assertUnauthorized();
     }
 
     #[Group('S-08')]
-    #[TestDox('HOY: 12 contraseñas erróneas seguidas reciben siempre 401, nunca 429')]
-    public function test_no_hay_limite_de_intentos(): void
+    #[TestDox('AHORA: 12 contraseñas erróneas seguidas reciben al menos un 429')]
+    public function test_hay_limite_de_intentos(): void
     {
         $credenciales = DemoCredentials::for('student');
         $estados = [];
@@ -130,37 +128,34 @@ final class ComportamientoActualInseguroTest extends TestCase
                 ->getStatusCode();
         }
 
-        $this->assertSame(array_fill(0, 12, 401), $estados);
+        $this->assertContains(429, $estados, 'Estados: '.implode(', ', $estados));
     }
 
     #[Group('S-01')]
     #[Group('S-08')]
-    #[TestDox('HOY: ninguna ruta de la API tiene middleware de autenticación ni de límite de peticiones (el 401 lo decide el controlador)')]
-    public function test_rutas_sin_middleware_de_autenticacion_ni_throttle(): void
+    #[TestDox('AHORA: login tiene throttle y las rutas protegidas usan auth:sanctum')]
+    public function test_rutas_protegidas_tienen_sanctum_y_login_tiene_throttle(): void
     {
         $router = app('router');
+        $login = $router->getRoutes()->match(Request::create('/api/auth/login', 'POST'));
+        $me = $router->getRoutes()->match(Request::create('/api/auth/me', 'GET'));
 
-        foreach ($router->getRoutes() as $ruta) {
-            if (! str_starts_with($ruta->uri(), 'api/')) {
-                continue;
-            }
-
-            $middleware = implode(',', array_map('strval', $router->gatherRouteMiddleware($ruta)));
-            $this->assertDoesNotMatchRegularExpression(
-                '/Authenticate|auth|Throttle|throttle/',
-                $middleware,
-                "La ruta {$ruta->uri()} ya tiene middleware de seguridad: actualizar esta caracterización."
-            );
-        }
+        $loginMw = implode(',', $router->gatherRouteMiddleware($login));
+        $meMw = implode(',', $router->gatherRouteMiddleware($me));
+        $this->assertStringContainsString('ThrottleRequests', $loginMw);
+        $this->assertTrue(
+            str_contains($meMw, 'Authenticate') || str_contains($meMw, 'auth:sanctum'),
+            "me middleware inesperado: {$meMw}"
+        );
     }
 
     #[Group('AUTO-01')]
-    #[TestDox('HOY: un DNI enviado como arreglo JSON provoca HTTP 500 (debería ser 422); causa en LoginRequest.php:22')]
-    public function test_dni_como_arreglo_provoca_error_500(): void
+    #[TestDox('AHORA: un DNI enviado como arreglo JSON responde 422')]
+    public function test_dni_como_arreglo_responde_422(): void
     {
         $carga = array_merge(DemoCredentials::for('student'), ['identifier' => ['71405255']]);
 
-        $this->postJson('/api/auth/login', $carga)->assertStatus(500);
+        $this->postJson('/api/auth/login', $carga)->assertStatus(422);
     }
 
     #[Group('S-11')]

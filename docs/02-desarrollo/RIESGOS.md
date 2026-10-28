@@ -13,7 +13,7 @@
 | R7 | Trabajo concurrente en `AsistenciaStore.php` | Media | Coordinar módulos; PRs pequeños |
 | R8 | `composer.lock` | Baja | Producción 73/73 idéntica; solo se añadieron paquetes de desarrollo |
 | R9 | Dependencias vulnerables | Alta al conectar auth real | M0.2: actualizar Laravel y evaluar Vite en PRs aparte |
-| R10 | JSON de estado con sesiones y contraseñas | Alta si se despliega | El archivo está ignorado; F1.1 no lo borra; se retira cuando F1.2/F1.3 cubran el contrato |
+| R10 | JSON de estado con sesiones y contraseñas | Alta si se despliega | F1.2 dejó de guardar sesiones en el JSON; el archivo sigue para asistencia y recuperación |
 | R11 | README de `main` habla de MySQL y `migrate` | Baja | README de `main` ya describe JSON; esta rama documenta PostgreSQL opcional |
 | R12 | Saltos de línea en scripts | Baja | `.gitattributes` añadido |
 

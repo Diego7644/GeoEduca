@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Auth\EloquentUserAuthenticator;
 use App\Http\Requests\Auth\AccesoRequest;
 use App\Http\Requests\Auth\DetectAccesoRequest;
 use App\Http\Requests\Auth\LoginRequest;
@@ -11,6 +12,8 @@ use App\Services\Asistencia\AsistenciaStore;
 use App\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -55,16 +58,23 @@ class AuthController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $this->store->forgetSession((string) $request->bearerToken());
+        $token = $request->user()?->currentAccessToken();
+        if ($token instanceof PersonalAccessToken) {
+            $token->delete();
+        } else {
+            $request->user()?->tokens()->delete();
+        }
+
+        Auth::forgetGuards();
 
         return response()->json(['message' => 'Sesión cerrada']);
     }
 
     public function me(Request $request): JsonResponse
     {
-        $user = $this->store->userForToken((string) $request->bearerToken());
-
-        return response()->json(['user' => $user]);
+        return response()->json([
+            'user' => EloquentUserAuthenticator::payload($request->user()),
+        ]);
     }
 
     private function recovery(callable $action): JsonResponse

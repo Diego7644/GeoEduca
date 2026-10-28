@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Caracterizacion\Unit;
 
+use App\Auth\EloquentUserAuthenticator;
 use App\Contracts\UserAuthenticator;
 use App\Services\Auth\AuthService;
-use App\Auth\MockUserAuthenticator;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -32,9 +32,9 @@ final class AuthServiceTest extends TestCase
         $this->assertSame($esperado, (new AuthService($autenticador))->attempt($credenciales));
     }
 
-    #[TestDox('El contenedor resuelve UserAuthenticator como MockUserAuthenticator (binding actual)')]
-    public function test_el_binding_actual_es_el_mock(): void
+    #[TestDox('El contenedor resuelve UserAuthenticator como EloquentUserAuthenticator (F1.2)')]
+    public function test_el_binding_actual_es_eloquent(): void
     {
-        $this->assertInstanceOf(MockUserAuthenticator::class, $this->app->make(UserAuthenticator::class));
+        $this->assertInstanceOf(EloquentUserAuthenticator::class, $this->app->make(UserAuthenticator::class));
     }
 }

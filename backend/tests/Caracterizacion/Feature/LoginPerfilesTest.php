@@ -76,8 +76,8 @@ final class LoginPerfilesTest extends TestCase
             ->assertJsonPath('user.role', $perfil)
             ->assertJsonPath('user.identifier', $credenciales['identifier']);
 
-        // Contrato actual del mock: token opaco con prefijo "mock-" (no es un token Sanctum).
-        $this->assertMatchesRegularExpression('/^mock-[0-9a-f]{32}$/', $respuesta->json('token'));
+        // Contrato F1.2: token Sanctum `{id}|{secreto}`.
+        $this->assertMatchesRegularExpression('/^\d+\|.+/', $respuesta->json('token'));
 
         // La respuesta nunca devuelve la contraseña.
         $this->assertArrayNotHasKey('password', $respuesta->json('user'));
