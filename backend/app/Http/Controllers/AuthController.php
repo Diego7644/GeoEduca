@@ -8,8 +8,10 @@ use App\Http\Requests\Auth\DetectAccesoRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RecoveryConfirmRequest;
 use App\Http\Requests\Auth\RecoveryRequest;
-use App\Services\Asistencia\AsistenciaStore;
+use App\Models\User;
+use App\Services\Auth\AccountRecoveryService;
 use App\Services\Auth\AuthService;
+use App\Services\Auth\GateAccessService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +19,11 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthService $auth, private AsistenciaStore $store)
-    {
+    public function __construct(
+        private AuthService $auth,
+        private AccountRecoveryService $recovery,
+        private GateAccessService $gate
+    ) {
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -28,32 +33,25 @@ class AuthController extends Controller
 
     public function detectar(DetectAccesoRequest $request): JsonResponse
     {
-        return response()->json($this->auth->detect($request->validated()));
+        return response()->json($this->gate->readerStatus($this->staff($request)));
     }
 
     public function acceso(AccesoRequest $request): JsonResponse
     {
-        return response()->json($this->auth->attemptCredential($request->validated()));
+        return $this->jsonOrDomainError(fn () => $this->gate->identify(
+            $this->staff($request),
+            $request->validated()['credential']
+        ));
     }
 
     public function recuperar(RecoveryRequest $request): JsonResponse
     {
-        return $this->recovery(fn () => $this->store->startRecovery(
-            $request->validated()['identifier'],
-            $request->validated()['role']
-        ));
+        return response()->json($this->recovery->request($request->validated()));
     }
 
     public function confirmarRecuperacion(RecoveryConfirmRequest $request): JsonResponse
     {
-        $data = $request->validated();
-
-        return $this->recovery(fn () => $this->store->confirmRecovery(
-            $data['identifier'],
-            $data['role'],
-            $data['code'],
-            $data['password']
-        ));
+        return $this->jsonOrDomainError(fn () => $this->recovery->confirm($request->validated()));
     }
 
     public function logout(Request $request): JsonResponse
@@ -77,7 +75,17 @@ class AuthController extends Controller
         ]);
     }
 
-    private function recovery(callable $action): JsonResponse
+    private function staff(Request $request): User
+    {
+        $user = $request->user();
+        if (! $user instanceof User) {
+            abort(response()->json(['message' => 'No autenticado.'], 401));
+        }
+
+        return $user;
+    }
+
+    private function jsonOrDomainError(callable $action): JsonResponse
     {
         try {
             return response()->json($action());

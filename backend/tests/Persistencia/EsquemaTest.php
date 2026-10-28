@@ -28,5 +28,8 @@ final class EsquemaTest extends PersistenciaTestCase
         ] as $tabla) {
             $this->assertTrue(Schema::hasTable($tabla), "Falta la tabla {$tabla}");
         }
+
+        $this->assertTrue(Schema::hasColumn('password_reset_codes', 'attempts'));
+        $this->assertTrue(Schema::hasColumn('password_reset_codes', 'code_hash'));
     }
 }

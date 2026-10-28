@@ -50,6 +50,33 @@ final class Cargas
             'GET /api/asistencia/auxiliar/casos' => ['GET', '/api/asistencia/auxiliar/casos', []],
             'POST /api/asistencia/auxiliar/aprobar' => ['POST', '/api/asistencia/auxiliar/aprobar', self::aprobacion()],
             'POST /api/asistencia/justificacion' => ['POST', '/api/asistencia/justificacion', self::justificacion()],
+            'POST /api/auth/acceso' => ['POST', '/api/auth/acceso', self::acceso()],
+            'POST /api/auth/acceso/detectar' => ['POST', '/api/auth/acceso/detectar', ['method' => 'nfc', 'role' => 'staff']],
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $cambios
+     * @return array<string, mixed>
+     */
+    public static function acceso(array $cambios = []): array
+    {
+        return array_merge([
+            'method' => 'nfc',
+            'role' => 'staff',
+            'credential' => '71405255',
+        ], $cambios);
+    }
+
+    /**
+     * @param  array<string, mixed>  $cambios
+     * @return array<string, mixed>
+     */
+    public static function recuperacion(array $cambios = []): array
+    {
+        return array_merge([
+            'identifier' => '71405255',
+            'role' => 'student',
+        ], $cambios);
     }
 }

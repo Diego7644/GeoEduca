@@ -13,14 +13,16 @@ class RecoveryConfirmRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('identifier')) {
+        $identifier = $this->input('identifier');
+        if (is_string($identifier) || is_numeric($identifier)) {
             $this->merge([
-                'identifier' => preg_replace('/\D/', '', (string) $this->input('identifier')),
+                'identifier' => preg_replace('/\D/', '', (string) $identifier),
             ]);
         }
-        if ($this->has('code')) {
+        $code = $this->input('code');
+        if (is_string($code) || is_numeric($code)) {
             $this->merge([
-                'code' => preg_replace('/\D/', '', (string) $this->input('code')),
+                'code' => preg_replace('/\D/', '', (string) $code),
             ]);
         }
     }
@@ -28,10 +30,10 @@ class RecoveryConfirmRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identifier' => ['required', 'digits:8'],
-            'role' => ['required', 'in:student,parent,staff'],
-            'code' => ['required', 'digits:6'],
-            'password' => ['required', 'string', 'min:8', 'max:128'],
+            'identifier' => ['required', 'string', 'bail', 'digits:8'],
+            'role' => ['required', 'string', 'bail', 'in:student,parent,staff'],
+            'code' => ['required', 'string', 'bail', 'digits:6'],
+            'password' => ['required', 'string', 'bail', 'min:8', 'max:128'],
         ];
     }
 

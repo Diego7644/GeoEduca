@@ -5,7 +5,7 @@
   - La APP_KEY es un valor falso exclusivo de pruebas.
   - Suites:
       Caracterizacion      -> fija el comportamiento ACTUAL (debe aprobar, incluso los defectos conocidos).
-      RequisitosSeguridad  -> comprueba el comportamiento SEGURO esperado (hoy falla donde hay defectos).
+      RequisitosSeguridad  -> comportamiento seguro (F1.2/F1.3: carnet, recuperación, IDOR).
       Persistencia         -> esquema, relaciones y CRUD Eloquent en SQLite :memory: (F1.1).
       Autenticacion        -> login Sanctum, expiración, revocación y aislamiento (F1.2).
 -->
@@ -53,5 +53,8 @@
         <env name="SESSION_DRIVER" value="array" force="true"/>
         <env name="BCRYPT_ROUNDS" value="4" force="true"/>
         <env name="SANCTUM_EXPIRATION" value="120" force="true"/>
+        <env name="GEO_RECOVERY_TTL" value="15" force="true"/>
+        <env name="GEO_RECOVERY_MAX_ATTEMPTS" value="5" force="true"/>
+        <env name="GEO_RECOVERY_DEV_REVEAL" value="false" force="true"/>
     </php>
 </phpunit>

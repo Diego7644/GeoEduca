@@ -30,6 +30,11 @@ export function AuthProvider({ children }) {
 
   const loginWithAccess = useCallback(async (payload) => {
     const { token, user: loggedUser } = await authService.loginWithAccess(payload);
+    if (!token || !loggedUser) {
+      const error = new Error('El carnet no inicia sesión en el portal. Use DNI y contraseña.');
+      error.status = 403;
+      throw error;
+    }
     return persist(token, loggedUser);
   }, [persist]);
 

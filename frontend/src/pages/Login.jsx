@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import FieldError from '../components/FieldError';
 import Icon from '../components/Icon';
+import RecoveryModal from '../components/RecoveryModal';
 import SafeImage from '../components/SafeImage';
 import { IMAGES } from '../config/images';
 import { ROLE_HOME } from '../config/roles';
@@ -33,6 +34,9 @@ export default function Login() {
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [recoveryOpen, setRecoveryOpen] = useState(false);
+  const carnetMessage =
+    'El carnet NFC o el QR no inician sesión en el portal. Use DNI y contraseña. El auxiliar identifica el carnet en la puerta con su propia sesión.';
 
   if (user) return <Navigate to={ROLE_HOME[user.role]} replace />;
 
@@ -145,9 +149,13 @@ export default function Login() {
                   <label className="font-label-md text-label-md text-on-surface" htmlFor="password">
                     Contraseña de Acceso
                   </label>
-                  <a className="font-label-md text-label-md text-primary-container hover:underline transition-colors" href="#">
+                  <button
+                    type="button"
+                    className="font-label-md text-label-md text-primary-container hover:underline transition-colors"
+                    onClick={() => setRecoveryOpen(true)}
+                  >
                     ¿Olvidaste tu contraseña?
-                  </a>
+                  </button>
                 </div>
                 <div className={inputShell(!!password.error)}>
                   <div className="absolute left-3.5 flex items-center pointer-events-none text-on-surface-variant">
@@ -228,6 +236,7 @@ export default function Login() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 type="button"
+                onClick={() => setError(carnetMessage)}
                 className="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-left transition-colors cursor-pointer group"
               >
                 <div className="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
@@ -240,6 +249,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
+                onClick={() => setError(carnetMessage)}
                 className="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-left transition-colors cursor-pointer group"
               >
                 <div className="w-9 h-9 rounded-lg bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant group-hover:scale-105 transition-transform shrink-0">
@@ -268,6 +278,13 @@ export default function Login() {
               </div>
             </div>
           </div>
+
+          <RecoveryModal
+            open={recoveryOpen}
+            onClose={() => setRecoveryOpen(false)}
+            identifier={identifier.value.trim()}
+            role={role}
+          />
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-on-surface-variant font-body-sm text-body-sm">
             <span>© 2025 GEOEDUCA Technologies S.A.C.</span>

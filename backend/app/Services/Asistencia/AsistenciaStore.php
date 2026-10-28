@@ -81,6 +81,30 @@ class AsistenciaStore
         ];
     }
 
+    /**
+     * Identifica a un estudiante en puerta. No emite sesión ni token.
+     *
+     * @return array{identified: bool, student: array{name: string, grade: string, code: string, dni: string}}
+     */
+    public function identifyStudentForStaff(array $actor, string $credential): array
+    {
+        $this->guard($actor, 'staff');
+        $student = $this->findStudent($credential);
+        if (! $student) {
+            throw new \RuntimeException('No hay un estudiante con ese DNI o código.');
+        }
+
+        return [
+            'identified' => true,
+            'student' => [
+                'name' => $student['name'],
+                'grade' => $student['grade'],
+                'code' => $student['code'],
+                'dni' => $student['dni'],
+            ],
+        ];
+    }
+
     public function userForToken(string $token): ?array
     {
         if ($token === '') {
@@ -117,47 +141,21 @@ class AsistenciaStore
         return $this->state()['passwords'][(string) $id] ?? $fallback;
     }
 
+    /**
+     * @deprecated F1.3: la recuperación vive en AccountRecoveryService / password_reset_codes.
+     * Se conserva para no borrar el JSON del prototipo hasta migrar asistencia.
+     */
     public function startRecovery(string $dni, string $role): array
     {
-        $account = $this->account($dni, $role);
-        if (! $account) {
-            throw new \RuntimeException('No encontramos una cuenta con ese DNI para el perfil seleccionado.');
-        }
-
-        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        $this->mutate(function (array &$state) use ($account, $code) {
-            $state['recovery'][$account['role'].':'.$account['dni']] = [
-                'code' => $code,
-                'expires_at' => time() + 900,
-                'id' => $account['id'],
-            ];
-
-            return true;
-        });
-
-        $payload = ['message' => 'Generamos un código de 6 dígitos, vigente por 15 minutos.'];
-        if (app()->environment('local')) {
-            $payload['demo_code'] = $code;
-        }
-
-        return $payload;
+        throw new \RuntimeException('La recuperación ya no usa el almacén JSON.');
     }
 
+    /**
+     * @deprecated F1.3: la recuperación vive en AccountRecoveryService / password_reset_codes.
+     */
     public function confirmRecovery(string $dni, string $role, string $code, string $password): array
     {
-        $key = $role.':'.$dni;
-        $this->mutate(function (array &$state) use ($key, $code, $password) {
-            $entry = $state['recovery'][$key] ?? null;
-            if (! $entry || (int) $entry['expires_at'] < time() || ! hash_equals((string) $entry['code'], $code)) {
-                throw new \RuntimeException('El código no es válido o ya expiró.');
-            }
-            $state['passwords'][(string) $entry['id']] = $password;
-            unset($state['recovery'][$key]);
-
-            return true;
-        });
-
-        return ['message' => 'Contraseña actualizada. Ya puede iniciar sesión.'];
+        throw new \RuntimeException('La recuperación ya no usa el almacén JSON.');
     }
 
     public function estudiante(array $actor): array

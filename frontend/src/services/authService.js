@@ -45,8 +45,21 @@ export function detectAccess(payload) {
   return postAuth('/auth/acceso/detectar', payload);
 }
 
-export function loginWithAccess(payload) {
-  return postAuth('/auth/acceso', payload);
+/**
+ * El carnet ya no inicia sesión. Si el backend no emite token, se rechaza
+ * en el cliente para que AuthContext no persista una sesión falsa.
+ */
+export async function loginWithAccess(payload) {
+  const data = await postAuth('/auth/acceso', payload);
+  if (!data?.token) {
+    const error = new Error(
+      data?.message || 'El carnet no inicia sesión en el portal. Use DNI y contraseña.'
+    );
+    error.status = 403;
+    error.fieldErrors = {};
+    throw error;
+  }
+  return data;
 }
 
 export function requestRecovery(payload) {

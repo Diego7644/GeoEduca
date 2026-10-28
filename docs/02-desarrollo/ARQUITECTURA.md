@@ -1,6 +1,6 @@
 # Arquitectura
 
-## Hoy (commit `800e5e2`)
+## Hoy (F1.3)
 
 ```mermaid
 flowchart LR
@@ -13,10 +13,13 @@ flowchart LR
   subgraph api [Laravel 11]
     AC[AuthController]
     AS[AsistenciaController]
-    AUTH[AuthService + MockUserAuthenticator]
-    DEMO[DemoAccounts]
+    AUTH[AuthService + EloquentUserAuthenticator]
+    REC[AccountRecoveryService]
+    GATE[GateAccessService]
+    MW[auth:sanctum + role]
     STORE[AsistenciaStore]
   end
+  PG[(users / password_reset_codes / PAT)]
   JSON[(storage/app/geoeduca-state.json)]
   UI --> LS
   UI -->|Axios /api| AC
@@ -24,8 +27,11 @@ flowchart LR
   UI --> GPS
   UI --> QR
   AC --> AUTH
-  AUTH --> DEMO
-  AUTH --> STORE
+  AC --> REC
+  AC --> GATE
+  AUTH --> PG
+  REC --> PG
+  AS --> MW
   AS --> STORE
   STORE --> JSON
 ```
@@ -37,7 +43,7 @@ Flujos:
 3. Justificación: exige `child_id` y comprueba que el estudiante esté a cargo del tutor.
 4. Frontend: el proxy de Vite reenvía `/api` a Laravel. CORS permite `localhost:5173` y `127.0.0.1:5173`.
 
-F1.2: el login usa `users` + Sanctum. Las sesiones nuevas no van al JSON. La asistencia **sí** sigue en `AsistenciaStore`. Colas y correo no existen.
+F1.3: el login usa `users` + Sanctum. El carnet no emite sesión. La recuperación usa `password_reset_codes` hasheados. Las sesiones nuevas no van al JSON. La asistencia **sí** sigue en `AsistenciaStore`. Colas y correo no existen.
 
 ## Destino de F1 (persistencia + autenticación/autorización)
 
@@ -66,7 +72,7 @@ flowchart LR
   POL --> S
 ```
 
-Las tablas de F1.1 ya existen. `AsistenciaStore` y `DemoAccounts` se retiran en F1.2–F1.3, cuando Sanctum cubra el mismo contrato. Hasta entonces, las pruebas de caracterización fotografían el JSON.
+Las tablas de F1.1 ya existen. Sanctum y `role:` cubren login y autorización. `AsistenciaStore` se retira cuando se migre el historial (M4). Las pruebas de caracterización siguen fotografiando el JSON de asistencia.
 
 ## Límites de confianza actuales
 
@@ -74,5 +80,5 @@ Las tablas de F1.1 ya existen. `AsistenciaStore` y `DemoAccounts` se retiran en 
 |---|---|---|
 | Token en `localStorage` | El frontend | XSS lo lee |
 | Rol en el navegador | `ProtectedRoute` | Se puede editar; el API ya no se deja engañar en asistencia |
-| JSON único | Todo el backend | Un archivo = todas las sesiones y contraseñas recuperadas |
-| Cuentas de demostración | Login | Credenciales en el código, ya públicas en esta rama |
+| JSON único | Asistencia | Un archivo = historial y bitácora del prototipo; ya no guarda sesiones ni códigos |
+| Cuentas de demostración | Seed local | Solo con `GEO_SEED_PROTOTYPE`; el login no lee `DemoAccounts` |
