@@ -32,12 +32,12 @@ flowchart LR
 
 Flujos:
 
-1. Login: `POST /api/auth/login` compara DNI, perfil y contraseña contra `DemoAccounts`. Emite `mock-<hex>` y lo guarda en el JSON.
+1. Login: `POST /api/auth/login` busca `(dni, role)` en `users`, comprueba el hash y emite un token Sanctum. No hay fallback a `DemoAccounts`.
 2. Asistencia: el controlador lee el token, pide el actor al almacén y, si el rol coincide, muta el JSON y devuelve un `panel`.
 3. Justificación: exige `child_id` y comprueba que el estudiante esté a cargo del tutor.
 4. Frontend: el proxy de Vite reenvía `/api` a Laravel. CORS permite `localhost:5173` y `127.0.0.1:5173`.
 
-F1.1 añadió modelos Eloquent y migraciones. **Siguen fuera del camino de la API:** el login usa `DemoAccounts` y la asistencia usa el JSON. Sanctum está publicado (`personal_access_tokens`) pero el token sigue siendo `mock-<hex>`. Colas y correo no existen.
+F1.2: el login usa `users` + Sanctum. Las sesiones nuevas no van al JSON. La asistencia **sí** sigue en `AsistenciaStore`. Colas y correo no existen.
 
 ## Destino de F1 (persistencia + autenticación/autorización)
 

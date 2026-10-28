@@ -1,51 +1,31 @@
 # Próximas tareas
 
-La primera etapa funcional es **F1: persistencia de datos, autenticación y autorización**.
+## Hecho: F1.1 – Esquema
 
-## Hecho: F1.1 – Esquema (esta rama)
+En `main` (`6678249`, PR #3). PostgreSQL, modelos, seeders de desarrollo, suite Persistencia.
 
-Rama `feature/f1-persistencia`, sin push ni fusión a `main`.
+## Hecho: F1.2 – Login real (esta rama, local)
 
-- Migraciones PostgreSQL: `users`, `staff_members`, `students`, `guardian_student`, `school_settings`, `attendance_records`, `justifications`, `qr_tokens`, `in_app_notifications`, `password_reset_codes`, `audit_logs`, `personal_access_tokens`.
-- Modelos Eloquent y relaciones. Factories y seeder **solo de desarrollo** (`GEO_DEV_PASSWORD`), sin copiar `DemoAccounts`.
-- SQLite en memoria para PHPUnit; PostgreSQL 16 en desarrollo (Docker).
-- Pruebas: `migrate:fresh` consistente; DNI duplicado por rol rechazado; login del prototipo no escribe en `users`.
-- El JSON `geoeduca-state.json` **no se eliminó**. La API no usa las tablas nuevas.
+Rama `feature/f1-autenticacion`, **sin push**.
 
-Detalle: [`MODELO-DE-DATOS.md`](MODELO-DE-DATOS.md), [`CONFIGURACION-POSTGRES.md`](CONFIGURACION-POSTGRES.md), [`RESULTADOS-PHPUNIT-F1.1.md`](RESULTADOS-PHPUNIT-F1.1.md).
+- `EloquentUserAuthenticator` + `Hash::check`. Sin fallback a `DemoAccounts`.
+- Tokens Sanctum con caducidad; `logout` revoca; `/me` → 401 sin token.
+- `auth:sanctum` en asistencia; throttle en login; `nosniff`; DNI no textual → 422.
+- El JSON ya no guarda sesiones nuevas. Los paneles de asistencia sí siguen en JSON.
+- Frontend: se retiró el mock `VITE_USE_MOCK_AUTH`. El contrato `identifier`/`password`/`role` no cambió.
 
-## Ahora: F1.2 – Login real
+Detalle: [`AUTENTICACION.md`](AUTENTICACION.md), [`RESULTADOS-PHPUNIT-F1.2.md`](RESULTADOS-PHPUNIT-F1.2.md).
 
-- `AuthService` contra `users`. Retirar `MockUserAuthenticator` del camino por defecto.
-- Contraseñas solo con hash. Tokens Sanctum con expiración. `logout` revoca el token actual.
-- `/api/auth/me` sin token o con token inválido/revocado → `401`.
-- No devolver `demo_code` ni guardar la contraseña nueva en texto plano.
-- Mantener el contrato de login que el frontend ya usa (`identifier`, `password`, `role`).
-- No borrar el JSON hasta que las sesiones dejen de vivir ahí (F1.3).
+## Ahora: F1.3 / restante de F1.4
 
-## F1.3 – Autorización
+Gran parte de F1.3 (middleware Sanctum) y F1.4 (throttle, DNI, `nosniff`, `APP_DEBUG`) quedó en F1.2. Falta:
 
-- `auth:sanctum` en todas las rutas salvo `health` y `login`.
-- Middleware de rol. Política tutor→hijo en justificación y consultas del padre.
-- Dejar de usar `AsistenciaStore` para sesiones.
-
-## F1.4 – Endurecimiento
-
-- `throttle` en login.
-- `LoginRequest`: el DNI no se fuerza a `(string)`; arreglo u objeto → 422.
-- `APP_DEBUG=false` en `.env.example`. Cabeceras de seguridad (`nosniff` como mínimo).
 - Recuperación: código hasheado, caducidad, un solo uso, sin devolverlo.
+- `POST /api/auth/acceso`: no emitir sesión solo con DNI.
+- Política tutor→hijo sobre datos reales (hoy el JSON y `guard()` cubren el rol).
+- Dejar de usar `AsistenciaStore` para el historial cuando exista M4.
 
 ## F1.5 – Frontend
 
-- Retirar cuentas de respaldo con contraseñas del código.
-- Cada carga protegida consulta `/api/auth/me`.
-- Mensaje claro si el backend no responde (hoy UI-12 muestra un error técnico).
-
-## Hecho en la integración (no repetir)
-
-- Copia de infraestructura PHPUnit sobre el código de Diego, sin tocar producción.
-- Adaptación de caracterización.
-- Guía académica pública redactada.
-- Diagnóstico y plan de F1.
-- Publicación en `main` (`4992279`) vía PRs #1 y #2.
+- Cada carga protegida consulta `/api/auth/me` (hoy confía en `localStorage`).
+- Mensaje claro si el backend no responde (UI-12).

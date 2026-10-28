@@ -30,7 +30,7 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 | Capacidad | Qué hay hoy |
 |---|---|
 | Paneles por rol (estudiante, padre/tutor, auxiliar) | La interfaz carga datos de la API |
-| Autenticación | Cuentas de demostración y tokens `mock-` guardados en un JSON, sin expiración |
+| Autenticación | F1.2: `users` + Sanctum (hash, caducidad, revocación). Las cuentas históricas se siembran solo en local |
 | Autorización | El servidor comprueba el rol en el controlador; no hay middleware Sanctum |
 | Asistencia | El historial se genera por fórmula; no hay registros reales |
 | QR | Patrón visual de 8×8; no es un código QR escaneable ni se valida en el servidor |
@@ -75,15 +75,17 @@ cd backend
 php vendor/bin/phpunit
 ```
 
-Hay tres suites:
+Hay cuatro suites:
 
 - `Caracterizacion`: describe el comportamiento actual y debe aprobar.
 - `Persistencia`: esquema y relaciones Eloquent en SQLite. Debe aprobar.
-- `RequisitosSeguridad`: describe el comportamiento seguro esperado. Hoy falla a propósito (defecto de autenticación, cabeceras, límite de intentos, etc.). No se modifican esas expectativas para ocultar fallos.
+- `Autenticacion`: login Sanctum, revocación y aislamiento. Debe aprobar.
+- `RequisitosSeguridad`: comportamiento seguro esperado. En F1.2 estas pruebas aprueban.
 
 ```bash
 php vendor/bin/phpunit --testsuite Caracterizacion
 php vendor/bin/phpunit --testsuite Persistencia
+php vendor/bin/phpunit --testsuite Autenticacion
 php vendor/bin/phpunit --testsuite RequisitosSeguridad
 ```
 
