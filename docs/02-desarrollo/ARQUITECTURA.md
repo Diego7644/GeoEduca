@@ -37,7 +37,7 @@ Flujos:
 3. Justificación: exige `child_id` y comprueba que el estudiante esté a cargo del tutor.
 4. Frontend: el proxy de Vite reenvía `/api` a Laravel. CORS permite `localhost:5173` y `127.0.0.1:5173`.
 
-Lo que **no** está en el diagrama: modelos Eloquent, migraciones, middleware `auth:sanctum`, colas, correo, tablas.
+F1.1 añadió modelos Eloquent y migraciones. **Siguen fuera del camino de la API:** el login usa `DemoAccounts` y la asistencia usa el JSON. Sanctum está publicado (`personal_access_tokens`) pero el token sigue siendo `mock-<hex>`. Colas y correo no existen.
 
 ## Destino de F1 (persistencia + autenticación/autorización)
 
@@ -66,7 +66,7 @@ flowchart LR
   POL --> S
 ```
 
-`AsistenciaStore` y `DemoAccounts` se retiran cuando las tablas y Sanctum cubran el mismo contrato. Hasta entonces, las pruebas de caracterización fotografían el JSON.
+Las tablas de F1.1 ya existen. `AsistenciaStore` y `DemoAccounts` se retiran en F1.2–F1.3, cuando Sanctum cubra el mismo contrato. Hasta entonces, las pruebas de caracterización fotografían el JSON.
 
 ## Límites de confianza actuales
 

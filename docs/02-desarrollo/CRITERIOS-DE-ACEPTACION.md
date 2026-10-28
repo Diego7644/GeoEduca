@@ -2,6 +2,15 @@
 
 Un módulo se da por hecho cuando se puede **demostrar** con pruebas o con un flujo reproducible. Una pantalla no basta.
 
+## F1.1 – Esquema (esta rama, local)
+
+- `php artisan migrate` sobre PostgreSQL crea las tablas documentadas en `MODELO-DE-DATOS.md`.
+- PHPUnit `Persistencia` aprueba. Caracterización aprueba. `RequisitosSeguridad` sigue con los 9 fallos conocidos, sin fallos nuevos.
+- Un DNI puede repetirse en otro rol; el mismo DNI+rol se rechaza.
+- Las contraseñas del seeder de desarrollo se guardan con hash. No hay cuentas `DemoAccounts` en el seeder.
+- El login y la asistencia del prototipo siguen en JSON.
+- `frontend/` no cambia.
+
 ## F1 – Persistencia, autenticación y autorización
 
 - Ninguna ruta, salvo `health` y `login`, responde sin token válido (`401`).

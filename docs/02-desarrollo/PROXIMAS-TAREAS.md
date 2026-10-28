@@ -1,27 +1,27 @@
 # Próximas tareas
 
-La primera etapa funcional es **F1: persistencia de datos, autenticación y autorización**. No empieza el código de F1 hasta que M0 esté publicado (commit + PR autorizados).
+La primera etapa funcional es **F1: persistencia de datos, autenticación y autorización**.
 
-## Ahora (M0, espera autorización)
+## Hecho: F1.1 – Esquema (esta rama)
 
-1. Revisar esta carpeta y `../01-guia-pruebas-calidad/AUDITORIA-DE-PRIVACIDAD.md`.
-2. Autorizar tres commits locales según `GRUPOS-DE-COMMIT.md`.
-3. Resolver D2 (fork o escritura) y abrir PR contra `mejoras-interfaces-dinamicas`. **No fusionar con `main`.**
-4. Decidir D5 (motor de base de datos) antes de escribir migraciones.
+Rama `feature/f1-persistencia`, sin push ni fusión a `main`.
 
-## F1.1 – Esquema
+- Migraciones PostgreSQL: `users`, `staff_members`, `students`, `guardian_student`, `school_settings`, `attendance_records`, `justifications`, `qr_tokens`, `in_app_notifications`, `password_reset_codes`, `audit_logs`, `personal_access_tokens`.
+- Modelos Eloquent y relaciones. Factories y seeder **solo de desarrollo** (`GEO_DEV_PASSWORD`), sin copiar `DemoAccounts`.
+- SQLite en memoria para PHPUnit; PostgreSQL 16 en desarrollo (Docker).
+- Pruebas: `migrate:fresh` consistente; DNI duplicado por rol rechazado; login del prototipo no escribe en `users`.
+- El JSON `geoeduca-state.json` **no se eliminó**. La API no usa las tablas nuevas.
 
-- Crear migraciones: `users` (DNI único por rol, rol, hash de contraseña), `personal_access_tokens`.
-- Modelos y relaciones mínimas. Seeder **solo de desarrollo**, sin copiar las cuentas de demostración actuales al código de producción.
-- SQLite en memoria para PHPUnit; el motor de desarrollo según D5.
-- Pruebas: `migrate:fresh` deja un esquema consistente; DNI duplicado por rol se rechaza.
+Detalle: [`MODELO-DE-DATOS.md`](MODELO-DE-DATOS.md), [`CONFIGURACION-POSTGRES.md`](CONFIGURACION-POSTGRES.md), [`RESULTADOS-PHPUNIT-F1.1.md`](RESULTADOS-PHPUNIT-F1.1.md).
 
-## F1.2 – Login real
+## Ahora: F1.2 – Login real
 
-- `AuthService` contra la base. Retirar `MockUserAuthenticator` del camino por defecto.
-- Tokens Sanctum con expiración. `logout` revoca el token actual.
+- `AuthService` contra `users`. Retirar `MockUserAuthenticator` del camino por defecto.
+- Contraseñas solo con hash. Tokens Sanctum con expiración. `logout` revoca el token actual.
 - `/api/auth/me` sin token o con token inválido/revocado → `401`.
 - No devolver `demo_code` ni guardar la contraseña nueva en texto plano.
+- Mantener el contrato de login que el frontend ya usa (`identifier`, `password`, `role`).
+- No borrar el JSON hasta que las sesiones dejen de vivir ahí (F1.3).
 
 ## F1.3 – Autorización
 
@@ -42,9 +42,10 @@ La primera etapa funcional es **F1: persistencia de datos, autenticación y auto
 - Cada carga protegida consulta `/api/auth/me`.
 - Mensaje claro si el backend no responde (hoy UI-12 muestra un error técnico).
 
-## Hecho en esta integración (no repetir)
+## Hecho en la integración (no repetir)
 
 - Copia de infraestructura PHPUnit sobre el código de Diego, sin tocar producción.
 - Adaptación de caracterización.
 - Guía académica pública redactada.
 - Diagnóstico y plan de F1.
+- Publicación en `main` (`4992279`) vía PRs #1 y #2.
