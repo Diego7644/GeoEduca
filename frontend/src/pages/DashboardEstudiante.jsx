@@ -7,7 +7,7 @@ import SafeImage from '../components/SafeImage';
 import Toast, { useToast } from '../components/Toast';
 import { IMAGES } from '../config/images';
 import useApiResource from '../hooks/useApiResource';
-import { getEstudiante, refreshStudentToken } from '../services/asistenciaService';
+import { getEstudiante, refreshStudentToken, sendUbicacion } from '../services/asistenciaService';
 import { distanceMeters, formatDistance } from '../utils/attendance';
 import { QR_COLORS, qrModules } from '../utils/qrToken';
 
@@ -109,6 +109,11 @@ export default function DashboardEstudiante() {
           status: meters <= data.gps.radius ? 'inside' : 'outside',
           meters,
         });
+        sendUbicacion({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracy_m: Number.isFinite(pos.coords.accuracy) ? Math.round(pos.coords.accuracy) : null,
+        }).catch(() => {});
       },
       () => setPosition({ status: 'denied', meters: null }),
       { enableHighAccuracy: true, maximumAge: 15000, timeout: 8000 }

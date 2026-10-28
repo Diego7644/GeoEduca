@@ -5,7 +5,7 @@
 export const AUTH_RULES = {
   identifier: { min: 8, max: 8 },
   password: { min: 8, max: 128 },
-  roles: ['student', 'parent', 'staff'],
+  roles: ['student', 'parent', 'staff', 'admin'],
 };
 
 export const JUSTIFICATION_RULES = {

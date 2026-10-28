@@ -13,6 +13,10 @@ async function request(method, url, payload) {
 
 export const getEstudiante = () => request('get', '/asistencia/estudiante');
 export const refreshStudentToken = () => request('post', '/asistencia/estudiante/token').then((data) => data.token);
+export const sendUbicacion = (payload) => request('post', '/asistencia/estudiante/ubicacion', payload);
+export const getDocente = () => request('get', '/asistencia/docente');
+export const getDirectorio = () => request('get', '/admin/directorio');
+export const linkGuardian = (payload) => request('post', '/admin/apoderados', payload);
 export const getPadre = () => request('get', '/asistencia/padre');
 export const getAuxiliar = () => request('get', '/asistencia/auxiliar/casos');
 export const getReportes = () => request('get', '/asistencia/reportes');

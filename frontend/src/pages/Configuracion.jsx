@@ -62,7 +62,7 @@ export default function Configuracion() {
               <p className="font-body-md text-on-surface-variant">
                 {data.can_edit
                   ? 'Estos valores cambian el límite de ingreso, la salida y la puntualidad que ven estudiantes y familias.'
-                  : 'Solo el auxiliar de puerta puede modificar estos parámetros. El resto de perfiles los consulta.'}
+                  : 'Solo el auxiliar de puerta o la administración pueden modificar estos parámetros.'}
               </p>
             </div>
 

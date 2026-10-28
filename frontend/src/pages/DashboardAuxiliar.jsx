@@ -177,13 +177,8 @@ export default function DashboardAuxiliar() {
                   <p className="font-body-sm">Quedan en la bitácora de esta sesión</p>
                 </div>
                 <div className="bg-surface-container-low rounded-xl p-space-md">
-                  <span className="font-label-sm uppercase text-outline">Molinetes</span>
-                  {data.metrics.hardware.map((item) => (
-                    <div key={item.label} className="flex justify-between font-body-sm mt-1">
-                      <span>{item.label}</span><span className="text-secondary">{item.ok ? 'OK' : 'Falla'}</span>
-                    </div>
-                  ))}
-                  <p className="font-label-sm text-outline mt-1">Latencia {data.metrics.latency}</p>
+                  <span className="font-label-sm uppercase text-outline">Lectores</span>
+                  <p className="font-body-sm mt-1">{data.reader || 'No hay lectores físicos conectados.'}</p>
                 </div>
               </div>
 
