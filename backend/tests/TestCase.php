@@ -19,6 +19,18 @@ abstract class TestCase extends BaseTestCase
 {
     private ?string $almacenamientoTemporal = null;
 
+    /**
+     * PHPUnit `force="true"` no pisa variables ya presentes en el proceso
+     * (por ejemplo DB_DATABASE=geoeduca de un `.env` o de la terminal).
+     * Las pruebas deben usar SQLite en memoria aunque exista PostgreSQL local.
+     */
+    public function createApplication()
+    {
+        $this->forzarEntornoSqliteDePrueba();
+
+        return parent::createApplication();
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,6 +47,19 @@ abstract class TestCase extends BaseTestCase
         }
 
         parent::tearDown();
+    }
+
+    private function forzarEntornoSqliteDePrueba(): void
+    {
+        foreach ([
+            'DB_CONNECTION' => 'sqlite',
+            'DB_DATABASE' => ':memory:',
+            'DB_FOREIGN_KEYS' => 'true',
+        ] as $clave => $valor) {
+            putenv($clave.'='.$valor);
+            $_ENV[$clave] = $valor;
+            $_SERVER[$clave] = $valor;
+        }
     }
 
     private function eliminarDirectorio(string $ruta): void
