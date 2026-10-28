@@ -9,7 +9,8 @@ import Toast, { useToast } from '../components/Toast';
 import { IMAGES } from '../config/images';
 import useApiResource from '../hooks/useApiResource';
 import useValidatedField from '../hooks/useValidatedField';
-import { approveManualEntry, getAuxiliar, validateQr } from '../services/asistenciaService';
+import QrCamera from '../components/QrCamera';
+import { approveManualEntry, closeDay, getAuxiliar, getJustificaciones, markExit, reviewJustification, validateQr } from '../services/asistenciaService';
 import { downloadCsv } from '../utils/attendance';
 import { validateStudentId } from '../validation/rules';
 
@@ -34,8 +35,23 @@ export default function DashboardAuxiliar() {
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [qrValue, setQrValue] = useState('');
+  const [exitQuery, setExitQuery] = useState('');
+  const [justifications, setJustifications] = useState([]);
   const studentId = useValidatedField(validateStudentId);
   const [form, setForm] = useState({ reason: 'Falla de Batería / Sin Dispositivo', notes: '', notify: true });
+
+  useEffect(() => {
+    if (!data) return undefined;
+    let active = true;
+    getJustificaciones().then((result) => {
+      if (active) setJustifications(result.justifications ?? []);
+    }).catch(() => {
+      if (active) setJustifications([]);
+    });
+    return () => {
+      active = false;
+    };
+  }, [data]);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -183,6 +199,17 @@ export default function DashboardAuxiliar() {
                 </div>
               </div>
 
+              <QrCamera
+                onCode={async (value) => {
+                  try {
+                    const result = await validateQr(value);
+                    setData(result.panel);
+                    showToast(result.message);
+                  } catch (err) {
+                    showToast(err.message);
+                  }
+                }}
+              />
               <form
                 className="mb-4 flex flex-col sm:flex-row gap-2"
                 onSubmit={async (event) => {
@@ -205,6 +232,38 @@ export default function DashboardAuxiliar() {
                   aria-label="Código QR del estudiante"
                 />
                 <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Validar QR</button>
+              </form>
+              <form
+                className="mb-4 flex flex-col sm:flex-row gap-2"
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  try {
+                    const result = await markExit(exitQuery.trim());
+                    setData(result.panel);
+                    setExitQuery('');
+                    showToast(result.message);
+                  } catch (err) {
+                    showToast(err.message);
+                  }
+                }}
+              >
+                <input value={exitQuery} onChange={(event) => setExitQuery(event.target.value)} placeholder="DNI o código para registrar salida" className="flex-1 bg-surface-container-low rounded-lg px-3 py-2 font-mono" aria-label="Estudiante para salida" />
+                <button type="submit" className="px-4 py-2 rounded-lg bg-secondary text-on-secondary font-semibold">Registrar salida</button>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-lg bg-surface-container font-semibold"
+                  onClick={async () => {
+                    try {
+                      const result = await closeDay();
+                      showToast(result.message);
+                      reload();
+                    } catch (err) {
+                      showToast(err.message);
+                    }
+                  }}
+                >
+                  Cerrar jornada
+                </button>
               </form>
               <div className="relative">
                 <Icon name="qr_code_scanner" className="absolute left-4 top-3.5 text-primary" />
@@ -283,6 +342,25 @@ export default function DashboardAuxiliar() {
               </div>
             </section>
 
+            <section className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+              <h3 className="font-bold mb-3">Justificaciones</h3>
+              {justifications.length === 0 && <p className="text-outline">No hay solicitudes.</p>}
+              {justifications.map((item) => (
+                <div key={item.id} className="py-3 border-t border-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <p className="font-semibold">{item.student} · {item.event_date}</p>
+                    <p className="font-body-sm text-on-surface-variant">{item.reason}</p>
+                    <p className="font-label-sm uppercase text-primary">{item.status}</p>
+                  </div>
+                  {item.status === 'submitted' && (
+                    <div className="flex gap-2">
+                      <button type="button" className="px-3 py-1 rounded-lg bg-secondary text-on-secondary" onClick={() => reviewJustification(item.id, 'approved').then(() => reload())}>Aprobar</button>
+                      <button type="button" className="px-3 py-1 rounded-lg bg-surface-container" onClick={() => reviewJustification(item.id, 'rejected').then(() => reload())}>Rechazar</button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </section>
             <section className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold">Bitácora del auxiliar</h3>

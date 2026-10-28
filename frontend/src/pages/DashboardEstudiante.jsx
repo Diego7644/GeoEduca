@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import QRCode from 'qrcode';
 import DashboardLayout from '../components/DashboardLayout';
 import Icon from '../components/Icon';
 import Modal from '../components/Modal';
@@ -57,6 +58,7 @@ export default function DashboardEstudiante() {
   const [weeklyOpen, setWeeklyOpen] = useState(false);
   const [rfidOpen, setRfidOpen] = useState(false);
   const [position, setPosition] = useState({ status: 'locating', meters: null });
+  const [qrUrl, setQrUrl] = useState('');
 
   const refresh = useCallback(async () => {
     if (refreshingRef.current) return;
@@ -78,6 +80,17 @@ export default function DashboardEstudiante() {
   useEffect(() => {
     if (data?.token?.expires_in) setTimeLeft(data.token.expires_in);
   }, [data?.token?.value, data?.token?.expires_in]);
+
+  useEffect(() => {
+    if (!data?.token?.value) return undefined;
+    let active = true;
+    QRCode.toDataURL(data.token.value, { margin: 1, width: 240 }).then((url) => {
+      if (active) setQrUrl(url);
+    });
+    return () => {
+      active = false;
+    };
+  }, [data?.token?.value]);
 
   useEffect(() => {
     const id = setInterval(() => setTimeLeft((current) => (current <= 1 ? 0 : current - 1)), 1000);
@@ -192,7 +205,11 @@ export default function DashboardEstudiante() {
                   </p>
                   <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value">{data.token.value}</p>
                   <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
-                    <QrGraphic seed={data.token.value} dimmed={flash} />
+                    {qrUrl ? (
+                      <img src={qrUrl} alt="Código QR de asistencia" className={`w-56 h-56 sm:w-64 sm:h-64 ${flash ? 'opacity-40' : ''}`} />
+                    ) : (
+                      <QrGraphic seed={data.token.value} dimmed={flash} />
+                    )}
                   </div>
                   <div className="flex items-center gap-space-md mt-space-md py-2 px-space-md bg-surface-container-low rounded-xl w-full">
                     <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center">
