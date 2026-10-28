@@ -108,9 +108,15 @@ final class ContratoRutasTest extends TestCase
     }
 
     #[Group('B-04')]
-    #[TestDox('Ninguna acción de la API usa Eloquent: no hay modelos en app/Models')]
-    public function test_no_hay_modelos_eloquent(): void
+    #[TestDox('Existen modelos Eloquent de persistencia, pero la API de asistencia sigue usando AsistenciaStore')]
+    public function test_existen_modelos_y_asistencia_sigue_en_el_almacen_json(): void
     {
-        $this->assertDirectoryDoesNotExist(app_path('Models'));
+        $this->assertDirectoryExists(app_path('Models'));
+        $this->assertFileExists(app_path('Models/User.php'));
+        $this->assertFileExists(app_path('Services/Asistencia/AsistenciaStore.php'));
+        $controlador = file_get_contents(app_path('Http/Controllers/AsistenciaController.php'));
+        $this->assertNotFalse($controlador);
+        $this->assertStringContainsString('AsistenciaStore', $controlador);
+        $this->assertStringContainsString('geoeduca-state.json', file_get_contents(app_path('Services/Asistencia/AsistenciaStore.php')) ?: '');
     }
 }
