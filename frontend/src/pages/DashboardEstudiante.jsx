@@ -1,30 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import Icon from '../components/Icon';
+import Modal from '../components/Modal';
+import PageState from '../components/PageState';
 import SafeImage from '../components/SafeImage';
+import Toast, { useToast } from '../components/Toast';
 import { IMAGES } from '../config/images';
+import useApiResource from '../hooks/useApiResource';
+import { getEstudiante, refreshStudentToken } from '../services/asistenciaService';
+import { distanceMeters, formatDistance } from '../utils/attendance';
+import { QR_COLORS, qrModules } from '../utils/qrToken';
 
 const TOTAL_TIME = 60;
 const CIRCUMFERENCE = 2 * Math.PI * 20;
-
-const DARK = '#003692';
-const LIGHT = '#004BC3';
-// [x, y, width, height, color]
-const QR_MODULES = [
-  [88, 24, 12, 12, DARK], [108, 24, 20, 12, LIGHT], [136, 24, 16, 12, DARK],
-  [88, 44, 24, 12, LIGHT], [124, 44, 12, 12, DARK], [144, 44, 12, 12, LIGHT],
-  [24, 88, 16, 12, LIGHT], [48, 88, 28, 12, DARK], [24, 108, 20, 20, DARK],
-  [52, 112, 24, 16, LIGHT], [24, 136, 36, 12, LIGHT],
-  [88, 88, 16, 16, DARK], [136, 88, 16, 16, LIGHT], [88, 136, 16, 16, LIGHT], [136, 136, 16, 16, DARK],
-  [164, 88, 24, 12, DARK], [196, 88, 24, 12, LIGHT], [164, 108, 16, 24, LIGHT],
-  [188, 108, 32, 16, DARK], [172, 132, 24, 16, LIGHT], [204, 136, 16, 12, DARK],
-  [88, 164, 20, 24, DARK], [116, 164, 32, 12, LIGHT], [92, 196, 24, 20, LIGHT],
-  [124, 184, 16, 32, DARK], [148, 172, 20, 20, LIGHT], [176, 168, 44, 12, DARK],
-  [176, 188, 16, 28, LIGHT], [200, 188, 20, 28, DARK],
-];
 const QR_FINDERS = [[20, 20], [164, 20], [20, 164]];
+const KPI = 'bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between';
 
-function QrGraphic({ dimmed }) {
+function QrGraphic({ seed, dimmed }) {
+  const modules = qrModules(seed);
   return (
     <svg
       className={`w-56 h-56 sm:w-64 sm:h-64 text-on-surface transition-opacity ${dimmed ? 'opacity-40' : ''}`}
@@ -35,12 +28,12 @@ function QrGraphic({ dimmed }) {
       <rect fill="#FAF8FF" height="240" rx="16" width="240" />
       {QR_FINDERS.map(([x, y]) => (
         <g key={`${x}-${y}`}>
-          <rect fill={DARK} height="56" rx="8" width="56" x={x} y={y} />
+          <rect fill={QR_COLORS.dark} height="56" rx="8" width="56" x={x} y={y} />
           <rect fill="#FFFFFF" height="40" rx="4" width="40" x={x + 8} y={y + 8} />
-          <rect fill={DARK} height="24" rx="3" width="24" x={x + 16} y={y + 16} />
+          <rect fill={QR_COLORS.dark} height="24" rx="3" width="24" x={x + 16} y={y + 16} />
         </g>
       ))}
-      {QR_MODULES.map(([x, y, w, h, fill]) => (
+      {modules.map(([x, y, w, h, fill]) => (
         <rect key={`${x}-${y}`} fill={fill} height={h} rx="2" width={w} x={x} y={y} />
       ))}
       <g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.15))">
@@ -53,394 +46,354 @@ function QrGraphic({ dimmed }) {
   );
 }
 
-const KPI = 'bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between';
-
-const CLASSES = [
-  {
-    start: '08:00', period: 'AM', name: 'Física Elemental', place: 'Laboratorio 3 (Pabellón B) • Prof. Héctor Vega',
-    range: '08:00 - 09:30', note: '90 minutos', next: true,
-  },
-  {
-    start: '09:30', period: 'AM', name: 'Matemáticas Avanzadas', place: 'Aula 402 • Prof. Lucía Santander',
-    range: '09:30 - 11:00', note: 'Evaluación corta',
-  },
-  { recess: '11:00 AM - 11:30 AM • Receso General & Refrigerio' },
-  {
-    start: '11:30', period: 'AM', name: 'Literatura Universal & Redacción', place: 'Aula 402 • Prof. Fernando Quiroga',
-    range: '11:30 - 01:00', note: '90 minutos',
-  },
-];
-
 export default function DashboardEstudiante() {
-  const [timeLeft, setTimeLeft] = useState(42);
+  const load = useCallback(() => getEstudiante(), []);
+  const { data, setData, error, loading, reload } = useApiResource(load);
+  const { toast, showToast } = useToast();
+  const refreshingRef = useRef(false);
+  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const [flash, setFlash] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [weeklyOpen, setWeeklyOpen] = useState(false);
+  const [rfidOpen, setRfidOpen] = useState(false);
+  const [position, setPosition] = useState({ status: 'locating', meters: null });
+
+  const refresh = useCallback(async () => {
+    if (refreshingRef.current) return;
+    refreshingRef.current = true;
+    setRefreshing(true);
+    try {
+      const token = await refreshStudentToken();
+      setData((current) => (current ? { ...current, token } : current));
+      setTimeLeft(token.expires_in || TOTAL_TIME);
+    } catch (err) {
+      setTimeLeft(TOTAL_TIME);
+      showToast('No se pudo renovar el QR', err.message);
+    } finally {
+      refreshingRef.current = false;
+      setRefreshing(false);
+    }
+  }, [setData, showToast]);
 
   useEffect(() => {
-    const id = setInterval(() => setTimeLeft((t) => (t <= 1 ? TOTAL_TIME : t - 1)), 1000);
+    if (data?.token?.expires_in) setTimeLeft(data.token.expires_in);
+  }, [data?.token?.value, data?.token?.expires_in]);
+
+  useEffect(() => {
+    const id = setInterval(() => setTimeLeft((current) => (current <= 1 ? 0 : current - 1)), 1000);
     return () => clearInterval(id);
   }, []);
 
-  // Parpadeo del QR cada vez que el token se renueva.
   useEffect(() => {
-    if (timeLeft !== TOTAL_TIME) return undefined;
+    if (timeLeft !== 0 || !data?.token) return undefined;
+    refresh();
+    return undefined;
+  }, [timeLeft, data?.token, refresh]);
+
+  useEffect(() => {
+    if (!data?.token?.value) return undefined;
     setFlash(true);
     const id = setTimeout(() => setFlash(false), 250);
     return () => clearTimeout(id);
-  }, [timeLeft]);
+  }, [data?.token?.value]);
 
-  const handleRefresh = () => {
-    setTimeLeft(TOTAL_TIME);
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 800);
-  };
+  useEffect(() => {
+    if (!data?.gps || !navigator.geolocation) {
+      if (data?.gps) setPosition({ status: 'unsupported', meters: null });
+      return undefined;
+    }
+    const watch = navigator.geolocation.watchPosition(
+      (pos) => {
+        const meters = distanceMeters(pos.coords.latitude, pos.coords.longitude, data.gps.lat, data.gps.lng);
+        setPosition({
+          status: meters <= data.gps.radius ? 'inside' : 'outside',
+          meters,
+        });
+      },
+      () => setPosition({ status: 'denied', meters: null }),
+      { enableHighAccuracy: true, maximumAge: 15000, timeout: 8000 }
+    );
+    return () => navigator.geolocation.clearWatch(watch);
+  }, [data?.gps]);
 
   const offset = CIRCUMFERENCE - (timeLeft / TOTAL_TIME) * CIRCUMFERENCE;
+  const gpsCopy = useMemo(() => {
+    if (!data?.gps) return { label: 'GPS', detail: '' };
+    if (position.status === 'locating') return { label: 'Buscando señal', detail: 'Esperando la ubicación de este dispositivo.' };
+    if (position.status === 'denied') return { label: 'Ubicación no disponible', detail: 'Autoriza el GPS o presenta tu carnet en la mesa del auxiliar.' };
+    if (position.status === 'unsupported') return { label: 'Sin GPS', detail: 'Este navegador no informa coordenadas.' };
+    const where = position.status === 'inside' ? 'Dentro del rango' : 'Fuera del perímetro';
+    return {
+      label: where,
+      detail: `${data.gps.gate} • a ${formatDistance(position.meters)} (radio ${data.gps.radius} m)`,
+    };
+  }, [data?.gps, position]);
+
+  const today = data?.today;
+  const positive = today?.status === 'puntual';
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col w-full">
-        {/* Welcome & status header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md mb-space-lg">
-          <div className="flex items-center gap-space-md">
-            <div className="relative">
-              <SafeImage
-                alt="Mateo Valenzuela"
-                className="w-16 h-16 rounded-2xl object-cover shadow-sm bg-surface-container"
-                src={IMAGES.studentMateo}
-              />
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-on-secondary shadow-sm">
-                <Icon name="check" filled className="text-[13px]" />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">
-                  ¡Buenos días, Mateo Valenzuela!
-                </h1>
-                <span className="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary font-label-sm text-label-sm font-semibold hidden sm:inline-block">
-                  ID #STU-88219
-                </span>
-              </div>
-              <p className="font-body-md text-body-md text-on-surface-variant flex items-center gap-2 mt-0.5">
-                <span>Estudiante de 4to Secundaria • Sección B</span>
-                <span className="w-1 h-1 rounded-full bg-outline" />
-                <span className="text-primary font-semibold">Tutor: Prof. R. Morales</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container-low rounded-xl shadow-sm self-start lg:self-center">
-            <div className="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse" />
-            <div className="flex flex-col">
-              <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline">
-                Jornada Matutina en Curso
-              </span>
-              <span className="font-title-lg text-body-sm font-semibold text-on-surface">
-                Límite regular: <span className="text-primary font-bold">08:00 AM</span> (Faltan 16 min)
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Main grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-gutter items-start">
-          {/* LEFT: QR token & geolocation */}
-          <div className="xl:col-span-5 flex flex-col gap-space-lg">
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col items-center relative overflow-hidden">
-              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-primary via-primary-container to-secondary" />
-
-              <div className="w-full flex items-center justify-between mb-space-md">
-                <div className="flex flex-col">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">
-                    Credencial Dinámica
-                  </span>
-                  <h2 className="font-title-lg text-title-lg text-on-surface font-bold">Tu Token de Asistencia</h2>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container">
-                  <Icon name="shield" filled className="text-[15px]" />
-                  <span className="font-label-sm text-label-sm font-semibold">Anti-captura Activa</span>
-                </div>
-              </div>
-
-              <p className="font-body-sm text-body-sm text-on-surface-variant text-center mb-space-md">
-                Presenta este código en los torniquetes o al lector óptico del auxiliar en puerta.
-              </p>
-
-              <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md flex items-center justify-center">
-                <div className="absolute inset-x-4 top-4 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-80 animate-pulse pointer-events-none" />
-                <QrGraphic dimmed={flash} />
-              </div>
-
-              <div className="flex items-center gap-space-md mt-space-md py-2 px-space-md bg-surface-container-low rounded-xl w-full">
-                <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center">
-                  <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
-                    <circle className="text-surface-container-highest" cx="24" cy="24" fill="none" r="20" stroke="currentColor" strokeWidth="3.5" />
-                    <circle
-                      className="text-primary-container transition-all duration-1000 ease-linear"
-                      cx="24" cy="24" fill="none" r="20" stroke="currentColor"
-                      strokeDasharray={CIRCUMFERENCE} strokeDashoffset={offset}
-                      strokeLinecap="round" strokeWidth="3.5"
-                    />
-                  </svg>
-                  <span className="absolute font-headline-md text-label-md font-bold text-primary">
-                    {String(timeLeft).padStart(2, '0')}s
-                  </span>
-                </div>
-                <div className="flex flex-col flex-1 min-w-0">
-                  <span className="font-label-md text-label-md text-on-surface font-semibold">Rotación de Cripto-Token</span>
-                  <span className="font-body-sm text-body-sm text-outline truncate">
-                    Se renueva cada 60 seg para evitar capturas
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleRefresh}
-                className="w-full mt-space-md h-10 px-space-md rounded-lg bg-primary-container hover:bg-primary text-on-primary font-title-lg text-body-sm font-semibold flex items-center justify-center gap-space-xs transition-colors shadow-sm active:scale-[0.99]"
-              >
-                <Icon name={refreshing ? 'refresh' : 'autorenew'} className={`text-[18px] ${refreshing ? 'animate-spin' : ''}`} />
-                <span>{refreshing ? 'Actualizado...' : 'Generar Nuevo Código QR'}</span>
-              </button>
-
-              <div className="w-full mt-space-md p-space-sm bg-surface-container rounded-xl flex items-start gap-space-sm">
-                <div className="p-2 rounded-lg bg-secondary-container/40 text-on-secondary-container mt-0.5">
-                  <Icon name="near_me" filled className="text-[20px]" />
-                </div>
-                <div className="flex flex-col flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm font-bold text-on-surface uppercase tracking-wide">
-                      GPS del Dispositivo
-                    </span>
-                    <span className="font-label-sm text-label-sm text-secondary font-semibold">Dentro del Rango</span>
+      <PageState loading={loading} error={error} onRetry={reload}>
+        {data && (
+          <div className="flex flex-col w-full">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md mb-space-lg">
+              <div className="flex items-center gap-space-md">
+                <div className="relative">
+                  <SafeImage alt={data.profile.name} className="w-16 h-16 rounded-2xl object-cover shadow-sm bg-surface-container" src={IMAGES[data.profile.avatar]} />
+                  <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-on-secondary shadow-sm ${positive ? 'bg-secondary' : 'bg-tertiary'}`}>
+                    <Icon name={positive ? 'check' : 'schedule'} filled className="text-[13px]" />
                   </div>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
-                    Campus Principal • Puerta 2 peatonal (
-                    <span className="font-semibold text-on-surface">a 12 metros de distancia</span>)
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h1 className="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">
+                      ¡{data.profile.greeting}, {data.profile.name}!
+                    </h1>
+                    <span className="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary font-label-sm font-semibold">{data.profile.code}</span>
+                  </div>
+                  <p className="font-body-md text-on-surface-variant flex items-center gap-2 mt-0.5 flex-wrap">
+                    <span>{data.profile.grade}</span>
+                    <span className="w-1 h-1 rounded-full bg-outline" />
+                    <span className="text-primary font-semibold">Tutor: {data.profile.tutor}</span>
                   </p>
                 </div>
               </div>
-            </div>
-
-            <div className="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between shadow-sm">
-              <div className="flex items-center gap-space-sm">
-                <Icon name="contactless" className="text-primary text-[24px]" />
-                <div>
-                  <span className="font-title-lg text-body-sm font-semibold text-on-surface block leading-tight">
-                    ¿Sin batería o sin señal?
-                  </span>
-                  <span className="font-body-sm text-body-sm text-outline">
-                    Puedes usar tu carnet RFID físico con el Auxiliar.
-                  </span>
+              <div className="flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container-low rounded-xl shadow-sm self-start lg:self-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse" />
+                <div className="flex flex-col">
+                  <span className="font-label-sm uppercase tracking-wider text-outline">{data.shift.label}</span>
+                  <span className="font-title-lg text-body-sm font-semibold text-on-surface">{data.shift.detail}</span>
                 </div>
               </div>
-              <button
-                type="button"
-                className="px-3 py-1.5 rounded-lg bg-surface-container-highest text-primary font-label-md text-label-md font-semibold hover:bg-surface-container-high transition-colors"
-              >
-                Info
-              </button>
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-gutter items-start">
+              <div className="xl:col-span-5 flex flex-col gap-space-lg">
+                <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col items-center relative overflow-hidden">
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-primary via-primary-container to-secondary" />
+                  <div className="w-full flex items-center justify-between mb-space-md">
+                    <div>
+                      <span className="font-label-sm text-outline uppercase tracking-wider">Credencial dinámica</span>
+                      <h2 className="font-title-lg text-title-lg text-on-surface font-bold">Tu token de asistencia</h2>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container">
+                      <Icon name="shield" filled className="text-[15px]" />
+                      <span className="font-label-sm font-semibold">Token {data.token.hint}</span>
+                    </div>
+                  </div>
+                  <p className="font-body-sm text-on-surface-variant text-center mb-space-md">
+                    Presenta este código en los torniquetes. Cambia solo con cada renovación.
+                  </p>
+                  <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
+                    <QrGraphic seed={data.token.value} dimmed={flash} />
+                  </div>
+                  <div className="flex items-center gap-space-md mt-space-md py-2 px-space-md bg-surface-container-low rounded-xl w-full">
+                    <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center">
+                      <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
+                        <circle className="text-surface-container-highest" cx="24" cy="24" fill="none" r="20" stroke="currentColor" strokeWidth="3.5" />
+                        <circle className="text-primary-container transition-all duration-1000 ease-linear" cx="24" cy="24" fill="none" r="20" stroke="currentColor" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={offset} strokeLinecap="round" strokeWidth="3.5" />
+                      </svg>
+                      <span className="absolute font-bold text-primary text-label-md">{String(timeLeft).padStart(2, '0')}s</span>
+                    </div>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className="font-label-md font-semibold text-on-surface">Rotación de token</span>
+                      <span className="font-body-sm text-outline truncate">Se renueva cada 60 segundos</span>
+                    </div>
+                  </div>
+                  <button type="button" onClick={refresh} className="w-full mt-space-md h-10 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-semibold flex items-center justify-center gap-2">
+                    <Icon name={refreshing ? 'refresh' : 'autorenew'} className={`text-[18px] ${refreshing ? 'animate-spin' : ''}`} />
+                    {refreshing ? 'Actualizando...' : 'Generar nuevo código QR'}
+                  </button>
+                  <div className="w-full mt-space-md p-space-sm bg-surface-container rounded-xl flex items-start gap-space-sm">
+                    <div className={`p-2 rounded-lg mt-0.5 ${position.status === 'inside' ? 'bg-secondary-container/40 text-on-secondary-container' : 'bg-tertiary-fixed text-on-tertiary-fixed'}`}>
+                      <Icon name="near_me" filled className="text-[20px]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-label-sm font-bold uppercase">GPS del dispositivo</span>
+                        <span className={`font-label-sm font-semibold ${position.status === 'inside' ? 'text-secondary' : 'text-tertiary'}`}>{gpsCopy.label}</span>
+                      </div>
+                      <p className="font-body-sm text-on-surface-variant mt-0.5">{gpsCopy.detail}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between shadow-sm gap-3">
+                  <div className="flex items-center gap-space-sm">
+                    <Icon name="contactless" className="text-primary text-[24px]" />
+                    <div>
+                      <span className="font-semibold text-on-surface block">¿Sin batería o sin señal?</span>
+                      <span className="font-body-sm text-outline">Puedes usar tu carnet RFID físico con el auxiliar.</span>
+                    </div>
+                  </div>
+                  <button type="button" onClick={() => setRfidOpen(true)} className="px-3 py-1.5 rounded-lg bg-surface-container-highest text-primary font-semibold">Info</button>
+                </div>
+              </div>
+
+              <div className="xl:col-span-7 flex flex-col gap-space-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+                  <div className={KPI}>
+                    <div className="flex items-center justify-between"><span className="font-label-sm uppercase text-outline">Puntualidad</span><Icon name="timelapse" className="text-secondary" /></div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-metric-display text-headline-md font-bold">{Number(data.kpis.punctuality).toFixed(1)}%</span>
+                      <span className={`font-label-sm font-bold flex items-center ${data.kpis.delta >= 0 ? 'text-secondary' : 'text-tertiary'}`}>
+                        <Icon name={data.kpis.delta >= 0 ? 'arrow_upward' : 'arrow_downward'} className="text-[14px]" />
+                        {Math.abs(data.kpis.delta).toFixed(1)}%
+                      </span>
+                    </div>
+                    <span className="font-body-sm text-outline">Contra el mes anterior</span>
+                  </div>
+                  <div className={KPI}>
+                    <div className="flex items-center justify-between"><span className="font-label-sm uppercase text-outline">Asistencias</span><Icon name="event_available" className="text-primary" /></div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-metric-display text-headline-md font-bold">{data.kpis.present}</span>
+                      <span className="font-body-sm text-outline">/ {data.kpis.expected} hábiles</span>
+                    </div>
+                    <span className="font-body-sm text-secondary font-medium">{data.kpis.unjustified} faltas injustificadas</span>
+                  </div>
+                  <div className={KPI}>
+                    <div className="flex items-center justify-between"><span className="font-label-sm uppercase text-outline">Tardanzas</span><Icon name="history_toggle_off" className="text-tertiary-fixed-dim" /></div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-metric-display text-headline-md font-bold">{data.kpis.lates}</span>
+                      {data.kpis.lates > 0 && (
+                        <span className="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm">
+                          {data.kpis.lateJustified ? 'Justificada' : 'Pendiente'}
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-body-sm text-outline">{data.kpis.lateNote}</span>
+                  </div>
+                </div>
+
+                <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+                    <div className="flex items-start gap-space-md">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${positive ? 'bg-secondary-container/40 text-on-secondary-container' : 'bg-tertiary-fixed text-on-tertiary-fixed'}`}>
+                        <Icon name={positive ? 'check_circle' : 'schedule'} filled className="text-[32px]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-label-sm uppercase text-outline font-semibold">Registro de hoy</span>
+                          <span className={`px-2 py-0.5 rounded-full font-label-sm font-bold ${positive ? 'bg-secondary-container/50 text-on-secondary-container' : 'bg-tertiary-fixed text-on-tertiary-fixed'}`}>{today.statusLabel}</span>
+                        </div>
+                        <h3 className="font-headline-md text-on-surface font-bold mt-0.5">
+                          {today.time ? `Ingreso marcado: ${today.time}` : 'Todavía no hay marcación de ingreso'}
+                        </h3>
+                        <p className="font-body-sm text-on-surface-variant mt-1">
+                          {today.gate ? <>Verificado en <strong>{today.gate}</strong> mediante {today.method}.</> : data.shift.detail}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-label-sm text-outline block">Notificación familiar</span>
+                      <span className={`font-label-md font-semibold ${today.notified ? 'text-secondary' : 'text-outline'}`}>
+                        {today.notified ? 'Enviada al tutor' : 'Se envía al marcar'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-space-md p-space-md rounded-xl bg-gradient-to-r from-primary/10 to-transparent flex items-center justify-between gap-3">
+                    <div>
+                      <span className="font-bold text-primary">{today.streak > 0 ? `Llevas ${today.streak} días lectivos seguidos a tiempo.` : 'Hoy no sumas racha de puntualidad.'}</span>
+                      <p className="font-body-sm text-on-surface-variant">La racha se calcula con tus marcaciones reales del periodo.</p>
+                    </div>
+                    {today.rank && <span className="hidden md:inline-flex px-3 py-1 rounded-lg bg-surface-container-lowest text-primary font-bold">{today.rank}</span>}
+                  </div>
+                </div>
+
+                <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm">
+                  <div className="flex items-center justify-between mb-space-md">
+                    <div>
+                      <span className="font-label-sm uppercase text-outline">Cronograma del día</span>
+                      <h3 className="font-title-lg font-bold text-on-surface">{data.scheduleTitle}</h3>
+                    </div>
+                    <span className="font-label-md text-outline">{data.subjectCount} asignaturas</span>
+                  </div>
+                  <div className="space-y-space-sm">
+                    {data.classes.length === 0 && <p className="text-outline font-body-sm">No hay clases programadas hoy.</p>}
+                    {data.classes.map((item) => item.recess ? (
+                      <div key={item.recess} className="flex items-center gap-3 py-1 px-4 text-outline font-label-sm">
+                        <Icon name="coffee" className="text-[16px]" />
+                        <span>{item.recess}</span>
+                        <div className="flex-1 h-0.5 bg-surface-container" />
+                      </div>
+                    ) : (
+                      <div key={item.name} className={`p-space-md rounded-xl flex items-center justify-between ${item.next ? 'bg-surface-container-high/60' : 'bg-surface-container-low'} ${item.done ? 'opacity-70' : ''}`}>
+                        <div className="flex items-center gap-space-md">
+                          <div className={`flex flex-col items-center justify-center w-14 py-1.5 rounded-lg ${item.next ? 'bg-primary-container text-on-primary' : 'bg-surface-container'}`}>
+                            <span className="font-label-sm font-bold">{item.start}</span>
+                            <span className="text-[10px]">{item.period}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4 className="font-semibold text-on-surface">{item.name}</h4>
+                              {item.badge && <span className="px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-sm">{item.badge}</span>}
+                            </div>
+                            <p className="font-body-sm text-on-surface-variant">{item.place}</p>
+                          </div>
+                        </div>
+                        <div className="text-right hidden sm:block">
+                          <span className={`block font-label-md ${item.next ? 'text-primary font-semibold' : 'text-on-surface-variant'}`}>{item.range}</span>
+                          <span className="font-label-sm text-outline">{item.note}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-space-md pt-space-sm border-t border-surface-container flex items-center justify-between">
+                    <span className="font-body-sm text-outline">Salida estimada: <strong className="text-on-surface">{data.exitLabel}</strong></span>
+                    <button type="button" onClick={() => setWeeklyOpen(true)} className="font-label-md text-primary font-semibold flex items-center gap-1">
+                      Ver horario semanal <Icon name="arrow_forward" className="text-[16px]" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="relative rounded-2xl overflow-hidden shadow-sm h-36 bg-surface-container">
+                  <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${IMAGES.campus}')` }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/40 to-transparent flex items-end p-space-md text-surface-bright">
+                    <div>
+                      <span className="font-label-sm uppercase">Ubicación del colegio</span>
+                      <p className="font-bold">{data.campus.name}</p>
+                      <p className="font-body-sm opacity-80">{data.campus.address}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        )}
+      </PageState>
 
-          {/* RIGHT: metrics, today's check-in, schedule */}
-          <div className="xl:col-span-7 flex flex-col gap-space-lg">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
-              <div className={KPI}>
-                <div className="flex items-center justify-between mb-space-xs">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">Puntualidad</span>
-                  <Icon name="timelapse" className="text-secondary text-[20px]" />
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-metric-display text-metric-display text-on-surface font-bold">96.4%</span>
-                  <span className="font-label-sm text-label-sm text-secondary font-bold flex items-center">
-                    <Icon name="arrow_upward" className="text-[14px]" />2.1%
-                  </span>
-                </div>
-                <span className="font-body-sm text-body-sm text-outline mt-space-xs">Rango del mes (Octubre)</span>
+      <Modal open={weeklyOpen} onClose={() => setWeeklyOpen(false)} maxWidth="max-w-2xl">
+        <div className="p-space-lg">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-title-lg font-bold">Horario semanal</h3>
+            <button type="button" onClick={() => setWeeklyOpen(false)}><Icon name="close" /></button>
+          </div>
+          <div className="grid gap-3">
+            {data?.weekly?.map((day) => (
+              <div key={day.day} className="bg-surface-container-low rounded-xl p-3">
+                <p className="font-semibold text-primary">{day.day}</p>
+                <ul className="mt-1 font-body-sm text-on-surface-variant">
+                  {day.items.map((item) => <li key={item}>{item}</li>)}
+                </ul>
               </div>
-
-              <div className={KPI}>
-                <div className="flex items-center justify-between mb-space-xs">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">Asistencias</span>
-                  <Icon name="event_available" className="text-primary text-[20px]" />
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-metric-display text-metric-display text-on-surface font-bold">18</span>
-                  <span className="font-body-sm text-body-sm text-outline">/ 19 hábiles</span>
-                </div>
-                <span className="font-body-sm text-body-sm text-secondary font-medium mt-space-xs">
-                  0 Faltas Injustificadas
-                </span>
-              </div>
-
-              <div className={KPI}>
-                <div className="flex items-center justify-between mb-space-xs">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">Tardanzas</span>
-                  <Icon name="history_toggle_off" className="text-tertiary-fixed-dim text-[20px]" />
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-metric-display text-metric-display text-on-surface font-bold">1</span>
-                  <span className="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">
-                    Justificada
-                  </span>
-                </div>
-                <span className="font-body-sm text-body-sm text-outline mt-space-xs">14 Oct (Tráfico vehicular)</span>
-              </div>
-            </div>
-
-            {/* Today's check-in */}
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm relative overflow-hidden">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
-                <div className="flex items-start gap-space-md">
-                  <div className="w-14 h-14 rounded-2xl bg-secondary-container/40 text-on-secondary-container flex items-center justify-center flex-shrink-0 shadow-sm">
-                    <Icon name="check_circle" filled className="text-[32px]" />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                      <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">
-                        Registro de Hoy
-                      </span>
-                      <span className="px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-sm text-label-sm font-bold">
-                        A Tiempo
-                      </span>
-                    </div>
-                    <h3 className="font-headline-md text-headline-md text-on-surface font-bold mt-0.5">
-                      Ingreso Marcado: 07:44 AM
-                    </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                      Verificado en <strong className="text-on-surface">Torniquete #03 - Acceso Norte</strong> mediante
-                      código QR dinámico.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center pt-2 sm:pt-0 border-t sm:border-t-0 border-surface-container">
-                  <span className="font-label-sm text-label-sm text-outline">Notificación Familiar</span>
-                  <span className="inline-flex items-center gap-1 font-label-md text-label-md text-secondary font-semibold">
-                    <Icon name="done_all" className="text-[16px]" /> Enviada a Tutor
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-space-md p-space-md rounded-xl bg-gradient-to-r from-primary/10 via-primary-container/5 to-transparent flex items-center justify-between">
-                <div className="flex items-center gap-space-sm">
-                  <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold">
-                    <Icon name="local_fire_department" className="text-[18px]" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-title-lg text-body-sm font-bold text-primary">¡Gran racha de puntualidad!</span>
-                    <span className="font-body-sm text-body-sm text-on-surface-variant">
-                      Llevas 12 días lectivos consecutivos llegando a tiempo.
-                    </span>
-                  </div>
-                </div>
-                <span className="hidden md:inline-flex px-3 py-1 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md font-bold shadow-sm">
-                  Top 5% del Aula
-                </span>
-              </div>
-            </div>
-
-            {/* Schedule */}
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col">
-              <div className="flex items-center justify-between mb-space-md">
-                <div className="flex flex-col">
-                  <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">Cronograma del Día</span>
-                  <h3 className="font-title-lg text-title-lg text-on-surface font-bold">Horario de Clases • Lunes 24</h3>
-                </div>
-                <span className="font-label-md text-label-md text-outline">5 Asignaturas programadas</span>
-              </div>
-
-              <div className="space-y-space-sm">
-                {CLASSES.map((c) =>
-                  c.recess ? (
-                    <div key="recess" className="flex items-center gap-3 py-1 px-4 text-outline font-label-sm text-label-sm">
-                      <Icon name="coffee" className="text-[16px]" />
-                      <span>{c.recess}</span>
-                      <div className="flex-1 h-0.5 bg-surface-container" />
-                    </div>
-                  ) : (
-                    <div
-                      key={c.name}
-                      className={`p-space-md rounded-xl flex items-center justify-between ${
-                        c.next ? 'bg-surface-container-high/60' : 'bg-surface-container-low hover:bg-surface-container transition-colors'
-                      }`}
-                    >
-                      <div className="flex items-center gap-space-md">
-                        <div
-                          className={`flex flex-col items-center justify-center w-14 py-1.5 rounded-lg ${
-                            c.next ? 'bg-primary-container text-on-primary' : 'bg-surface-container text-on-surface'
-                          }`}
-                        >
-                          <span className="font-label-sm text-label-sm font-bold">{c.start}</span>
-                          <span className={`font-label-sm text-[10px] ${c.next ? 'opacity-80' : 'text-outline'}`}>{c.period}</span>
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className={`font-title-lg text-body-md ${c.next ? 'font-bold' : 'font-semibold'} text-on-surface`}>
-                              {c.name}
-                            </h4>
-                            {c.next && (
-                              <span className="px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold animate-pulse">
-                                Próxima Clase
-                              </span>
-                            )}
-                          </div>
-                          <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{c.place}</p>
-                        </div>
-                      </div>
-                      <div className="text-right hidden sm:block">
-                        <span
-                          className={`font-label-md text-label-md block ${
-                            c.next ? 'text-primary font-semibold' : 'text-on-surface-variant font-medium'
-                          }`}
-                        >
-                          {c.range}
-                        </span>
-                        <span className="font-label-sm text-label-sm text-outline">{c.note}</span>
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-
-              <div className="mt-space-md pt-space-sm border-t border-surface-container flex items-center justify-between text-body-sm">
-                <span className="font-body-sm text-body-sm text-outline">
-                  Salida estimada: <strong className="text-on-surface">02:30 PM</strong>
-                </span>
-                <button type="button" className="font-label-md text-label-md text-primary font-semibold hover:underline flex items-center gap-1">
-                  <span>Ver horario semanal completo</span>
-                  <Icon name="arrow_forward" className="text-[16px]" />
-                </button>
-              </div>
-            </div>
-
-            {/* Campus location */}
-            <div className="relative rounded-2xl overflow-hidden shadow-sm h-36 bg-surface-container">
-              <div
-                className="w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: `url('${IMAGES.campus}')` }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/40 to-transparent flex items-end p-space-md text-on-tertiary">
-                <div className="flex items-center justify-between w-full">
-                  <div>
-                    <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed opacity-90">
-                      Ubicación Actual
-                    </span>
-                    <p className="font-title-lg text-body-md font-bold text-surface-bright leading-tight">
-                      Colegio San Gabriel • Sede Central
-                    </p>
-                    <p className="font-body-sm text-body-sm text-surface-variant opacity-80">
-                      Av. Las Palmeras 450, Urb. Monterrico
-                    </p>
-                  </div>
-                  <Icon name="place" className="text-[28px] text-surface-bright" />
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      </Modal>
+
+      <Modal open={rfidOpen} onClose={() => setRfidOpen(false)}>
+        <div className="p-space-lg">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-title-lg font-bold">{data?.rfid?.title}</h3>
+            <button type="button" onClick={() => setRfidOpen(false)}><Icon name="close" /></button>
+          </div>
+          <ol className="list-decimal pl-5 space-y-2 font-body-md text-on-surface-variant">
+            {data?.rfid?.steps?.map((step) => <li key={step}>{step}</li>)}
+          </ol>
+        </div>
+      </Modal>
+      <Toast toast={toast} />
     </DashboardLayout>
   );
 }

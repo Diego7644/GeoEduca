@@ -1,0 +1,20 @@
+{
+    "id":  "B-02",
+    "funcionalidad":  "Validación de geolocalización y geocerca",
+    "tipo":  "Funcional (no implementado)",
+    "precondiciones":  "Sede con geocerca configurada.",
+    "entrada":  "Ninguna",
+    "procedimiento":  "Buscar rutas de geolocalización en route:list",
+    "esperado":  "Existe un endpoint que valide coordenadas contra una geocerca en el servidor",
+    "resultado":  "Bloqueado",
+    "real":  "Rutas coincidentes: 0. Los textos de GPS de la interfaz son fijos.",
+    "ejecutado":  "2026-10-27T20:08:41",
+    "peticiones":  [
+                       {
+                           "metodo":  "CLI",
+                           "url":  "php artisan route:list --json --except-vendor",
+                           "estado":  0,
+                           "cuerpoRecibido":  "Rutas registradas: /, api/asistencia/auxiliar/aprobar, api/asistencia/auxiliar/casos, api/asistencia/estudiante, api/asistencia/justificacion, api/asistencia/padre, api/auth/login, api/auth/logout, api/auth/me, api/health"
+                       }
+                   ]
+}

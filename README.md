@@ -1,66 +1,95 @@
-# 🌍 GEOEDUCA - Sistema de Control Escolar y Asistencia
+# GEOEDUCA
 
-GEOEDUCA es una plataforma web moderna diseñada para la gestión de asistencia escolar en tiempo real. Utiliza geolocalización (GPS), códigos QR dinámicos y paneles especializados para optimizar el control de acceso en las instituciones educativas.
+Prototipo web de control de asistencia escolar. El repositorio principal del proyecto es [Diego7644/GeoEduca](https://github.com/Diego7644/GeoEduca).
 
-Este repositorio contiene el código fuente de la aplicación, dividida en un **Backend (API REST)** construido con Laravel y un **Frontend (SPA)** desarrollado con React y Vite.
+Hoy las pantallas funcionan y varias acciones se guardan, pero **no es un sistema funcional**: no hay base de datos, la autenticación es simulada y el historial de asistencia, el QR, el GPS y las notificaciones no ejecutan un proceso real. El siguiente objetivo de desarrollo es persistencia, autenticación segura y gestión de roles. El detalle está en [`docs/02-desarrollo/`](docs/02-desarrollo/README.md).
 
----
+## Tecnologías
 
-## 🚀 Tecnologías Principales
+| Capa | Stack |
+|---|---|
+| Backend | PHP 8.2, Laravel 11, Laravel Sanctum (instalado, aún no usado) |
+| Frontend | React 18, Vite 5, React Router, Tailwind CSS, Axios |
+| Pruebas | PHPUnit 11, Mockery |
+| Persistencia actual | archivo JSON local (`storage/app/geoeduca-state.json`, ignorado por Git). No hay migraciones ni modelos |
 
-### Frontend
-*   **React 18** (con Vite como empaquetador)
-*   **React Router DOM** (Manejo de rutas protegidas por roles)
-*   **Tailwind CSS** (Diseño responsivo y sistema de diseño personalizado)
-*   **Axios** (Cliente HTTP con interceptores para manejo de tokens)
+## Estructura
+
+```
+backend/                         API Laravel
+frontend/                        SPA React
+docs/01-guia-pruebas-calidad/    Guía académica pública (práctica de pruebas)
+docs/02-desarrollo/              Diagnóstico técnico y plan de implementación
+backend/tests/                   Suite PHPUnit reutilizable
+```
+
+El código de la aplicación está en `backend/` y `frontend/`. La guía académica no se mezcla con esos archivos.
+
+## Estado actual
+
+| Capacidad | Qué hay hoy |
+|---|---|
+| Paneles por rol (estudiante, padre/tutor, auxiliar) | La interfaz carga datos de la API |
+| Autenticación | Cuentas de demostración y tokens `mock-` guardados en un JSON, sin expiración |
+| Autorización | El servidor comprueba el rol en el controlador; no hay middleware Sanctum |
+| Asistencia | El historial se genera por fórmula; no hay registros reales |
+| QR | Patrón visual de 8×8; no es un código QR escaneable ni se valida en el servidor |
+| GPS | El navegador calcula si está en el perímetro; la coordenada no se envía |
+| Notificaciones | Lista dentro de la aplicación; no hay correo, SMS ni push |
+| Base de datos | No existe |
+
+Las cuentas de demostración viven en el código del prototipo. No se documentan aquí. Hay que rotarlas antes de cualquier despliegue.
+
+## Instalación y ejecución
+
+Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. **No hace falta un motor de base de datos** para arrancar el prototipo.
 
 ### Backend
-*   **Laravel** (API REST)
-*   **PHP 8+**
-*   **MySQL / PostgreSQL** (Base de datos relacional)
-
----
-
-## 👥 Roles del Sistema
-
-La aplicación cuenta con un sistema de autenticación basado en roles. Cada usuario es redirigido a un dashboard específico al iniciar sesión:
-
-1.  **Estudiante (`student`)**: Genera un token QR dinámico (rotación de 60s) para marcar su asistencia, visualiza su horario y su racha de puntualidad.
-2.  **Padre / Tutor (`parent`)**: Monitorea la asistencia de sus hijos en tiempo real, recibe alertas de entrada/salida, y puede enviar justificaciones médicas o permisos de salida anticipada.
-3.  **Auxiliar / Staff (`staff`)**: Consola operativa para gestionar contingencias en la puerta (fallas de GPS, QR expirados, falta de batería). Permite el registro forzado de ingreso y mantiene una auditoría en vivo.
-
----
-
-## ⚙️ Requisitos Previos
-
-Asegúrate de tener instalado en tu entorno local:
-*   [Node.js](https://nodejs.org/) (v18 o superior)
-*   [PHP](https://www.php.net/) (v8.1 o superior)
-*   [Composer](https://getcomposer.org/)
-*   Un gestor de base de datos (MySQL, MariaDB o SQLite)
-
----
-
-## 🛠️ Instalación y Ejecución Local
-
-El proyecto está dividido en dos carpetas principales: `backend` y `frontend`. Debes iniciar ambos servidores para que la aplicación funcione correctamente.
-
-### 1. Configurar el Backend (Laravel)
-
-Abre una terminal y navega a la carpeta del backend:
 
 ```bash
 cd backend
-
-# Instalar dependencias de PHP
 composer install
-
-# Copiar el archivo de entorno y generar la clave de la aplicación
-cp .env.example .env
+cp .env.example .env          # en Windows: copy .env.example .env
 php artisan key:generate
+php artisan serve             # http://127.0.0.1:8000
+```
 
-# Configurar la base de datos en el archivo .env y luego ejecutar las migraciones
-php artisan migrate
+No ejecutes `php artisan migrate`: todavía no hay migraciones.
 
-# Iniciar el servidor de desarrollo (se ejecutará en http://127.0.0.1:8000)
-php artisan serve
+### Frontend
+
+En otra terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev                   # http://localhost:5173
+```
+
+Vite reenvía `/api` al backend. Los dos servidores tienen que estar en marcha.
+
+### Pruebas automatizadas
+
+```bash
+cd backend
+php vendor/bin/phpunit
+```
+
+Hay dos suites:
+
+- `Caracterizacion`: describe el comportamiento actual y debe aprobar.
+- `RequisitosSeguridad`: describe el comportamiento seguro esperado. Hoy falla a propósito (defecto de autenticación, cabeceras, límite de intentos, etc.). No se modifican esas expectativas para ocultar fallos.
+
+```bash
+php vendor/bin/phpunit --testsuite Caracterizacion
+php vendor/bin/phpunit --testsuite RequisitosSeguridad
+```
+
+## Documentación
+
+| Dónde | Para qué |
+|---|---|
+| [`docs/02-desarrollo/`](docs/02-desarrollo/README.md) | Diagnóstico, arquitectura, plan, riesgos y primera etapa (persistencia y autenticación) |
+| [`docs/01-guia-pruebas-calidad/`](docs/01-guia-pruebas-calidad/README.md) | Evidencias públicas de la práctica de Pruebas y Calidad de Software |
+
+La guía académica es un entregable de curso. Su finalización corresponde al compañero responsable. El desarrollo del producto continúa a partir de `docs/02-desarrollo/PROXIMAS-TAREAS.md`.

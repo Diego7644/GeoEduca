@@ -16,21 +16,38 @@ function readStoredUser() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(readStoredUser);
 
-  const login = useCallback(async (credentials) => {
-    const { token, user: loggedUser } = await authService.login(credentials);
+  const persist = useCallback((token, loggedUser) => {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(loggedUser));
     setUser(loggedUser);
     return loggedUser;
   }, []);
 
-  const logout = useCallback(() => {
+  const login = useCallback(async (credentials) => {
+    const { token, user: loggedUser } = await authService.login(credentials);
+    return persist(token, loggedUser);
+  }, [persist]);
+
+  const loginWithAccess = useCallback(async (payload) => {
+    const { token, user: loggedUser } = await authService.loginWithAccess(payload);
+    return persist(token, loggedUser);
+  }, [persist]);
+
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch {
+      // La sesión local se cierra aunque el servidor no responda.
+    }
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     setUser(null);
   }, []);
 
-  const value = useMemo(() => ({ user, login, logout, isAuthenticated: !!user }), [user, login, logout]);
+  const value = useMemo(
+    () => ({ user, login, loginWithAccess, logout, isAuthenticated: !!user }),
+    [user, login, loginWithAccess, logout]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

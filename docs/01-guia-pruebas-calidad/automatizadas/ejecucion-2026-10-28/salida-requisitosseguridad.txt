@@ -1,0 +1,262 @@
+Fecha de inicio (hora local UTC-5): 2026-10-28 00:05:57
+Fecha de inicio (UTC): 2026-10-28 05:05:57
+Directorio: <RAIZ_PROYECTO>/backend
+Comando: php vendor/bin/phpunit --testsuite RequisitosSeguridad
+Codigo de salida: 1
+Duracion total del proceso: 2.14 s
+----- salida de PHPUnit -----
+PHPUnit 11.5.57 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: <RAIZ_PROYECTO>\backend\phpunit.xml
+
+FFFFFFFFFFFFFFFFFFFFF........FFFFFF                               35 / 35 (100%)
+
+Time: 00:01.749, Memory: 30.00 MB
+
+There were 27 failures:
+
+1) Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/auth/me" ('GET', '/api/auth/me', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+
+2) Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/asistencia/estudiante" ('GET', '/api/asistencia/estudiante', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+
+3) Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/asistencia/padre" ('GET', '/api/asistencia/padre', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+
+4) Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/asistencia/auxiliar/casos" ('GET', '/api/asistencia/auxiliar/casos', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+
+5) Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "POST /api/asistencia/auxiliar/aprobar" ('POST', '/api/asistencia/auxiliar/aprobar', ['74829104', 'Bateria agotada (carnet fisic...ntado)'])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+
+6) Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "POST /api/asistencia/justificacion" ('POST', '/api/asistencia/justificacion', ['medical', '2026-10-27', '11:30', 'Cita medica programada en cli...ticio)'])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43
+
+7) Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/auth/me" ('GET', '/api/auth/me', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+
+8) Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/asistencia/estudiante" ('GET', '/api/asistencia/estudiante', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+
+9) Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/asistencia/padre" ('GET', '/api/asistencia/padre', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+
+10) Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/asistencia/auxiliar/casos" ('GET', '/api/asistencia/auxiliar/casos', [])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+
+11) Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "POST /api/asistencia/auxiliar/aprobar" ('POST', '/api/asistencia/auxiliar/aprobar', ['74829104', 'Bateria agotada (carnet fisic...ntado)'])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+
+12) Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "POST /api/asistencia/justificacion" ('POST', '/api/asistencia/justificacion', ['medical', '2026-10-27', '11:30', 'Cita medica programada en cli...ticio)'])
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54
+
+13) Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "estudiante → GET auxiliar/casos" ('student', 'GET', '/api/asistencia/auxiliar/casos', [])
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutorizacionPorRolTest.php:52
+
+14) Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "estudiante → POST auxiliar/aprobar" ('student', 'POST', '/api/asistencia/auxiliar/aprobar', ['74829104', 'Bateria agotada (carnet fisic...ntado)'])
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutorizacionPorRolTest.php:52
+
+15) Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "estudiante → GET padre" ('student', 'GET', '/api/asistencia/padre', [])
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutorizacionPorRolTest.php:52
+
+16) Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "padre → GET auxiliar/casos" ('parent', 'GET', '/api/asistencia/auxiliar/casos', [])
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutorizacionPorRolTest.php:52
+
+17) Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "padre → POST auxiliar/aprobar" ('parent', 'POST', '/api/asistencia/auxiliar/aprobar', ['74829104', 'Bateria agotada (carnet fisic...ntado)'])
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutorizacionPorRolTest.php:52
+
+18) Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "padre → GET estudiante" ('parent', 'GET', '/api/asistencia/estudiante', [])
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+<RAIZ_PROYECTO>\backend\tests\Seguridad\AutorizacionPorRolTest.php:52
+
+19) Tests\Seguridad\EndurecimientoHttpTest::test_cabecera_nosniff
+Header [X-Content-Type-Options] not present on response.
+Failed asserting that false is true.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:303
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EndurecimientoHttpTest.php:26
+
+20) Tests\Seguridad\EndurecimientoHttpTest::test_error_404_con_configuracion_por_defecto_no_filtra_detalles
+Con APP_DEBUG=true (valor de .env.example) la respuesta de error expone: trace, file, line, exception
+Failed asserting that two arrays are identical.
+--- Expected
++++ Actual
+@@ @@
+-Array &0 []
++Array &0 [
++    0 => 'trace',
++    1 => 'file',
++    2 => 'line',
++    3 => 'exception',
++]
+
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EndurecimientoHttpTest.php:44
+
+21) Tests\Seguridad\EndurecimientoHttpTest::test_validacion_sin_accept_responde_422
+Expected response status code [422] but received 302.
+Failed asserting that 302 is identical to 422.
+
+The following errors occurred during the last request:
+
+El DNI debe tener 8 dígitos.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EndurecimientoHttpTest.php:59
+
+22) Tests\Seguridad\EntradasHostilesTest::test_identificador_no_textual_no_provoca_error_500 with data set "DNI enviado como arreglo" ([['<DNI-DEMO-ESTUDIANTE>']])
+Una entrada hostil debe responder 401 o 422; respondió 500
+Failed asserting that an array contains 500.
+
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:91
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:79
+
+23) Tests\Seguridad\EntradasHostilesTest::test_identificador_no_textual_no_provoca_error_500 with data set "DNI enviado como objeto" ([['']])
+Una entrada hostil debe responder 401 o 422; respondió 500
+Failed asserting that an array contains 500.
+
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:91
+<RAIZ_PROYECTO>\backend\tests\Seguridad\EntradasHostilesTest.php:79
+
+24) Tests\Seguridad\LimiteIntentosLoginTest::test_intentos_fallidos_repetidos_reciben_429
+Se esperaba al menos un 429 en 12 intentos fallidos seguidos. Estados obtenidos: 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401
+Failed asserting that an array contains 429.
+
+<RAIZ_PROYECTO>\backend\tests\Seguridad\LimiteIntentosLoginTest.php:34
+
+25) Tests\Seguridad\SesionYLogoutTest::test_me_tras_logout_responde_401
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\SesionYLogoutTest.php:32
+
+26) Tests\Seguridad\SesionYLogoutTest::test_asistencia_tras_logout_responde_401
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+<RAIZ_PROYECTO>\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+<RAIZ_PROYECTO>\backend\tests\Seguridad\SesionYLogoutTest.php:42
+
+27) Tests\Seguridad\SesionYLogoutTest::test_me_con_token_valido_identifica_al_usuario
+Un token válido debe identificar a su usuario; devolvió user=null.
+Failed asserting that null is not null.
+
+<RAIZ_PROYECTO>\backend\tests\Seguridad\SesionYLogoutTest.php:52
+
+FAILURES!
+Tests: 35, Assertions: 74, Failures: 27.

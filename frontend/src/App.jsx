@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import DashboardEstudiante from './pages/DashboardEstudiante';
 import DashboardPadre from './pages/DashboardPadre';
 import DashboardAuxiliar from './pages/DashboardAuxiliar';
+import Reportes from './pages/Reportes';
+import Configuracion from './pages/Configuracion';
 
 function HomeRedirect() {
   const { user } = useAuth();
@@ -26,6 +28,10 @@ export default function App() {
       </Route>
       <Route element={<ProtectedRoute roles={['staff']} />}>
         <Route path="/auxiliar" element={<DashboardAuxiliar />} />
+      </Route>
+      <Route element={<ProtectedRoute roles={['student', 'parent', 'staff']} />}>
+        <Route path="/reportes" element={<Reportes />} />
+        <Route path="/configuracion" element={<Configuracion />} />
       </Route>
 
       <Route path="*" element={<HomeRedirect />} />

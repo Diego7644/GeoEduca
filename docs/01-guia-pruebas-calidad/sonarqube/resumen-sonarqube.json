@@ -1,0 +1,18 @@
+{
+    "fechaRecoleccion":  "2026-10-27T23:07:58",
+    "proyecto":  "geoeduca-pruebas-calidad",
+    "sonarQube":  "26.10.0.133078",
+    "analisisId":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+    "fechaDelAnalisis":  "2026-10-28T04:06:51+0000",
+    "commitAnalizado":  "b326574",
+    "estadoQualityGate":  "OK",
+    "incidenciasTotales":  11,
+    "securityHotspots":  0,
+    "coberturaDeCodigo":  "NO MEDIDA: no se importo ningun informe de cobertura (no hay Xdebug ni PCOV). Sonar muestra 0.0 % solo porque su sensor Zero Coverage asigna 0 a los archivos sin informe; no es cobertura real.",
+    "pruebas":  {
+                    "total":  "124",
+                    "fallidas":  "27",
+                    "errores":  "0",
+                    "omitidas":  "0"
+                }
+}

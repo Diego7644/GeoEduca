@@ -1,0 +1,34 @@
+{
+    "id":  "F-04",
+    "funcionalidad":  "Inicio de sesión de personal (docente/auxiliar)",
+    "tipo":  "Funcional",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "DNI 40111222 (ficticio), contraseña demo de docente \u003cMASKED\u003e, perfil staff",
+    "procedimiento":  "POST /api/auth/login",
+    "esperado":  "200, rol staff, token presente",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 200; rol=staff; token presente=True (valor oculto)",
+    "ejecutado":  "2026-10-27T20:08:18",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"40111222\",\"role\":\"staff\"}",
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:18 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"token\":\"\u003cREDACTED\u003e\",\"token_type\":\"Bearer\",\"user\":{\"id\":3,\"name\":\"Aux. Ricardo Paz\",\"roleLabel\":\"Auxiliar de Puerta\",\"identifier\":\"40111222\",\"role\":\"staff\"}}",
+                           "ms":  479
+                       }
+                   ]
+}

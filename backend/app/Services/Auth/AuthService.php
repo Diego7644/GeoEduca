@@ -21,4 +21,14 @@ class AuthService
     {
         return $this->authenticator->authenticate($credentials);
     }
+
+    public function attemptCredential(array $credentials): array
+    {
+        return $this->authenticator->authenticateCredential($credentials);
+    }
+
+    public function detect(array $payload): array
+    {
+        return $this->authenticator->detectCredential($payload);
+    }
 }

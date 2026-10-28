@@ -1,0 +1,35 @@
+{
+    "id":  "V-07",
+    "funcionalidad":  "Validación de motivo de justificación corto",
+    "tipo":  "Validación de datos",
+    "precondiciones":  "Sesión de padre iniciada (token simulado).",
+    "entrada":  "reason de 5 caracteres",
+    "procedimiento":  "POST /api/asistencia/justificacion",
+    "esperado":  "422 con error en reason (mínimo 10)",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 422; errors.reason=El motivo debe tener al menos 10 caracteres.",
+    "ejecutado":  "2026-10-27T20:08:23",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/asistencia/justificacion",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  "{\"event_date\":\"2026-10-27\",\"reason\":\"corto\",\"type\":\"medical\"}",
+                           "estado":  422,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:23 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"El motivo debe tener al menos 10 caracteres.\",\"errors\":{\"reason\":[\"El motivo debe tener al menos 10 caracteres.\"]}}",
+                           "ms":  516
+                       }
+                   ]
+}

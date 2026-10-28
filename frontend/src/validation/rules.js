@@ -55,6 +55,13 @@ export function validateEventDate(value) {
   return validateRequiredMin(value, { min: 1, label: 'La fecha del evento' });
 }
 
+export function validateRecoveryCode(value) {
+  const raw = String(value ?? '').replace(/\D/g, '');
+  if (!raw) return 'El código es obligatorio.';
+  if (raw.length !== 6) return 'El código debe tener 6 dígitos.';
+  return '';
+}
+
 export function validateStudentId(value) {
   return validateRequiredMin(value, {
     min: CONTINGENCY_RULES.studentId.min,

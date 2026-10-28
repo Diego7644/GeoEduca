@@ -1,0 +1,35 @@
+{
+    "id":  "I-05",
+    "funcionalidad":  "Robustez: cliente de API sin cabecera Accept",
+    "tipo":  "Integración",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "DNI inválido de 7 dígitos; sin Accept: application/json",
+    "procedimiento":  "POST /api/auth/login sin Accept (sin seguir redirecciones)",
+    "esperado":  "422 con JSON de errores: una ruta de API no debe responder con redirección HTML",
+    "resultado":  "Fallido",
+    "real":  "HTTP 302; Location=\u0027http://127.0.0.1:8000/\u0027",
+    "ejecutado":  "2026-10-27T20:08:28",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DE-7-DIGITOS>\",\"role\":\"student\"}",
+                           "estado":  302,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "text/html; charset=utf-8",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:28 GMT",
+                                                      "Connection":  "close",
+                                                      "Location":  "http://127.0.0.1:8000/",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "\u003c!DOCTYPE html\u003e\n\u003chtml\u003e\n    \u003chead\u003e\n        \u003cmeta charset=\"UTF-8\" /\u003e\n        \u003cmeta http-equiv=\"refresh\" content=\"0;url=\u0027http://127.0.0.1:8000\u0027\" /\u003e\n\n        \u003ctitle\u003eRedirecting to http://127.0.0.1:8000\u003c/title\u003e\n    \u003c/head\u003e\n    \u003cbody\u003e\n        Redirecting to \u003ca href=\"http://127.0.0.1:8000\"\u003ehttp://127.0.0.1:8000\u003c/a\u003e.\n    \u003c/body\u003e\n\u003c/html\u003e",
+                           "ms":  486
+                       }
+                   ]
+}

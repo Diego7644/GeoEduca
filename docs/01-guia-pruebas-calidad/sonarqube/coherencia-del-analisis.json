@@ -1,0 +1,48 @@
+{
+    "analisisVigente":  {
+                            "id":  "bc4c4544-a6ef-44fe-a794-398d5ae5c0f3",
+                            "fecha":  "2026-10-28T04:06:51+0000",
+                            "version":  "practica-pruebas-calidad",
+                            "commit":  "b326574"
+                        },
+    "tareaDeProcesamiento":  "a8f898fa-e8c6-4b70-940a-bc224af45e0c",
+    "evidenciaGuardadaCorrespondeAlAnalisisVigente":  false,
+    "qualityGateGuardadoIgualAlActual":  true,
+    "metricasGuardadasDistintasDeLaLecturaActual":  [
+                                                        "test_execution_time"
+                                                    ],
+    "phpunitImportadoIgualAlInformeLocal":  true,
+    "cruces":  [
+                   {
+                       "comprobacion":  "bugs (metrica) = incidencias de tipo BUG",
+                       "metrica":  0,
+                       "incidencias":  0,
+                       "coincide":  true
+                   },
+                   {
+                       "comprobacion":  "vulnerabilities (metrica) = incidencias de tipo VULNERABILITY",
+                       "metrica":  2,
+                       "incidencias":  2,
+                       "coincide":  true
+                   },
+                   {
+                       "comprobacion":  "code_smells (metrica) = incidencias de tipo CODE_SMELL",
+                       "metrica":  9,
+                       "incidencias":  9,
+                       "coincide":  true
+                   },
+                   {
+                       "comprobacion":  "violations (metrica) = total de incidencias",
+                       "metrica":  11,
+                       "incidencias":  11,
+                       "coincide":  true
+                   },
+                   {
+                       "comprobacion":  "security_hotspots (metrica) = hotspots devueltos por la API",
+                       "metrica":  0,
+                       "incidencias":  0,
+                       "coincide":  true
+                   }
+               ],
+    "todoCoincide":  false
+}

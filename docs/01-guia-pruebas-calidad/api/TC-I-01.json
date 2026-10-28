@@ -1,0 +1,35 @@
+{
+    "id":  "I-01",
+    "funcionalidad":  "Proxy de Vite hacia la API",
+    "tipo":  "Integración",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 y Vite en localhost:5173 activos.",
+    "entrada":  "Ninguna",
+    "procedimiento":  "GET http://localhost:5173/api/health",
+    "esperado":  "200 {\"status\":\"ok\"} (Vite reenvía a Laravel)",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 200 en 488 ms",
+    "ejecutado":  "2026-10-27T20:08:26",
+    "peticiones":  [
+                       {
+                           "metodo":  "GET",
+                           "url":  "http://localhost:5173/api/health",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Transfer-Encoding":  "chunked",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:26 GMT",
+                                                      "connection":  "close",
+                                                      "host":  "127.0.0.1:8000",
+                                                      "Cache-Control":  "no-cache, private"
+                                                  },
+                           "cuerpoRecibido":  "{\"status\":\"ok\"}",
+                           "ms":  488
+                       }
+                   ]
+}

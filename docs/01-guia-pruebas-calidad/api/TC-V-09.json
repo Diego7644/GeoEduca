@@ -1,0 +1,35 @@
+{
+    "id":  "V-09",
+    "funcionalidad":  "Validación de aprobación manual sin motivo",
+    "tipo":  "Validación de datos",
+    "precondiciones":  "Sesión de personal iniciada (token simulado).",
+    "entrada":  "student_id=74829104, sin reason",
+    "procedimiento":  "POST /api/asistencia/auxiliar/aprobar",
+    "esperado":  "422 con error en reason",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 422; errors.reason=El motivo de contingencia es obligatorio.",
+    "ejecutado":  "2026-10-27T20:08:24",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/asistencia/auxiliar/aprobar",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  "{\"student_id\":\"74829104\"}",
+                           "estado":  422,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:24 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"El motivo de contingencia es obligatorio.\",\"errors\":{\"reason\":[\"El motivo de contingencia es obligatorio.\"]}}",
+                           "ms":  555
+                       }
+                   ]
+}

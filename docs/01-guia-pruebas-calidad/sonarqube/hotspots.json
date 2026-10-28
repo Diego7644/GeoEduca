@@ -1,0 +1,10 @@
+{
+    "consultaRealizada":  "OK",
+    "error":  null,
+    "total":  0,
+    "metricaSecurityHotspotsDelServidor":  "0",
+    "hotspots":  [
+
+                 ],
+    "nota":  "La API api/hotspots esta deprecada por SonarSource (los hotspots pasan a ser incidencias de seguridad). Parametro correcto: project."
+}

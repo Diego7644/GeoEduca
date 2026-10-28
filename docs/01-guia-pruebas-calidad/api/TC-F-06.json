@@ -1,0 +1,35 @@
+{
+    "id":  "F-06",
+    "funcionalidad":  "Aprobación manual de ingreso (contrato de la API)",
+    "tipo":  "Funcional",
+    "precondiciones":  "Sesión de personal iniciada (token simulado).",
+    "entrada":  "student_id=74829104 (ficticio), reason de 41 caracteres",
+    "procedimiento":  "POST /api/asistencia/auxiliar/aprobar con Authorization Bearer",
+    "esperado":  "200 con mensaje y eco de los datos validados (la persistencia se evalúa en B-04)",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 200; mensaje: Ingreso aprobado (simulado)",
+    "ejecutado":  "2026-10-27T20:08:18",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/asistencia/auxiliar/aprobar",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  "{\"student_id\":\"74829104\",\"reason\":\"Bateria agotada (carnet fisico presentado)\"}",
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:18 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"Ingreso aprobado (simulado)\",\"data\":{\"student_id\":\"74829104\",\"reason\":\"Bateria agotada (carnet fisico presentado)\"}}",
+                           "ms":  447
+                       }
+                   ]
+}

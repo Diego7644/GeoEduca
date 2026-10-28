@@ -1,0 +1,42 @@
+{
+  "descripcion": "Compara las dos ejecuciones de las suites PHPUnit y fija el porcentaje de aprobacion. No reemplaza resumen-automatizadas.json (ejecucion original), que se conserva intacto.",
+  "formula": "porcentaje de aprobacion = pruebas aprobadas / pruebas ejecutadas x 100; las omitidas se informan aparte",
+  "ejecuciones": {
+    "original": {
+      "fecha": "2026-10-27",
+      "commit": "b326574",
+      "archivos": ["resumen-automatizadas.json", "salida-caracterizacion.txt", "salida-seguridad.txt", "junit-caracterizacion.xml", "junit-seguridad.xml"],
+      "duracionSegunJUnit_s": { "Caracterizacion": 2.049, "RequisitosSeguridad": 0.930, "total": 2.980 },
+      "duracionLineaTime_s": { "Caracterizacion": 2.110, "RequisitosSeguridad": 0.963 }
+    },
+    "segunda": {
+      "fecha": "2026-10-28",
+      "horaLocalUtcMenos5": "00:05:54",
+      "motivo": "Obtener un registro fechado adicional de la ejecucion; la herramienta no permite capturar la terminal, por lo que las capturas de pantalla quedan como tarea manual",
+      "comandos": [
+        "php vendor/bin/phpunit --testsuite Caracterizacion",
+        "php vendor/bin/phpunit --testsuite RequisitosSeguridad"
+      ],
+      "directorio": "<RAIZ_PROYECTO>/backend",
+      "php": "8.2.12",
+      "phpunit": "11.5.57",
+      "archivos": ["ejecucion-2026-10-28/salida-caracterizacion.txt", "ejecucion-2026-10-28/salida-requisitosseguridad.txt"],
+      "duracionLineaTime_s": { "Caracterizacion": 3.167, "RequisitosSeguridad": 1.749 },
+      "codigosDeSalida": { "Caracterizacion": 0, "RequisitosSeguridad": 1 },
+      "cambiosPersistentes": "Ninguno: el estado de git solo cambio por la carpeta nueva ejecucion-2026-10-28/ y storage/database mantuvo 28 archivos antes y despues"
+    }
+  },
+  "resultados": {
+    "Caracterizacion": { "pruebas": 89, "aserciones": 305, "aprobadas": 89, "fallidas": 0, "omitidas": 0, "aprobacionPct": 100.0 },
+    "RequisitosSeguridad": { "pruebas": 35, "aserciones": 74, "aprobadas": 8, "fallidas": 27, "omitidas": 0, "aprobacionPct": 22.9 },
+    "total": { "pruebas": 124, "aserciones": 379, "aprobadas": 97, "fallidas": 27, "omitidas": 0, "aprobacionPct": 78.2 }
+  },
+  "comparacionDeResultados": {
+    "pruebasPorSuiteIguales": true,
+    "aprobadasYFallidasIguales": true,
+    "nombresDeLas27PruebasFallidasIguales": true,
+    "diferenciasEnNombresDeFallos": 0,
+    "diferenciaDeTiempo": "La segunda ejecucion tardo mas (3,167 s y 1,749 s frente a 2,110 s y 0,963 s en la linea Time). No se investigo la causa; el contenido y el resultado son identicos."
+  },
+  "verificadoPorPrograma": "Los porcentajes se calcularon como 89/89, 8/35 y 97/124; los nombres de fallos se compararon entre salida-seguridad.txt y ejecucion-2026-10-28/salida-requisitosseguridad.txt."
+}

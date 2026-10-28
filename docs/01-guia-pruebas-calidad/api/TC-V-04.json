@@ -1,0 +1,34 @@
+{
+    "id":  "V-04",
+    "funcionalidad":  "Validación de formulario vacío",
+    "tipo":  "Validación de datos",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Cuerpo JSON vacío {}",
+    "procedimiento":  "POST /api/auth/login",
+    "esperado":  "422 con errores en identifier, password y role",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 422; campos con error: identifier, password, role",
+    "ejecutado":  "2026-10-27T20:08:21",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{}",
+                           "estado":  422,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:21 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"El DNI es obligatorio. (and 2 more errors)\",\"errors\":{\"identifier\":[\"El DNI es obligatorio.\"],\"password\":[\"La contrase\\u00f1a es obligatoria.\"],\"role\":[\"Debe seleccionar un perfil de acceso.\"]}}",
+                           "ms":  485
+                       }
+                   ]
+}

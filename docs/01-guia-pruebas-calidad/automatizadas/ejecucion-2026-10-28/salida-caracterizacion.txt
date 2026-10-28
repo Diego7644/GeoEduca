@@ -1,0 +1,18 @@
+Fecha de inicio (hora local UTC-5): 2026-10-28 00:05:54
+Fecha de inicio (UTC): 2026-10-28 05:05:54
+Directorio: <RAIZ_PROYECTO>/backend
+Comando: php vendor/bin/phpunit --testsuite Caracterizacion
+Codigo de salida: 0
+Duracion total del proceso: 3.63 s
+----- salida de PHPUnit -----
+PHPUnit 11.5.57 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: <RAIZ_PROYECTO>\backend\phpunit.xml
+
+................................................................. 65 / 89 ( 73%)
+........................                                          89 / 89 (100%)
+
+Time: 00:03.167, Memory: 32.00 MB
+
+OK (89 tests, 305 assertions)
