@@ -96,7 +96,7 @@ final class AsistenciaContratoTest extends TestCase
     }
 
     #[Group('B-04')]
-    #[TestDox('Una justificación enviada SÍ aparece después en el panel del padre (se guarda en el estado, no en base de datos)')]
+    #[TestDox('Una justificación enviada aparece después en el panel del padre')]
     public function test_la_justificacion_se_guarda_y_aparece_en_el_panel(): void
     {
         $token = $this->tokenDe('parent');
