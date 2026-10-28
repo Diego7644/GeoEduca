@@ -25,9 +25,9 @@
 | Datos de menores | Mínimos necesarios, cifrado en tránsito, acceso por rol y propiedad, sin datos reales en desarrollo |
 | Dependencias nuevas (QR, PDF) y actualización de Laravel/Vite | `composer audit` y `npm audit` en cada PR |
 | Componentes React de más de 400 líneas | Dividirlos al tocarlos, no en un cambio masivo |
-| Token en `localStorage` | Decisión D7: cookie HttpOnly de Sanctum cuando frontend y backend compartan dominio |
+| Token en `localStorage` | F1.4 no autoriza con ese JSON. La cookie HttpOnly queda para cuando compartan dominio. Ver [`SESIONES.md`](SESIONES.md) |
 | Sin canal de entrega del código | Documentado. `GEO_RECOVERY_DEV_REVEAL` se ignora si `APP_ENV=production` |
 
 ## Operación de esta entrega
 
-F1.1 y F1.2 están en `main` (PRs #3 y #4). F1.3 queda en `feature/f1-seguridad-accesos` **sin push**. El JSON del prototipo no se eliminó. La guía académica no se alteró.
+F1.1, F1.2 y F1.3 están en `main` (PRs #3, #4 y #5). F1.4 queda en `feature/f1-sesiones-frontend` **sin push**. El JSON del prototipo no se eliminó. La guía académica no se alteró.

@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
+import SessionStatus from './components/SessionStatus';
 import { useAuth } from './context/AuthContext';
 import { ROLE_HOME } from './config/roles';
 import Login from './pages/Login';
@@ -10,8 +11,12 @@ import Reportes from './pages/Reportes';
 import Configuracion from './pages/Configuracion';
 
 function HomeRedirect() {
-  const { user } = useAuth();
-  return <Navigate to={user ? ROLE_HOME[user.role] : '/login'} replace />;
+  const { user, status, retry, abandonSession } = useAuth();
+  if (status === 'checking') return <SessionStatus status="checking" />;
+  if (status === 'offline' || status === 'error') {
+    return <SessionStatus status={status} onRetry={retry} onAbandon={abandonSession} />;
+  }
+  return <Navigate to={user ? ROLE_HOME[user.role] ?? '/login' : '/login'} replace />;
 }
 
 export default function App() {

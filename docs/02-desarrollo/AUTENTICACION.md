@@ -1,6 +1,6 @@
 # Autenticación y accesos (F1.2–F1.3)
 
-Rama F1.3: `feature/f1-seguridad-accesos` (local). F1.2 ya está en `main` (`3ea06ad`, PR #4).
+F1.3 está en `main` (`c50a911`, PR #5). Cómo el navegador confirma esa sesión: [`SESIONES.md`](SESIONES.md).
 
 ## Cómo se identifica una cuenta
 

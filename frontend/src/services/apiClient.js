@@ -1,6 +1,15 @@
 import axios from 'axios';
+import { shouldDropSession } from './sessionPolicy';
 
 export const TOKEN_KEY = 'geoeduca_token';
+const USER_KEY = 'geoeduca_user';
+
+let onSessionDropped = () => {};
+
+/** AuthContext registra aquí la limpieza de estado. No redirige por sí mismo. */
+export function setUnauthorizedHandler(handler) {
+  onSessionDropped = typeof handler === 'function' ? handler : () => {};
+}
 
 /**
  * Cliente HTTP central. Apunta a la API de Laravel (backend/routes/api.php).
@@ -17,18 +26,19 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem(TOKEN_KEY);
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token && !config.headers.Authorization && !config.headers.authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Sesión expirada o inválida: limpiar y volver al login.
+    if (shouldDropSession(error)) {
       localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem('geoeduca_user');
-      if (window.location.pathname !== '/login') window.location.assign('/login');
+      localStorage.removeItem(USER_KEY);
+      onSessionDropped();
     }
     return Promise.reject(error);
   }

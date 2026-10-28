@@ -4,6 +4,7 @@ import FieldError from '../components/FieldError';
 import Icon from '../components/Icon';
 import RecoveryModal from '../components/RecoveryModal';
 import SafeImage from '../components/SafeImage';
+import SessionStatus from '../components/SessionStatus';
 import { IMAGES } from '../config/images';
 import { ROLE_HOME } from '../config/roles';
 import { useAuth } from '../context/AuthContext';
@@ -24,7 +25,7 @@ const inputShell = (hasError) =>
   }`;
 
 export default function Login() {
-  const { user, login } = useAuth();
+  const { user, status, login, retry, abandonSession } = useAuth();
   const navigate = useNavigate();
 
   const [role, setRole] = useState('student');
@@ -38,7 +39,11 @@ export default function Login() {
   const carnetMessage =
     'El carnet NFC o el QR no inician sesión en el portal. Use DNI y contraseña. El auxiliar identifica el carnet en la puerta con su propia sesión.';
 
-  if (user) return <Navigate to={ROLE_HOME[user.role]} replace />;
+  if (status === 'checking') return <SessionStatus status="checking" />;
+  if (status === 'offline' || status === 'error') {
+    return <SessionStatus status={status} onRetry={retry} onAbandon={abandonSession} />;
+  }
+  if (user) return <Navigate to={ROLE_HOME[user.role] ?? '/login'} replace />;
 
   const canSubmit = identifier.isValid && password.isValid && !loading;
 
@@ -279,12 +284,7 @@ export default function Login() {
             </div>
           </div>
 
-          <RecoveryModal
-            open={recoveryOpen}
-            onClose={() => setRecoveryOpen(false)}
-            identifier={identifier.value.trim()}
-            role={role}
-          />
+          <RecoveryModal open={recoveryOpen} onClose={() => setRecoveryOpen(false)} />
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-on-surface-variant font-body-sm text-body-sm">
             <span>© 2025 GEOEDUCA Technologies S.A.C.</span>
