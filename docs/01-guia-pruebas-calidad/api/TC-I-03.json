@@ -1,0 +1,41 @@
+{
+    "id":  "I-03",
+    "funcionalidad":  "CORS: origen permitido",
+    "tipo":  "Integración",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Origin: http://localhost:5173",
+    "procedimiento":  "OPTIONS /api/auth/login (preflight)",
+    "esperado":  "204 y Access-Control-Allow-Origin igual al origen",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 204; Allow-Origin=\u0027http://localhost:5173\u0027",
+    "ejecutado":  "2026-10-27T20:08:27",
+    "peticiones":  [
+                       {
+                           "metodo":  "OPTIONS",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Access-Control-Request-Headers":  "content-type",
+                                                     "Origin":  "http://localhost:5173",
+                                                     "Access-Control-Request-Method":  "POST"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  204,
+                           "cabecerasRecibidas":  {
+                                                      "Access-Control-Allow-Headers":  "content-type",
+                                                      "Access-Control-Max-Age":  "3600",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Content-Type":  "text/html; charset=UTF-8",
+                                                      "Connection":  "close",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:27 GMT",
+                                                      "Access-Control-Allow-Methods":  "POST",
+                                                      "Host":  "127.0.0.1:8000",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Vary":  "Origin,Access-Control-Request-Method,Access-Control-Request-Headers",
+                                                      "Access-Control-Allow-Origin":  "http://localhost:5173"
+                                                  },
+                           "cuerpoRecibido":  "",
+                           "ms":  547
+                       }
+                   ]
+}

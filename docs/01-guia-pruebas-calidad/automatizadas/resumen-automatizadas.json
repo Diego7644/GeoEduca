@@ -1,0 +1,44 @@
+{
+    "fechaEjecucion":  "2026-10-27",
+    "rama":  "practica-pruebas-calidad",
+    "commitBase":  "21b12b0",
+    "php":  "8.2.12",
+    "phpunit":  "11.5.57",
+    "laravel":  "11.57.0",
+    "entorno":  "phpunit.xml aislado: APP_ENV=testing, BD sqlite :memory: (sin uso), sesiones/cache array, log null, APP_KEY falsa de pruebas",
+    "cobertura":  "No disponible: PHPUnit informa \"No code coverage driver available\" (sin xdebug ni pcov)",
+    "suites":  [
+                   {
+                       "suite":  "Caracterizacion",
+                       "comando":  "php vendor/bin/phpunit --testsuite Caracterizacion --log-junit junit-caracterizacion.xml --testdox-text testdox-caracterizacion.txt",
+                       "pruebas":  89,
+                       "aserciones":  305,
+                       "aprobadas":  89,
+                       "fallidas":  0,
+                       "errores":  0,
+                       "omitidas":  0,
+                       "duracionPHPUnitSegundos":  2.049358,
+                       "duracionRelojSegundos":  2.45
+                   },
+                   {
+                       "suite":  "RequisitosSeguridad",
+                       "comando":  "php vendor/bin/phpunit --testsuite RequisitosSeguridad --log-junit junit-seguridad.xml --testdox-text testdox-seguridad.txt",
+                       "pruebas":  35,
+                       "aserciones":  74,
+                       "aprobadas":  8,
+                       "fallidas":  27,
+                       "errores":  0,
+                       "omitidas":  0,
+                       "duracionPHPUnitSegundos":  0.93046,
+                       "duracionRelojSegundos":  1.25
+                   }
+               ],
+    "total":  {
+                  "pruebas":  124,
+                  "aprobadas":  97,
+                  "fallidas":  27,
+                  "errores":  0,
+                  "omitidas":  0
+              },
+    "omitidasOTrivial":  "Ninguna: 0 pruebas omitidas, 0 incompletas, sin aserciones triviales"
+}

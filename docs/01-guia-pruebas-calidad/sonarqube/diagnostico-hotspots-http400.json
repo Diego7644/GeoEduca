@@ -1,0 +1,6 @@
+{
+    "peticion":  "GET /api/hotspots/search?projectKey=\u003cclave\u003e\u0026ps=1 (parametro antiguo, repetido una vez a proposito)",
+    "respuestaDelServidor":  "API de SonarQube /api/hotspots/search -\u003e HTTP 400 | A value must be provided for either parameter \u0027project\u0027 or parameter \u0027hotspots\u0027",
+    "correccion":  "Usar GET /api/hotspots/search?project=\u003cclave\u003e\u0026ps=500",
+    "referencia":  "SonarQube SearchAction (hotspots): Parameter projectKey renamed to project since 10.2"
+}

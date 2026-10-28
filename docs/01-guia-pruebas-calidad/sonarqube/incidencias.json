@@ -1,0 +1,234 @@
+{
+    "total":  11,
+    "porTipo":  [
+                    {
+                        "tipo":  "CODE_SMELL",
+                        "cantidad":  9
+                    },
+                    {
+                        "tipo":  "VULNERABILITY",
+                        "cantidad":  2
+                    }
+                ],
+    "porSeveridad":  [
+                         {
+                             "severidad":  "MAJOR",
+                             "cantidad":  11
+                         }
+                     ],
+    "porRegla":  [
+                     {
+                         "regla":  "javascript:S6853",
+                         "cantidad":  6
+                     },
+                     {
+                         "regla":  "javascript:S6848",
+                         "cantidad":  3
+                     },
+                     {
+                         "regla":  "javascript:S2068",
+                         "cantidad":  2
+                     }
+                 ],
+    "incidencias":  [
+                        {
+                            "regla":  "javascript:S6848",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/components/Modal.jsx",
+                            "linea":  15,
+                            "mensaje":  "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             },
+                                             {
+                                                 "softwareQuality":  "MAINTAINABILITY",
+                                                 "severity":  "LOW"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "CONVENTIONAL"
+                        },
+                        {
+                            "regla":  "javascript:S6848",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/components/Modal.jsx",
+                            "linea":  19,
+                            "mensaje":  "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             },
+                                             {
+                                                 "softwareQuality":  "MAINTAINABILITY",
+                                                 "severity":  "LOW"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "CONVENTIONAL"
+                        },
+                        {
+                            "regla":  "javascript:S6848",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/components/Sidebar.jsx",
+                            "linea":  22,
+                            "mensaje":  "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             },
+                                             {
+                                                 "softwareQuality":  "MAINTAINABILITY",
+                                                 "severity":  "LOW"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "CONVENTIONAL"
+                        },
+                        {
+                            "regla":  "javascript:S6853",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/pages/DashboardAuxiliar.jsx",
+                            "linea":  589,
+                            "mensaje":  "A form label must be associated with a control.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "LOGICAL"
+                        },
+                        {
+                            "regla":  "javascript:S6853",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/pages/DashboardAuxiliar.jsx",
+                            "linea":  602,
+                            "mensaje":  "A form label must be associated with a control.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "LOGICAL"
+                        },
+                        {
+                            "regla":  "javascript:S6853",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/pages/DashboardPadre.jsx",
+                            "linea":  483,
+                            "mensaje":  "A form label must have accessible text.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "LOGICAL"
+                        },
+                        {
+                            "regla":  "javascript:S6853",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/pages/DashboardPadre.jsx",
+                            "linea":  691,
+                            "mensaje":  "A form label must be associated with a control.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "LOGICAL"
+                        },
+                        {
+                            "regla":  "javascript:S6853",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/pages/DashboardPadre.jsx",
+                            "linea":  722,
+                            "mensaje":  "A form label must be associated with a control.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "LOGICAL"
+                        },
+                        {
+                            "regla":  "javascript:S6853",
+                            "tipo":  "CODE_SMELL",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/pages/DashboardPadre.jsx",
+                            "linea":  750,
+                            "mensaje":  "A form label must be associated with a control.",
+                            "esfuerzo":  "5min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "RELIABILITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "LOGICAL"
+                        },
+                        {
+                            "regla":  "javascript:S2068",
+                            "tipo":  "VULNERABILITY",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/services/authService.js",
+                            "linea":  44,
+                            "mensaje":  "Review this potentially hard-coded password.",
+                            "esfuerzo":  "30min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "SECURITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "TRUSTWORTHY"
+                        },
+                        {
+                            "regla":  "javascript:S2068",
+                            "tipo":  "VULNERABILITY",
+                            "severidad":  "MAJOR",
+                            "estado":  "OPEN",
+                            "archivo":  "frontend/src/services/authService.js",
+                            "linea":  46,
+                            "mensaje":  "Review this potentially hard-coded password.",
+                            "esfuerzo":  "30min",
+                            "impactos":  [
+                                             {
+                                                 "softwareQuality":  "SECURITY",
+                                                 "severity":  "MEDIUM"
+                                             }
+                                         ],
+                            "atributoCleanCode":  "TRUSTWORTHY"
+                        }
+                    ]
+}

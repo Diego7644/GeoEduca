@@ -1,0 +1,76 @@
+{
+    "id":  "S-06",
+    "funcionalidad":  "Invalidación del token al cerrar sesión",
+    "tipo":  "Seguridad",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "DNI <DNI-DEMO-ESTUDIANTE> (ficticio), contraseña demo de estudiante \u003cMASKED\u003e, perfil student",
+    "procedimiento":  "1) POST /api/auth/login  2) POST /api/auth/logout con el token  3) GET /api/auth/me con el mismo token",
+    "esperado":  "Sistema seguro: tras el logout, /me responde 401",
+    "resultado":  "Fallido",
+    "real":  "login HTTP 200; logout HTTP 200; /me tras logout HTTP 200; cuerpo: {\"user\":null}",
+    "ejecutado":  "2026-10-27T20:08:32",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:31 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"token\":\"\u003cREDACTED\u003e\",\"token_type\":\"Bearer\",\"user\":{\"id\":1,\"name\":\"Mateo Valenzuela\",\"roleLabel\":\"Estudiante 4to Secundaria B\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}}",
+                           "ms":  569
+                       },
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/logout",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:31 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"Sesi\\u00f3n cerrada\"}",
+                           "ms":  521
+                       },
+                       {
+                           "metodo":  "GET",
+                           "url":  "http://127.0.0.1:8000/api/auth/me",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:32 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"user\":null}",
+                           "ms":  500
+                       }
+                   ]
+}

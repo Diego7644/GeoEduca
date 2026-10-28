@@ -1,0 +1,35 @@
+{
+    "id":  "S-04",
+    "funcionalidad":  "Rechazo de token falso",
+    "tipo":  "Seguridad",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "Authorization: Bearer con valor inventado",
+    "procedimiento":  "GET /api/asistencia/estudiante",
+    "esperado":  "Sistema seguro: 401 Unauthorized",
+    "resultado":  "Fallido",
+    "real":  "HTTP 200; cuerpo: {\"data\":[],\"message\":\"Pendiente de implementaci\\u00f3n\"}",
+    "ejecutado":  "2026-10-27T20:08:30",
+    "peticiones":  [
+                       {
+                           "metodo":  "GET",
+                           "url":  "http://127.0.0.1:8000/api/asistencia/estudiante",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json",
+                                                     "Authorization":  "Bearer \u003cREDACTED\u003e"
+                                                 },
+                           "cuerpoEnviado":  null,
+                           "estado":  200,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:30 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"data\":[],\"message\":\"Pendiente de implementaci\\u00f3n\"}",
+                           "ms":  454
+                       }
+                   ]
+}

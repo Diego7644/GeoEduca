@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="&lt;RAIZ_PROYECTO&gt;\backend\phpunit.xml" tests="35" assertions="74" errors="0" failures="27" skipped="0" time="0.930460">
+    <testsuite name="RequisitosSeguridad" tests="35" assertions="74" errors="0" failures="27" skipped="0" time="0.930460">
+      <testsuite name="Tests\Seguridad\AutenticacionRequeridaTest" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" tests="12" assertions="12" errors="0" failures="12" skipped="0" time="0.518403">
+        <testsuite name="Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401" tests="6" assertions="6" errors="0" failures="6" skipped="0" time="0.398409">
+          <testcase name="test_sin_credenciales_responde_401 with data set &quot;GET /api/auth/me&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="41" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.291682">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/auth/me"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43</failure>
+          </testcase>
+          <testcase name="test_sin_credenciales_responde_401 with data set &quot;GET /api/asistencia/estudiante&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="41" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.015366">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/asistencia/estudiante"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43</failure>
+          </testcase>
+          <testcase name="test_sin_credenciales_responde_401 with data set &quot;GET /api/asistencia/padre&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="41" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.019114">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/asistencia/padre"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43</failure>
+          </testcase>
+          <testcase name="test_sin_credenciales_responde_401 with data set &quot;GET /api/asistencia/auxiliar/casos&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="41" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.019544">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "GET /api/asistencia/auxiliar/casos"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43</failure>
+          </testcase>
+          <testcase name="test_sin_credenciales_responde_401 with data set &quot;POST /api/asistencia/auxiliar/aprobar&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="41" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.033123">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "POST /api/asistencia/auxiliar/aprobar"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43</failure>
+          </testcase>
+          <testcase name="test_sin_credenciales_responde_401 with data set &quot;POST /api/asistencia/justificacion&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="41" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.019580">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_sin_credenciales_responde_401 with data set "POST /api/asistencia/justificacion"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:43</failure>
+          </testcase>
+        </testsuite>
+        <testsuite name="Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401" tests="6" assertions="6" errors="0" failures="6" skipped="0" time="0.119995">
+          <testcase name="test_token_inventado_responde_401 with data set &quot;GET /api/auth/me&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="52" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.020460">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/auth/me"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54</failure>
+          </testcase>
+          <testcase name="test_token_inventado_responde_401 with data set &quot;GET /api/asistencia/estudiante&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="52" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.031133">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/asistencia/estudiante"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54</failure>
+          </testcase>
+          <testcase name="test_token_inventado_responde_401 with data set &quot;GET /api/asistencia/padre&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="52" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.017433">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/asistencia/padre"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54</failure>
+          </testcase>
+          <testcase name="test_token_inventado_responde_401 with data set &quot;GET /api/asistencia/auxiliar/casos&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="52" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.017231">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "GET /api/asistencia/auxiliar/casos"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54</failure>
+          </testcase>
+          <testcase name="test_token_inventado_responde_401 with data set &quot;POST /api/asistencia/auxiliar/aprobar&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="52" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.016709">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "POST /api/asistencia/auxiliar/aprobar"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54</failure>
+          </testcase>
+          <testcase name="test_token_inventado_responde_401 with data set &quot;POST /api/asistencia/justificacion&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php" line="52" class="Tests\Seguridad\AutenticacionRequeridaTest" classname="Tests.Seguridad.AutenticacionRequeridaTest" assertions="1" time="0.017029">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutenticacionRequeridaTest::test_token_inventado_responde_401 with data set "POST /api/asistencia/justificacion"&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutenticacionRequeridaTest.php:54</failure>
+          </testcase>
+        </testsuite>
+      </testsuite>
+      <testsuite name="Tests\Seguridad\AutorizacionPorRolTest" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" tests="6" assertions="18" errors="0" failures="6" skipped="0" time="0.095579">
+        <testsuite name="Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403" tests="6" assertions="18" errors="0" failures="6" skipped="0" time="0.095579">
+          <testcase name="test_rol_incorrecto_recibe_403 with data set &quot;estudiante → GET auxiliar/casos&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" line="48" class="Tests\Seguridad\AutorizacionPorRolTest" classname="Tests.Seguridad.AutorizacionPorRolTest" assertions="3" time="0.017425">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "estudiante → GET auxiliar/casos"&#13;
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php:52</failure>
+          </testcase>
+          <testcase name="test_rol_incorrecto_recibe_403 with data set &quot;estudiante → POST auxiliar/aprobar&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" line="48" class="Tests\Seguridad\AutorizacionPorRolTest" classname="Tests.Seguridad.AutorizacionPorRolTest" assertions="3" time="0.017792">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "estudiante → POST auxiliar/aprobar"&#13;
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php:52</failure>
+          </testcase>
+          <testcase name="test_rol_incorrecto_recibe_403 with data set &quot;estudiante → GET padre&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" line="48" class="Tests\Seguridad\AutorizacionPorRolTest" classname="Tests.Seguridad.AutorizacionPorRolTest" assertions="3" time="0.015198">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "estudiante → GET padre"&#13;
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php:52</failure>
+          </testcase>
+          <testcase name="test_rol_incorrecto_recibe_403 with data set &quot;padre → GET auxiliar/casos&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" line="48" class="Tests\Seguridad\AutorizacionPorRolTest" classname="Tests.Seguridad.AutorizacionPorRolTest" assertions="3" time="0.014840">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "padre → GET auxiliar/casos"&#13;
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php:52</failure>
+          </testcase>
+          <testcase name="test_rol_incorrecto_recibe_403 with data set &quot;padre → POST auxiliar/aprobar&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" line="48" class="Tests\Seguridad\AutorizacionPorRolTest" classname="Tests.Seguridad.AutorizacionPorRolTest" assertions="3" time="0.015462">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "padre → POST auxiliar/aprobar"&#13;
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php:52</failure>
+          </testcase>
+          <testcase name="test_rol_incorrecto_recibe_403 with data set &quot;padre → GET estudiante&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php" line="48" class="Tests\Seguridad\AutorizacionPorRolTest" classname="Tests.Seguridad.AutorizacionPorRolTest" assertions="3" time="0.014862">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\AutorizacionPorRolTest::test_rol_incorrecto_recibe_403 with data set "padre → GET estudiante"&#13;
+Expected response status code [403] but received 200.
+Failed asserting that 200 is identical to 403.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:141
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\AutorizacionPorRolTest.php:52</failure>
+          </testcase>
+        </testsuite>
+      </testsuite>
+      <testsuite name="Tests\Seguridad\EndurecimientoHttpTest" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php" tests="3" assertions="5" errors="0" failures="3" skipped="0" time="0.052214">
+        <testcase name="test_cabecera_nosniff" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php" line="24" class="Tests\Seguridad\EndurecimientoHttpTest" classname="Tests.Seguridad.EndurecimientoHttpTest" assertions="1" time="0.015393">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\EndurecimientoHttpTest::test_cabecera_nosniff&#13;
+Header [X-Content-Type-Options] not present on response.
+Failed asserting that false is true.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:303
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php:26</failure>
+        </testcase>
+        <testcase name="test_error_404_con_configuracion_por_defecto_no_filtra_detalles" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php" line="31" class="Tests\Seguridad\EndurecimientoHttpTest" classname="Tests.Seguridad.EndurecimientoHttpTest" assertions="3" time="0.019742">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\EndurecimientoHttpTest::test_error_404_con_configuracion_por_defecto_no_filtra_detalles&#13;
+Con APP_DEBUG=true (valor de .env.example) la respuesta de error expone: trace, file, line, exception
+Failed asserting that two arrays are identical.
+--- Expected
++++ Actual
+@@ @@
+-Array &amp;0 []
++Array &amp;0 [
++    0 =&gt; 'trace',
++    1 =&gt; 'file',
++    2 =&gt; 'line',
++    3 =&gt; 'exception',
++]
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php:44</failure>
+        </testcase>
+        <testcase name="test_validacion_sin_accept_responde_422" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php" line="53" class="Tests\Seguridad\EndurecimientoHttpTest" classname="Tests.Seguridad.EndurecimientoHttpTest" assertions="1" time="0.017080">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\EndurecimientoHttpTest::test_validacion_sin_accept_responde_422&#13;
+Expected response status code [422] but received 302.
+Failed asserting that 302 is identical to 422.&#13;
+&#13;
+The following errors occurred during the last request:
+
+El DNI debe tener 8 dígitos.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EndurecimientoHttpTest.php:59</failure>
+        </testcase>
+      </testsuite>
+      <testsuite name="Tests\Seguridad\EntradasHostilesTest" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" tests="10" assertions="26" errors="0" failures="2" skipped="0" time="0.182354">
+        <testsuite name="Tests\Seguridad\EntradasHostilesTest::test_entrada_hostil_se_rechaza_sin_error_500" tests="8" assertions="24" errors="0" failures="0" skipped="0" time="0.144701">
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;SQL en el DNI (OR 1=1)&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.017972"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;SQL con comentario en el DNI&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.014734"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;SQL en la contraseña (OR 1=1)&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.016733"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;SQL con punto y coma en la contraseña&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.014790"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;script HTML en la contraseña&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.016738"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;perfil con SQL&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.026780"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;contraseña enviada como arreglo&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.019717"/>
+          <testcase name="test_entrada_hostil_se_rechaza_sin_error_500 with data set &quot;perfil enviado como arreglo&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="54" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="3" time="0.017236"/>
+        </testsuite>
+        <testsuite name="Tests\Seguridad\EntradasHostilesTest::test_identificador_no_textual_no_provoca_error_500" tests="2" assertions="2" errors="0" failures="2" skipped="0" time="0.037653">
+          <testcase name="test_identificador_no_textual_no_provoca_error_500 with data set &quot;DNI enviado como arreglo&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="77" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="1" time="0.022964">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\EntradasHostilesTest::test_identificador_no_textual_no_provoca_error_500 with data set "DNI enviado como arreglo"&#13;
+Una entrada hostil debe responder 401 o 422; respondió 500
+Failed asserting that an array contains 500.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php:91
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php:79</failure>
+          </testcase>
+          <testcase name="test_identificador_no_textual_no_provoca_error_500 with data set &quot;DNI enviado como objeto&quot;" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php" line="77" class="Tests\Seguridad\EntradasHostilesTest" classname="Tests.Seguridad.EntradasHostilesTest" assertions="1" time="0.014689">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\EntradasHostilesTest::test_identificador_no_textual_no_provoca_error_500 with data set "DNI enviado como objeto"&#13;
+Una entrada hostil debe responder 401 o 422; respondió 500
+Failed asserting that an array contains 500.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php:91
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\EntradasHostilesTest.php:79</failure>
+          </testcase>
+        </testsuite>
+      </testsuite>
+      <testsuite name="Tests\Seguridad\LimiteIntentosLoginTest" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\LimiteIntentosLoginTest.php" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="0.026457">
+        <testcase name="test_intentos_fallidos_repetidos_reciben_429" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\LimiteIntentosLoginTest.php" line="24" class="Tests\Seguridad\LimiteIntentosLoginTest" classname="Tests.Seguridad.LimiteIntentosLoginTest" assertions="1" time="0.026457">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\LimiteIntentosLoginTest::test_intentos_fallidos_repetidos_reciben_429&#13;
+Se esperaba al menos un 429 en 12 intentos fallidos seguidos. Estados obtenidos: 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401
+Failed asserting that an array contains 429.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\LimiteIntentosLoginTest.php:34</failure>
+        </testcase>
+      </testsuite>
+      <testsuite name="Tests\Seguridad\SesionYLogoutTest" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php" tests="3" assertions="12" errors="0" failures="3" skipped="0" time="0.055453">
+        <testcase name="test_me_tras_logout_responde_401" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php" line="26" class="Tests\Seguridad\SesionYLogoutTest" classname="Tests.Seguridad.SesionYLogoutTest" assertions="4" time="0.017834">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\SesionYLogoutTest::test_me_tras_logout_responde_401&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php:32</failure>
+        </testcase>
+        <testcase name="test_asistencia_tras_logout_responde_401" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php" line="36" class="Tests\Seguridad\SesionYLogoutTest" classname="Tests.Seguridad.SesionYLogoutTest" assertions="4" time="0.017512">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\SesionYLogoutTest::test_asistencia_tras_logout_responde_401&#13;
+Expected response status code [401] but received 200.
+Failed asserting that 200 is identical to 401.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:160
+&lt;RAIZ_PROYECTO&gt;\backend\vendor\laravel\framework\src\Illuminate\Testing\Concerns\AssertsStatusCodes.php:121
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php:42</failure>
+        </testcase>
+        <testcase name="test_me_con_token_valido_identifica_al_usuario" file="&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php" line="46" class="Tests\Seguridad\SesionYLogoutTest" classname="Tests.Seguridad.SesionYLogoutTest" assertions="4" time="0.020107">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Seguridad\SesionYLogoutTest::test_me_con_token_valido_identifica_al_usuario&#13;
+Un token válido debe identificar a su usuario; devolvió user=null.
+Failed asserting that null is not null.
+&#13;
+&lt;RAIZ_PROYECTO&gt;\backend\tests\Seguridad\SesionYLogoutTest.php:52</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

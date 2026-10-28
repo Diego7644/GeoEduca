@@ -1,0 +1,34 @@
+{
+    "id":  "N-01",
+    "funcionalidad":  "Rechazo de contraseña incorrecta",
+    "tipo":  "Funcional (negativo)",
+    "precondiciones":  "Laravel en 127.0.0.1:8000 activo.",
+    "entrada":  "DNI <DNI-DEMO-ESTUDIANTE>, contraseña incorrecta ficticia, perfil student",
+    "procedimiento":  "POST /api/auth/login",
+    "esperado":  "401 con mensaje genérico y sin token",
+    "resultado":  "Aprobado",
+    "real":  "HTTP 401; mensaje: DNI o contraseña incorrectos para este perfil.",
+    "ejecutado":  "2026-10-27T20:08:24",
+    "peticiones":  [
+                       {
+                           "metodo":  "POST",
+                           "url":  "http://127.0.0.1:8000/api/auth/login",
+                           "cabecerasEnviadas":  {
+                                                     "Accept":  "application/json"
+                                                 },
+                           "cuerpoEnviado":  "{\"password\":\"\\u003cMASKED\\u003e\",\"identifier\":\"<DNI-DEMO-ESTUDIANTE>\",\"role\":\"student\"}",
+                           "estado":  401,
+                           "cabecerasRecibidas":  {
+                                                      "Vary":  "Origin",
+                                                      "X-Powered-By":  "PHP/8.2.12",
+                                                      "Cache-Control":  "no-cache, private",
+                                                      "Content-Type":  "application/json",
+                                                      "Date":  "Wed, 28 Oct 2026 01:08:24 GMT",
+                                                      "Connection":  "close",
+                                                      "Host":  "127.0.0.1:8000"
+                                                  },
+                           "cuerpoRecibido":  "{\"message\":\"DNI o contrase\\u00f1a incorrectos para este perfil.\",\"errors\":{\"identifier\":[\"Revise el DNI.\"],\"password\":[\"Revise la contrase\\u00f1a.\"]}}",
+                           "ms":  517
+                       }
+                   ]
+}

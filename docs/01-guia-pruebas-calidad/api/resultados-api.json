@@ -1,0 +1,268 @@
+[
+    {
+        "id":  "F-01",
+        "funcionalidad":  "Endpoint de salud",
+        "tipo":  "Funcional",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200 en 542 ms; cuerpo: {\"status\":\"ok\"}"
+    },
+    {
+        "id":  "F-02",
+        "funcionalidad":  "Inicio de sesión de estudiante",
+        "tipo":  "Funcional",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200; rol=student; token presente=True (valor oculto)"
+    },
+    {
+        "id":  "F-03",
+        "funcionalidad":  "Inicio de sesión de padre/tutor",
+        "tipo":  "Funcional",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200; rol=parent; token presente=True (valor oculto)"
+    },
+    {
+        "id":  "F-04",
+        "funcionalidad":  "Inicio de sesión de personal (docente/auxiliar)",
+        "tipo":  "Funcional",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200; rol=staff; token presente=True (valor oculto)"
+    },
+    {
+        "id":  "F-05",
+        "funcionalidad":  "Envío de justificación (contrato de la API)",
+        "tipo":  "Funcional",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200; mensaje: Solicitud enviada a Coordinación Académica."
+    },
+    {
+        "id":  "F-06",
+        "funcionalidad":  "Aprobación manual de ingreso (contrato de la API)",
+        "tipo":  "Funcional",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200; mensaje: Ingreso aprobado (simulado)"
+    },
+    {
+        "id":  "V-01",
+        "funcionalidad":  "Validación de DNI corto",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.identifier=El DNI debe tener 8 dígitos."
+    },
+    {
+        "id":  "V-02",
+        "funcionalidad":  "Validación de contraseña corta",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.password=La contraseña debe tener al menos 8 caracteres."
+    },
+    {
+        "id":  "V-03",
+        "funcionalidad":  "Validación de perfil inexistente",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.role=El perfil de acceso no es válido."
+    },
+    {
+        "id":  "V-04",
+        "funcionalidad":  "Validación de formulario vacío",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; campos con error: identifier, password, role"
+    },
+    {
+        "id":  "V-05",
+        "funcionalidad":  "Validación de DNI con letras",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.identifier=El DNI es obligatorio."
+    },
+    {
+        "id":  "V-06",
+        "funcionalidad":  "Validación de contraseña demasiado larga",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.password=La contraseña no puede superar 128 caracteres."
+    },
+    {
+        "id":  "V-07",
+        "funcionalidad":  "Validación de motivo de justificación corto",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.reason=El motivo debe tener al menos 10 caracteres."
+    },
+    {
+        "id":  "V-08",
+        "funcionalidad":  "Validación de tipo de justificación inexistente",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.type=El tipo de solicitud no es válido."
+    },
+    {
+        "id":  "V-09",
+        "funcionalidad":  "Validación de aprobación manual sin motivo",
+        "tipo":  "Validación de datos",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 422; errors.reason=El motivo de contingencia es obligatorio."
+    },
+    {
+        "id":  "N-01",
+        "funcionalidad":  "Rechazo de contraseña incorrecta",
+        "tipo":  "Funcional (negativo)",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 401; mensaje: DNI o contraseña incorrectos para este perfil."
+    },
+    {
+        "id":  "N-02",
+        "funcionalidad":  "Rechazo de credencial de otro perfil",
+        "tipo":  "Funcional (negativo)",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 401; mensaje: DNI o contraseña incorrectos para este perfil."
+    },
+    {
+        "id":  "N-03",
+        "funcionalidad":  "No enumeración de usuarios en el login",
+        "tipo":  "Seguridad",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 401; cuerpo idéntico al de N-01: True"
+    },
+    {
+        "id":  "I-01",
+        "funcionalidad":  "Proxy de Vite hacia la API",
+        "tipo":  "Integración",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200 en 488 ms"
+    },
+    {
+        "id":  "I-02",
+        "funcionalidad":  "Login a través del proxy (frontend a backend)",
+        "tipo":  "Integración",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 200; rol=student; token presente=True (valor oculto)"
+    },
+    {
+        "id":  "I-03",
+        "funcionalidad":  "CORS: origen permitido",
+        "tipo":  "Integración",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 204; Allow-Origin=\u0027http://localhost:5173\u0027"
+    },
+    {
+        "id":  "I-04",
+        "funcionalidad":  "CORS: origen no autorizado",
+        "tipo":  "Seguridad",
+        "resultado":  "Aprobado",
+        "real":  "HTTP 204; Allow-Origin=\u0027\u0027"
+    },
+    {
+        "id":  "I-05",
+        "funcionalidad":  "Robustez: cliente de API sin cabecera Accept",
+        "tipo":  "Integración",
+        "resultado":  "Fallido",
+        "real":  "HTTP 302; Location=\u0027http://127.0.0.1:8000/\u0027"
+    },
+    {
+        "id":  "S-01",
+        "funcionalidad":  "Perfil autenticado sin credenciales",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "HTTP 200; cuerpo: {\"user\":null}"
+    },
+    {
+        "id":  "S-02",
+        "funcionalidad":  "Casos del auxiliar sin autenticación",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "HTTP 200; cuerpo: {\"data\":[],\"message\":\"Pendiente de implementaci\\u00f3n\"}"
+    },
+    {
+        "id":  "S-03",
+        "funcionalidad":  "Aprobación manual sin autenticación",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "HTTP 200; mensaje: Ingreso aprobado (simulado)"
+    },
+    {
+        "id":  "S-04",
+        "funcionalidad":  "Rechazo de token falso",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "HTTP 200; cuerpo: {\"data\":[],\"message\":\"Pendiente de implementaci\\u00f3n\"}"
+    },
+    {
+        "id":  "S-05",
+        "funcionalidad":  "Autorización por rol: estudiante en endpoint de personal",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "HTTP 200; cuerpo: {\"data\":[],\"message\":\"Pendiente de implementaci\\u00f3n\"}"
+    },
+    {
+        "id":  "S-06",
+        "funcionalidad":  "Invalidación del token al cerrar sesión",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "login HTTP 200; logout HTTP 200; /me tras logout HTTP 200; cuerpo: {\"user\":null}"
+    },
+    {
+        "id":  "S-07",
+        "funcionalidad":  "Resistencia a inyección SQL en el login",
+        "tipo":  "Seguridad",
+        "resultado":  "Aprobado",
+        "real":  "identificador: HTTP 422; contraseña: HTTP 401; sin trazas SQL: True"
+    },
+    {
+        "id":  "S-08",
+        "funcionalidad":  "Limitación de intentos de login (fuerza bruta)",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "Estados obtenidos: 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 401"
+    },
+    {
+        "id":  "S-09",
+        "funcionalidad":  "No divulgación de versión de tecnología",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "X-Powered-By=\u0027PHP/8.2.12\u0027"
+    },
+    {
+        "id":  "S-10",
+        "funcionalidad":  "Cabeceras de seguridad HTTP básicas",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "X-Content-Type-Options=\u0027\u0027; X-Frame-Options=\u0027\u0027; Strict-Transport-Security=\u0027\u0027"
+    },
+    {
+        "id":  "S-11",
+        "funcionalidad":  "Los errores no filtran detalles internos",
+        "tipo":  "Seguridad",
+        "resultado":  "Fallido",
+        "real":  "HTTP 404; filtra trazas/rutas internas: True"
+    },
+    {
+        "id":  "B-01",
+        "funcionalidad":  "Emisión y validación de QR dinámico",
+        "tipo":  "Funcional (no implementado)",
+        "resultado":  "Bloqueado",
+        "real":  "Rutas coincidentes: 0. Rutas totales: 10. El QR de la pantalla es un SVG estático."
+    },
+    {
+        "id":  "B-02",
+        "funcionalidad":  "Validación de geolocalización y geocerca",
+        "tipo":  "Funcional (no implementado)",
+        "resultado":  "Bloqueado",
+        "real":  "Rutas coincidentes: 0. Los textos de GPS de la interfaz son fijos."
+    },
+    {
+        "id":  "B-03",
+        "funcionalidad":  "Notificaciones a apoderados",
+        "tipo":  "Funcional (no implementado)",
+        "resultado":  "Bloqueado",
+        "real":  "Rutas coincidentes: 0."
+    },
+    {
+        "id":  "B-04",
+        "funcionalidad":  "Persistencia y consulta de justificaciones",
+        "tipo":  "Funcional (no implementado)",
+        "resultado":  "Bloqueado",
+        "real":  "POST HTTP 200; GET HTTP 200; mensaje del GET: Pendiente de implementación; justificación encontrada: False"
+    }
+]

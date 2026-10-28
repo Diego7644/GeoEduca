@@ -1,0 +1,19 @@
+{
+    "nombreQualityGate":  "Sonar way",
+    "esElPredeterminado":  true,
+    "estado":  "OK",
+    "condiciones":  [
+                        {
+                            "status":  "OK",
+                            "metricKey":  "new_violations",
+                            "comparator":  "GT",
+                            "errorThreshold":  "0",
+                            "actualValue":  "0"
+                        }
+                    ],
+    "periodoDeCodigoNuevo":  {
+                                 "mode":  "PREVIOUS_VERSION",
+                                 "date":  "2026-10-28T02:37:01+0000"
+                             },
+    "nota":  "Solo lectura: el Quality Gate no se ha modificado."
+}

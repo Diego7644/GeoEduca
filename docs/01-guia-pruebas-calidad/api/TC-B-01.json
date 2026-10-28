@@ -1,0 +1,20 @@
+{
+    "id":  "B-01",
+    "funcionalidad":  "Emisión y validación de QR dinámico",
+    "tipo":  "Funcional (no implementado)",
+    "precondiciones":  "Sesión de estudiante y de auxiliar.",
+    "entrada":  "Ninguna",
+    "procedimiento":  "Buscar rutas de emisión/validación de QR en route:list",
+    "esperado":  "Existen endpoints para emitir un QR con expiración y validarlo una sola vez",
+    "resultado":  "Bloqueado",
+    "real":  "Rutas coincidentes: 0. Rutas totales: 10. El QR de la pantalla es un SVG estático.",
+    "ejecutado":  "2026-10-27T20:08:41",
+    "peticiones":  [
+                       {
+                           "metodo":  "CLI",
+                           "url":  "php artisan route:list --json --except-vendor",
+                           "estado":  0,
+                           "cuerpoRecibido":  "Rutas registradas: /, api/asistencia/auxiliar/aprobar, api/asistencia/auxiliar/casos, api/asistencia/estudiante, api/asistencia/justificacion, api/asistencia/padre, api/auth/login, api/auth/logout, api/auth/me, api/health"
+                       }
+                   ]
+}

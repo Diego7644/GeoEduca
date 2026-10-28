@@ -1,0 +1,125 @@
+04:06:45.931 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+04:06:45.936 INFO  Project root configuration file: /usr/src/sonar-project.properties
+04:06:45.958 INFO  SonarScanner CLI 8.1.0.6389
+04:06:45.972 INFO  Linux 6.6.87.2-microsoft-standard-WSL2 amd64
+04:06:47.237 INFO  Communicating with SonarQube Community Build 26.10.0.133078
+04:06:47.240 INFO  JRE provisioning is disabled
+04:06:47.241 INFO  Using the java executable '/usr/lib/jvm/java-21-amazon-corretto/bin/java' from JAVA_HOME
+04:06:48.300 INFO  Starting SonarScanner Engine...
+04:06:48.303 INFO  Java 21.0.12.1 Amazon.com Inc. (64-bit)
+04:06:49.953 INFO  Load global settings
+04:06:50.138 INFO  Load global settings (done) | time=182ms
+04:06:50.147 INFO  Server id: 4F833BF3-AaGATWYu1bJaOT-plqto
+04:06:50.172 INFO  Loading required plugins
+04:06:50.172 INFO  Load plugins index
+04:06:50.201 INFO  Load plugins index (done) | time=29ms
+04:06:50.202 INFO  Load/download plugins
+04:06:50.545 INFO  Load/download plugins (done) | time=344ms
+04:06:50.961 INFO  Load project settings for component key: 'geoeduca-pruebas-calidad'
+04:06:51.024 INFO  Load project settings for component key: 'geoeduca-pruebas-calidad' (done) | time=63ms
+04:06:51.041 INFO  Process project properties
+04:06:51.100 INFO  Process project properties (done) | time=58ms
+04:06:51.121 INFO  Project key: geoeduca-pruebas-calidad
+04:06:51.122 INFO  Base dir: /usr/src
+04:06:51.122 INFO  Working dir: /tmp/.scannerwork
+04:06:51.514 INFO  Load quality profiles
+04:06:51.606 INFO  Load quality profiles (done) | time=93ms
+04:06:51.686 INFO  Load active rules
+04:06:52.056 INFO  Load active rules (done) | time=370ms
+04:06:52.065 INFO  Load analysis cache
+04:06:52.104 INFO  Load analysis cache | time=39ms
+04:06:52.334 INFO  Preprocessing files...
+04:06:56.382 INFO  3 languages detected in 70 preprocessed files (done) | time=4048ms
+04:06:56.383 INFO  0 files ignored because of inclusion/exclusion patterns
+04:06:56.383 INFO  1 directory skipped because of exclusion patterns (content not counted)
+04:06:56.383 INFO  0 files ignored because of scm ignore settings
+04:06:56.384 INFO  Loading plugins for detected languages
+04:06:56.387 INFO  Load/download plugins
+04:06:57.316 INFO  Load/download plugins (done) | time=928ms
+04:06:57.527 INFO  Load project repositories
+04:06:57.680 INFO  Load project repositories (done) | time=153ms
+04:06:57.745 INFO  Indexing files...
+04:06:57.746 INFO  Project configuration:
+04:06:57.747 INFO    Excluded sources: **/vendor/**, **/node_modules/**, **/dist/**, **/storage/**, **/bootstrap/cache/**, **/.phpunit.cache/**, docs/01-guia-pruebas-calidad/**
+04:07:00.341 INFO  70 files indexed (done) | time=2594ms
+04:07:00.343 INFO  Quality profile for css: Sonar way core
+04:07:00.344 INFO  Quality profile for js: Sonar way core
+04:07:00.345 INFO  Quality profile for php: Sonar way core
+04:07:00.345 INFO  ------------- Run sensors on module geoeduca-pruebas-calidad
+04:07:00.441 INFO  Load metrics repository
+04:07:00.506 INFO  Load metrics repository (done) | time=65ms
+04:07:01.110 INFO  Reflections took 73 ms to scan 1 urls, producing 30 keys and 303 values
+04:07:01.268 INFO  Sensor IaC YAML File Type Classification Sensor [iac]
+04:07:01.275 INFO  Sensor IaC YAML File Type Classification Sensor [iac] (done) | time=6ms
+04:07:01.276 INFO  Sensor PHP sensor [php]
+04:07:01.396 INFO  Starting PHP symbol indexer
+04:07:01.402 INFO  45 source files to be analyzed
+04:07:02.593 INFO  45/45 source files have been analyzed
+04:07:02.594 INFO  Cached information of global symbols will be used for 0 out of 45 files. Global symbols were recomputed for the remaining files.
+04:07:02.657 INFO  Starting PHP rules
+04:07:02.658 INFO  45 source files to be analyzed
+04:07:04.133 INFO  45/45 source files have been analyzed
+04:07:04.133 INFO  The PHP analyzer was able to leverage cached data from previous analyses for 0 out of 45 files. These files were not parsed.
+04:07:04.134 INFO  Sensor PHP sensor [php] (done) | time=2858ms
+04:07:04.134 INFO  Sensor Analyzer for "php.ini" files [php]
+04:07:04.140 INFO  Sensor Analyzer for "php.ini" files [php] (done) | time=5ms
+04:07:04.141 INFO  Sensor PHPUnit report sensor [php]
+04:07:04.144 INFO  Importing /usr/src/backend/build/sonar/phpunit-junit.xml
+04:07:04.278 INFO  No PHPUnit coverage reports provided (see 'sonar.php.coverage.reportPaths' property)
+04:07:04.279 INFO  Sensor PHPUnit report sensor [php] (done) | time=137ms
+04:07:04.279 INFO  Sensor IaC hadolint report Sensor [iac]
+04:07:04.280 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=0ms
+04:07:04.280 INFO  Sensor Java Config Sensor [iac]
+04:07:04.281 INFO  There are no files to be analyzed for the Java language
+04:07:04.281 INFO  Sensor Java Config Sensor [iac] (done) | time=0ms
+04:07:04.281 INFO  Sensor IaC Docker Sensor [iac]
+04:07:04.284 INFO  There are no files to be analyzed for the Docker language
+04:07:04.285 INFO  Sensor IaC Docker Sensor [iac] (done) | time=5ms
+04:07:04.285 INFO  Sensor HTML [web]
+04:07:04.622 INFO  Sensor HTML [web] (done) | time=337ms
+04:07:04.623 INFO  Sensor TextAndSecretsSensor [text]
+04:07:04.656 INFO  Available processors: 12
+04:07:04.657 INFO  Using 12 threads for analysis.
+04:07:05.044 INFO  Start fetching files for the text and secrets analysis
+04:07:05.055 INFO  Using Git CLI to retrieve dirty files
+04:07:11.479 INFO  Retrieving language associated files and files included via "sonar.text.inclusions" that are tracked by git
+04:07:11.481 INFO  Starting the text and secrets analysis
+04:07:11.484 INFO  70 source files to be analyzed for the text and secrets analysis
+04:07:11.893 INFO  70/70 source files have been analyzed for the text and secrets analysis
+04:07:11.900 INFO  Sensor TextAndSecretsSensor [text] (done) | time=7277ms
+04:07:11.911 INFO  ------------- Run sensors on project
+04:07:12.168 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript]
+04:07:12.616 INFO  Detected os: Linux arch: amd64 alpine: false. Platform: LINUX_X64
+04:07:12.619 INFO  Deploy location /opt/sonar-scanner/.sonar/js/node-runtime, tagetRuntime: /opt/sonar-scanner/.sonar/js/node-runtime/node,  version: /opt/sonar-scanner/.sonar/js/node-runtime/version.txt
+04:07:17.524 INFO  Using embedded Node.js runtime.
+04:07:17.524 INFO  Using Node.js executable: '/opt/sonar-scanner/.sonar/js/node-runtime/node'.
+04:07:21.696 INFO  Memory configuration: OS (7789 MB), Node.js (2240 MB).
+04:07:21.783 INFO  gRPC analyze-project server listening on 127.0.0.1:38889
+04:07:22.014 INFO  Plugin version: [14.0.0.46108]
+04:07:26.640 INFO  Found 0 tsconfig.json file(s): []
+04:07:46.119 INFO  25 source files to be analyzed
+04:07:46.120 INFO  Analyzing 24 file(s) using default options [lib: lib.esnext.d.ts, lib.dom.d.ts]
+04:07:46.120 INFO  25/25 source files have been analyzed
+04:07:46.149 INFO  Hit the cache for 0 out of 24
+04:07:46.153 INFO  Miss the cache for 24 out of 24: ANALYSIS_MODE_INELIGIBLE [24/24]
+04:07:46.155 INFO  Sensor JavaScript/TypeScript/CSS analysis [javascript] (done) | time=33985ms
+04:07:46.156 INFO  Sensor IaC Project Sensor [iac]
+04:07:46.164 INFO  Sensor IaC Project Sensor [iac] (done) | time=10ms
+04:07:46.166 INFO  Sensor Zero Coverage Sensor
+04:07:46.211 INFO  Sensor Zero Coverage Sensor (done) | time=46ms
+04:07:46.212 INFO  ------------- Gather SCA dependencies on project
+04:07:46.225 INFO  Dependency analysis skipped
+04:07:46.261 INFO  CPD Executor 9 files had no CPD blocks
+04:07:46.262 INFO  CPD Executor Calculating CPD for 39 files
+04:07:46.306 INFO  CPD Executor CPD calculation finished (done) | time=45ms
+04:07:46.512 INFO  SCM revision ID 'b326574350303befd1aed33e3cf6448c40264a8d'
+04:07:48.376 INFO  Analysis report generated in 2058ms, dir size=623.8 kB
+04:07:48.523 INFO  Analysis report compressed in 145ms, zip size=336.6 kB
+04:07:48.686 INFO  Analysis report uploaded in 164ms
+04:07:48.688 INFO  ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=geoeduca-pruebas-calidad
+04:07:48.688 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+04:07:48.689 INFO  More about the report processing at http://sonarqube:9000/api/ce/task?id=a8f898fa-e8c6-4b70-940a-bc224af45e0c
+04:07:48.933 INFO  Analysis total time: 1:00.543 min
+04:07:48.941 INFO  SonarScanner Engine completed successfully
+04:07:48.986 INFO  EXECUTION SUCCESS
+04:07:48.987 INFO  Total time: 1:03.071s

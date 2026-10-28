@@ -1,0 +1,113 @@
+Asistencia Contrato (Tests\Caracterizacion\Feature\AsistenciaContrato)
+ [x] Justificación válida: 200, mensaje de envío y eco de los datos validados (no se persiste)
+ [x] La justificación sin hora (event_time es opcional) también se acepta
+ [x] Aprobación manual válida: 200, mensaje "(simulado)" y eco de los datos
+ [x] Solo se devuelven los campos validados: un campo extra (role) no se refleja
+ [x] Las consultas de asistencia devuelven data vacía y "Pendiente de implementación" with data set "GET /api/asistencia/estudiante"
+ [x] Las consultas de asistencia devuelven data vacía y "Pendiente de implementación" with data set "GET /api/asistencia/padre"
+ [x] Las consultas de asistencia devuelven data vacía y "Pendiente de implementación" with data set "GET /api/asistencia/auxiliar/casos"
+ [x] Una justificación enviada NO aparece en la consulta del padre (no hay persistencia)
+
+Asistencia Validacion (Tests\Caracterizacion\Feature\AsistenciaValidacion)
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-07 motivo de 5 caracteres"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-07 motivo ausente"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-07 motivo de 1001 caracteres"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-08 tipo inexistente"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-08 fecha ausente"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-08 fecha no válida"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-08 hora con formato inválido"
+ [x] Justificación inválida responde 422 y marca solo los campos erróneos with data set "V-08 formulario vacío"
+ [x] Aprobación manual inválida responde 422 y marca solo los campos erróneos with data set "V-09 sin motivo"
+ [x] Aprobación manual inválida responde 422 y marca solo los campos erróneos with data set "V-09 motivo de 3 caracteres"
+ [x] Aprobación manual inválida responde 422 y marca solo los campos erróneos with data set "V-09 identificador de 3 caracteres"
+ [x] Aprobación manual inválida responde 422 y marca solo los campos erróneos with data set "V-09 identificador ausente"
+ [x] Aprobación manual inválida responde 422 y marca solo los campos erróneos with data set "V-09 formulario vacío"
+ [x] El mensaje de motivo obligatorio está en español
+
+Auth Service (Tests\Caracterizacion\Unit\AuthService)
+ [x] AuthService delega en UserAuthenticator exactamente una vez y devuelve su resultado sin modificarlo
+ [x] El contenedor resuelve UserAuthenticator como MockUserAuthenticator (binding actual)
+
+Comportamiento Actual Inseguro (Tests\Caracterizacion\Feature\ComportamientoActualInseguro)
+ [x] HOY: /api/auth/me sin credenciales responde 200 con {"user":null} (debería ser 401)
+ [x] HOY: las rutas de asistencia responden 200 sin ninguna credencial (deberían ser 401) with data set "GET /api/auth/me"
+ [x] HOY: las rutas de asistencia responden 200 sin ninguna credencial (deberían ser 401) with data set "GET /api/asistencia/estudiante"
+ [x] HOY: las rutas de asistencia responden 200 sin ninguna credencial (deberían ser 401) with data set "GET /api/asistencia/padre"
+ [x] HOY: las rutas de asistencia responden 200 sin ninguna credencial (deberían ser 401) with data set "GET /api/asistencia/auxiliar/casos"
+ [x] HOY: las rutas de asistencia responden 200 sin ninguna credencial (deberían ser 401) with data set "POST /api/asistencia/auxiliar/aprobar"
+ [x] HOY: las rutas de asistencia responden 200 sin ninguna credencial (deberían ser 401) with data set "POST /api/asistencia/justificacion"
+ [x] HOY: un token inventado se acepta igual que ninguno (deberían ser 401) with data set "GET /api/auth/me"
+ [x] HOY: un token inventado se acepta igual que ninguno (deberían ser 401) with data set "GET /api/asistencia/estudiante"
+ [x] HOY: un token inventado se acepta igual que ninguno (deberían ser 401) with data set "GET /api/asistencia/padre"
+ [x] HOY: un token inventado se acepta igual que ninguno (deberían ser 401) with data set "GET /api/asistencia/auxiliar/casos"
+ [x] HOY: un token inventado se acepta igual que ninguno (deberían ser 401) with data set "POST /api/asistencia/auxiliar/aprobar"
+ [x] HOY: un token inventado se acepta igual que ninguno (deberían ser 401) with data set "POST /api/asistencia/justificacion"
+ [x] HOY: el token de un estudiante abre las rutas del auxiliar (debería ser 403)
+ [x] HOY: un token válido no identifica a nadie, /api/auth/me devuelve user null
+ [x] HOY: logout sin token responde 200 y no invalida nada (el token sigue aceptándose)
+ [x] HOY: 12 contraseñas erróneas seguidas reciben siempre 401, nunca 429
+ [x] HOY: ninguna ruta de la API tiene middleware de autenticación ni de límite de peticiones
+ [x] HOY: un DNI enviado como arreglo JSON provoca HTTP 500 (debería ser 422); causa en LoginRequest.php:22
+ [x] Con APP_DEBUG desactivado un 404 de API no filtra traza ni rutas de archivo
+ [x] Con APP_DEBUG activado un 404 de API SÍ filtra traza y rutas de archivo (comportamiento de Laravel)
+
+Contrato Rutas (Tests\Caracterizacion\Feature\ContratoRutas)
+ [x] La API expone exactamente las 9 rutas de negocio y salud documentadas
+ [x] No existe ninguna ruta de QR dinámico (emisión o validación)
+ [x] No existe ninguna ruta de geolocalización o geocerca
+ [x] No existe ninguna ruta de notificaciones
+ [x] Ninguna acción de la API usa Eloquent: no hay modelos en app/Models
+
+Cors (Tests\Caracterizacion\Feature\Cors)
+ [x] El preflight de un origen del frontend recibe Access-Control-Allow-Origin igual al origen with data set "localhost:5173"
+ [x] El preflight de un origen del frontend recibe Access-Control-Allow-Origin igual al origen with data set "127.0.0.1:5173"
+ [x] El preflight de un origen no autorizado NO recibe Access-Control-Allow-Origin
+ [x] Una petición real desde un origen no autorizado tampoco recibe Access-Control-Allow-Origin
+
+Demo Accounts (Tests\Caracterizacion\Unit\DemoAccounts)
+ [x] Hay exactamente tres cuentas, una por perfil: student, parent y staff
+ [x] Todos los DNI tienen 8 dígitos y los identificadores internos son únicos
+ [x] LIMITACIÓN: dos perfiles distintos comparten el mismo DNI (se distinguen por perfil y contraseña)
+ [x] LIMITACIÓN: las contraseñas están en texto plano (ninguna parece un hash bcrypt/argon)
+
+Login Perfiles (Tests\Caracterizacion\Feature\LoginPerfiles)
+ [x] Estudiante: 200, token Bearer y usuario con rol student
+ [x] Padre/tutor: 200, token Bearer y usuario con rol parent
+ [x] Personal (docente/auxiliar): 200, token Bearer y usuario con rol staff
+ [x] Cada login emite un token distinto
+ [x] El DNI con separadores se normaliza a dígitos antes de validar (LoginRequest)
+
+Login Rechazo (Tests\Caracterizacion\Feature\LoginRechazo)
+ [x] Contraseña incorrecta: 401 con mensaje genérico y sin token
+ [x] La contraseña de otro perfil no abre el perfil de estudiante
+ [x] El DNI del personal no abre el perfil de estudiante, aunque la contraseña sea la del personal
+ [x] No se puede enumerar usuarios: DNI inexistente y contraseña errónea dan la misma respuesta
+
+Login Validacion (Tests\Caracterizacion\Feature\LoginValidacion)
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-01 DNI de 7 dígitos"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-01 DNI de 9 dígitos"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-05 DNI solo con letras"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-02 contraseña de 3 caracteres"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-02 contraseña de 7 caracteres"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-06 contraseña de 129 caracteres"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-03 perfil inexistente (admin)"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-03 perfil ausente"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-04 formulario vacío"
+ [x] Login con datos inválidos responde 422, marca solo los campos erróneos y no emite token with data set "V-04 solo el DNI"
+ [x] El mensaje de DNI corto está en español y es claro
+ [x] El mensaje de contraseña corta indica el mínimo de 8 caracteres
+
+Mock User Authenticator (Tests\Caracterizacion\Unit\MockUserAuthenticator)
+ [x] Con credenciales de demostración devuelve token, tipo Bearer y el usuario del perfil with data set "student"
+ [x] Con credenciales de demostración devuelve token, tipo Bearer y el usuario del perfil with data set "parent"
+ [x] Con credenciales de demostración devuelve token, tipo Bearer y el usuario del perfil with data set "staff"
+ [x] Con contraseña incorrecta lanza una respuesta HTTP 401
+ [x] Exige que el perfil coincida con el de la cuenta (DNI correcto, perfil distinto)
+ [x] Ignora los caracteres no numéricos del DNI
+
+Salud (Tests\Caracterizacion\Feature\Salud)
+ [x] GET /api/health responde 200 con exactamente {"status":"ok"}
+ [x] GET /api/health no requiere autenticación y devuelve JSON
+ [x] GET / identifica la API y apunta a /api/health
+ [x] GET /up (health check de Laravel) responde 200
+

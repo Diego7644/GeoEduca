@@ -1,0 +1,17 @@
+{
+    "informeLocal":  "backend/build/sonar/phpunit-junit.xml (124 casos esperados: 97 aprobados y 27 fallidos)",
+    "esperadoSegunElInforme":  {
+                                   "tests":  124,
+                                   "test_failures":  27,
+                                   "test_errors":  0,
+                                   "skipped_tests":  0
+                               },
+    "importadoEnSonarQube":  {
+                                 "tests":  "124",
+                                 "test_failures":  "27",
+                                 "test_errors":  "0",
+                                 "skipped_tests":  "0"
+                             },
+    "sonarRecibioLosFallos":  true,
+    "nota":  "Si importadoEnSonarQube no tiene valores, Sonar no asocio los resultados a los archivos de sonar.tests."
+}
