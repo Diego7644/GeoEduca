@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureStaffKind;
 use App\Http\Middleware\EnsureUserRole;
 use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\ResetAuthGuard;
@@ -27,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'role' => EnsureUserRole::class,
+            'staff.kind' => EnsureStaffKind::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -77,6 +77,7 @@ final class AsistenciaRealTest extends TestCase
         $this->withToken($staff)->postJson('/api/asistencia/qr/validar', ['value' => $qr])
             ->assertStatus(422)
             ->assertJsonPath('message', 'Ese código QR ya fue utilizado.');
+        $this->assertSame(1, \App\Models\AttendanceAttempt::query()->where('result', 'reused')->count());
 
         $this->assertSame(1, AttendanceRecord::query()->count());
     }
@@ -128,6 +129,35 @@ final class AsistenciaRealTest extends TestCase
         $this->assertTrue(
             User::query()->where('dni', '71405255')->where('role', 'parent')->first()->wards()->where('dni', '74829104')->exists()
         );
+    }
+
+    #[TestDox('El administrador registra un estudiante y no se marca ausencia antes del cierre')]
+    public function test_alta_y_cierre_de_jornada(): void
+    {
+        $admin = User::query()->create([
+            'dni' => '90000008',
+            'role' => User::ROLE_ADMIN,
+            'name' => 'Admin de prueba',
+            'role_label' => 'Administrador',
+            'password' => 'Clave-admin-02',
+        ]);
+        $token = $this->postJson('/api/auth/login', [
+            'identifier' => '90000008',
+            'password' => 'Clave-admin-02',
+            'role' => 'admin',
+        ])->assertOk()->json('token');
+
+        $this->withToken($token)->postJson('/api/admin/estudiantes', [
+            'dni' => '55554444',
+            'code' => 'NEW-1001',
+            'name' => 'Alumno Nuevo',
+            'grade' => '1ro A',
+            'password' => 'Clave-alumno-1',
+        ])->assertCreated();
+
+        $this->assertNotSame($admin->id, Student::query()->where('dni', '55554444')->value('id'));
+        \App\Models\SchoolSetting::query()->first()->forceFill(['exit_time' => '23:59'])->save();
+        $this->withToken($token)->postJson('/api/asistencia/jornada/cerrar')->assertStatus(422);
     }
 
     #[TestDox('La importación en seco no escribe estudiantes nuevos')]

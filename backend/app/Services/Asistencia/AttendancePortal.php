@@ -121,16 +121,18 @@ class AttendancePortal
             throw new \RuntimeException('El código QR no es válido.');
         }
 
-        $record = DB::transaction(function () use ($token, $actor) {
+        $failure = null;
+        try {
+            $record = DB::transaction(function () use ($token, $actor, &$failure) {
             $locked = QrToken::query()->whereKey($token->id)->lockForUpdate()->first();
             $student = Student::query()->find($locked->student_id);
             if ($locked->consumed_at !== null) {
-                $this->attempt($student, $actor, AttendanceAttempt::KIND_QR, 'reused', 'código ya usado');
-                throw new \RuntimeException('Ese código QR ya fue utilizado.');
+                $failure = [$student, 'reused', 'código ya usado', 'Ese código QR ya fue utilizado.'];
+                throw new \RuntimeException($failure[3]);
             }
             if ($locked->expires_at->isPast()) {
-                $this->attempt($student, $actor, AttendanceAttempt::KIND_QR, 'expired', 'código vencido');
-                throw new \RuntimeException('Ese código QR ya expiró.');
+                $failure = [$student, 'expired', 'código vencido', 'Ese código QR ya expiró.'];
+                throw new \RuntimeException($failure[3]);
             }
             $existing = AttendanceRecord::query()
                 ->where('student_id', $student->id)
@@ -144,7 +146,13 @@ class AttendancePortal
             $this->attempt($student, $actor, AttendanceAttempt::KIND_QR, 'accepted', 'ingreso');
 
             return $created;
-        });
+            });
+        } catch (\RuntimeException $exception) {
+            if ($failure) {
+                $this->attempt($failure[0], $actor, AttendanceAttempt::KIND_QR, $failure[1], $failure[2]);
+            }
+            throw $exception;
+        }
 
         return [
             'message' => 'Ingreso registrado con QR.',
@@ -191,7 +199,7 @@ class AttendancePortal
             'event_date' => $data['event_date'],
             'event_time' => $data['event_time'] ?? null,
             'reason' => $data['reason'],
-            'attachment_name' => $data['attachment_name'] ?? null,
+            'attachment_name' => null,
             'status' => 'submitted',
         ]);
         $this->notifyStaff('Nueva justificación', $student->name.': '.$data['reason'], 'justification:'.$item->id);
@@ -224,12 +232,15 @@ class AttendancePortal
             ],
             'cases' => [],
             'audit' => AttendanceRecord::query()->with('student')->latest('id')->limit(20)->get()->map(fn (AttendanceRecord $row) => [
+                'id' => $row->id,
                 'time' => optional($row->created_at)->timezone('America/Lima')->format('H:i:s'),
                 'name' => $row->student->name,
                 'grade' => $row->student->grade_short,
                 'reason' => $row->reason ?: ($row->method ?: $row->source),
                 'status' => $row->status,
                 'operator' => $user->name,
+                'notif' => ['', $row->exit_time ? 'Salida '.$row->exit_time : ''],
+                'fresh' => null,
             ])->all(),
             'directory' => $students->map(fn (Student $student) => [
                 'id' => $student->id,
@@ -239,6 +250,13 @@ class AttendancePortal
                 'dni' => $student->dni,
             ])->all(),
             'reader' => 'No hay lectores NFC ni molinetes conectados. El ingreso se registra con QR o con el DNI en este panel.',
+            'incidents' => AttendanceAttempt::query()->with('student')->whereDate('created_at', $today)->whereIn('result', ['invalid', 'expired', 'reused'])->latest('id')->limit(8)->get()->map(fn (AttendanceAttempt $attempt) => [
+                'id' => $attempt->id,
+                'result' => $attempt->result,
+                'student' => $attempt->student?->name,
+                'detail' => $attempt->detail,
+                'time' => optional($attempt->created_at)->timezone('America/Lima')->format('H:i:s'),
+            ])->all(),
         ];
     }
 
@@ -261,27 +279,168 @@ class AttendancePortal
         return ['message' => 'Ingreso aprobado y anotado en la bitácora.', 'panel' => $this->auxiliar($user)];
     }
 
-    public function docente(User $user): array
+    public function salida(User $user, string $query): array
+    {
+        $this->assertPuedeRegistrar($user);
+        $student = $this->findStudent($query);
+        if (! $student) {
+            throw new \RuntimeException('No encontramos un estudiante con ese DNI o código.');
+        }
+        $record = AttendanceRecord::query()
+            ->where('student_id', $student->id)
+            ->whereDate('attended_on', $this->now()->toDateString())
+            ->first();
+        if (! $record || $record->status === AttendanceRecord::STATUS_ABSENT) {
+            throw new \RuntimeException('No hay una entrada de hoy para registrar la salida.');
+        }
+        if ($record->exit_time) {
+            throw new \RuntimeException('La salida de hoy ya fue registrada.');
+        }
+        $record->forceFill(['exit_time' => $this->now()->format('H:i:s')])->save();
+        $this->audit($user, $student->id, 'exit_recorded', 'Salida registrada.');
+
+        return ['message' => 'Salida registrada.', 'panel' => $user->isAdmin() ? $this->reportes($user) : $this->auxiliar($user)];
+    }
+
+    public function cerrarJornada(User $user): array
+    {
+        $this->assertPuedeRegistrar($user);
+        $settings = $this->settings();
+        if ($this->minutes($this->now()->format('H:i')) < $this->minutes($settings->exit_time)) {
+            throw new \RuntimeException('Aún no corresponde marcar ausencias: la jornada no ha terminado.');
+        }
+        if ((int) $this->now()->format('N') >= 6) {
+            throw new \RuntimeException('Hoy no hay jornada escolar.');
+        }
+        $created = 0;
+        $today = $this->now()->toDateString();
+        foreach (Student::query()->orderBy('id')->get() as $student) {
+            $exists = AttendanceRecord::query()->where('student_id', $student->id)->whereDate('attended_on', $today)->exists();
+            if ($exists) {
+                continue;
+            }
+            AttendanceRecord::query()->create([
+                'student_id' => $student->id,
+                'recorded_by_user_id' => $user->id,
+                'attended_on' => $today,
+                'status' => AttendanceRecord::STATUS_ABSENT,
+                'source' => 'close',
+                'method' => 'Cierre de jornada',
+                'gate' => null,
+                'reason' => 'Sin entrada al cierre de la jornada',
+            ]);
+            $created++;
+        }
+        $this->audit($user, null, 'day_closed', $created.' ausencia(s) generadas al cierre.');
+
+        return ['message' => "Jornada cerrada. Ausencias nuevas: {$created}.", 'created' => $created];
+    }
+
+    public function justificaciones(User $user): array
+    {
+        $query = Justification::query()->with('student')->latest('id');
+        if ($user->isParent()) {
+            $query->where('guardian_user_id', $user->id);
+        } elseif ($user->isStaff() && $user->staffProfile?->kind === StaffMember::KIND_DOCENTE) {
+            $ids = Student::query()->where('homeroom_staff_id', $user->staffProfile->id)->pluck('id');
+            $query->whereIn('student_id', $ids);
+        } elseif (! $user->isAdmin() && $user->staffProfile?->kind !== StaffMember::KIND_AUXILIAR) {
+            throw new \RuntimeException('No tiene acceso a este panel.');
+        }
+
+        return ['justifications' => $query->limit(50)->get()->map(fn (Justification $item) => $this->justificationPayload($item))->all()];
+    }
+
+    public function revisarJustificacion(User $user, int $id, string $decision): array
+    {
+        if (! in_array($decision, ['approved', 'rejected'], true)) {
+            throw new \RuntimeException('La decisión no es válida.');
+        }
+        $item = Justification::query()->with('student')->find($id);
+        if (! $item) {
+            throw new \RuntimeException('No encontramos la justificación.');
+        }
+        if (! $this->puedeRevisar($user, $item->student)) {
+            throw new \RuntimeException('No tiene acceso a este panel.');
+        }
+        if ($item->status !== 'submitted') {
+            throw new \RuntimeException('Esa justificación ya fue revisada.');
+        }
+        $item->forceFill([
+            'status' => $decision,
+            'reviewed_by_user_id' => $user->id,
+            'reviewed_at' => now(),
+        ])->save();
+        $this->audit($user, $item->student_id, 'justification_'.$decision, 'Revisión de justificación.');
+        InAppNotification::query()->firstOrCreate(
+            ['dedupe_key' => 'justification-review:'.$item->id],
+            [
+                'user_id' => $item->guardian_user_id,
+                'role' => User::ROLE_PARENT,
+                'title' => $decision === 'approved' ? 'Justificación aprobada' : 'Justificación rechazada',
+                'body' => $item->student->name.' • '.$item->event_date->format('Y-m-d'),
+            ]
+        );
+
+        return ['message' => $decision === 'approved' ? 'Justificación aprobada.' : 'Justificación rechazada.', 'justification' => $this->justificationPayload($item->fresh('student'))];
+    }
+
+    public function docente(User $user, ?string $date = null): array
     {
         $staff = $this->docenteOrFail($user);
+        $day = $date ?: $this->now()->toDateString();
         $students = Student::query()->where('homeroom_staff_id', $staff->id)->orderBy('name')->get();
 
         return [
             'teacher' => ['name' => $user->name, 'kind' => StaffMember::KIND_DOCENTE],
-            'students' => $students->map(fn (Student $student) => [
-                'id' => $student->id,
-                'name' => $student->name,
-                'dni' => $student->dni,
-                'grade' => $student->grade,
-                'today' => $this->todayRow($student),
+            'date' => $day,
+            'students' => $students->map(function (Student $student) use ($day) {
+                $record = AttendanceRecord::query()->where('student_id', $student->id)->whereDate('attended_on', $day)->first();
+
+                return [
+                    'id' => $student->id,
+                    'name' => $student->name,
+                    'dni' => $student->dni,
+                    'grade' => $student->grade,
+                    'today' => $record ? [
+                        'statusLabel' => [
+                            AttendanceRecord::STATUS_ON_TIME => 'A tiempo',
+                            AttendanceRecord::STATUS_LATE => 'Tardanza',
+                            AttendanceRecord::STATUS_ABSENT => 'Ausencia',
+                        ][$record->status] ?? $record->status,
+                        'time' => $record->entry_time,
+                        'exit' => $record->exit_time,
+                    ] : ['statusLabel' => 'Sin registro', 'time' => null, 'exit' => null],
+                ];
+            })->all(),
+            'justifications' => $this->justificaciones($user)['justifications'],
+            'history' => AttendanceRecord::query()->with('student')->whereIn('student_id', $students->pluck('id'))->orderByDesc('attended_on')->limit(30)->get()->map(fn (AttendanceRecord $record) => [
+                'id' => $record->id,
+                'date' => $record->attended_on->format('Y-m-d'),
+                'student' => $record->student->name,
+                'status' => $record->status,
+                'entry' => $record->entry_time ? substr((string) $record->entry_time, 0, 5) : null,
+                'exit' => $record->exit_time ? substr((string) $record->exit_time, 0, 5) : null,
             ])->all(),
         ];
     }
 
-    public function reportes(User $user): array
+    public function reportes(User $user, array $filters = []): array
     {
         $rows = [];
         $query = AttendanceRecord::query()->with('student')->latest('attended_on');
+        if (! empty($filters['from'])) {
+            $query->whereDate('attended_on', '>=', $filters['from']);
+        }
+        if (! empty($filters['to'])) {
+            $query->whereDate('attended_on', '<=', $filters['to']);
+        }
+        if (! empty($filters['student'])) {
+            $needle = $filters['student'];
+            $query->whereHas('student', function ($builder) use ($needle) {
+                $builder->where('name', 'like', '%'.$needle.'%')->orWhere('dni', 'like', '%'.$needle.'%');
+            });
+        }
         if ($user->isStudent()) {
             $query->where('student_id', $this->ownStudent($user)->id);
         } elseif ($user->isParent()) {
@@ -305,7 +464,9 @@ class AttendancePortal
         return [
             'title' => 'Asistencia registrada',
             'subtitle' => $user->name,
-            'range_label' => 'Registros persistidos',
+            'range_label' => trim(($filters['from'] ?? '').' '.($filters['to'] ?? '')) !== ''
+                ? trim(($filters['from'] ?? '…').' a '.($filters['to'] ?? '…'))
+                : 'Registros persistidos',
             'series_title' => 'No hay serie inventada',
             'series_unit' => 'count',
             'kpis' => [],
@@ -500,6 +661,38 @@ class AttendancePortal
         }
     }
 
+    private function assertPuedeRegistrar(User $user): void
+    {
+        if ($user->isAdmin() || $user->staffProfile?->kind === StaffMember::KIND_AUXILIAR) {
+            return;
+        }
+        throw new \RuntimeException('No tiene acceso a este panel.');
+    }
+
+    private function puedeRevisar(User $user, Student $student): bool
+    {
+        if ($user->isAdmin() || $user->staffProfile?->kind === StaffMember::KIND_AUXILIAR) {
+            return true;
+        }
+
+        return $user->staffProfile?->kind === StaffMember::KIND_DOCENTE
+            && (int) $student->homeroom_staff_id === (int) $user->staffProfile->id;
+    }
+
+    private function justificationPayload(Justification $item): array
+    {
+        return [
+            'id' => $item->id,
+            'student_id' => $item->student_id,
+            'student' => $item->student->name,
+            'type' => $item->type,
+            'event_date' => $item->event_date->format('Y-m-d'),
+            'reason' => $item->reason,
+            'status' => $item->status,
+            'reviewed_at' => $item->reviewed_at?->toIso8601String(),
+        ];
+    }
+
     private function docenteOrFail(User $user): StaffMember
     {
         $staff = $user->staffProfile;
@@ -537,7 +730,7 @@ class AttendancePortal
                 'title' => 'Solicitud enviada',
                 'time' => optional($item->created_at)->timezone('America/Lima')->format('H:i'),
                 'text' => $item->reason,
-                'meta' => $item->attachment_name ?: 'Sin archivo adjunto',
+                'meta' => $item->status,
                 'rowId' => null,
             ])->all();
 
@@ -610,13 +803,18 @@ class AttendancePortal
         $label = [
             AttendanceRecord::STATUS_ON_TIME => 'A Tiempo',
             AttendanceRecord::STATUS_LATE => 'Tardanza',
-            AttendanceRecord::STATUS_ABSENT => 'Sin registro',
+            AttendanceRecord::STATUS_ABSENT => 'Ausencia',
         ][$record->status] ?? 'Registro';
 
         return [
-            'status' => $record->status === AttendanceRecord::STATUS_ON_TIME ? 'puntual' : 'tardanza',
+            'status' => [
+                AttendanceRecord::STATUS_ON_TIME => 'puntual',
+                AttendanceRecord::STATUS_LATE => 'tardanza',
+                AttendanceRecord::STATUS_ABSENT => 'ausencia',
+            ][$record->status] ?? 'registro',
             'statusLabel' => $label,
             'time' => $record->entry_time ? substr((string) $record->entry_time, 0, 5) : null,
+            'exit' => $record->exit_time ? substr((string) $record->exit_time, 0, 5) : null,
             'gate' => $record->gate,
             'method' => $record->method,
             'notified' => true,

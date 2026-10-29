@@ -23,12 +23,15 @@ class Justification extends Model
         'reason',
         'attachment_name',
         'status',
+        'reviewed_by_user_id',
+        'reviewed_at',
     ];
 
     protected function casts(): array
     {
         return [
             'event_date' => 'date',
+            'reviewed_at' => 'datetime',
         ];
     }
 

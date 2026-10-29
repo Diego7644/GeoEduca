@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import PageState from '../components/PageState';
 import Toast, { useToast } from '../components/Toast';
@@ -7,7 +7,9 @@ import { getReportes } from '../services/asistenciaService';
 import { downloadCsv, escapeHtml, printHtml } from '../utils/attendance';
 
 export default function Reportes() {
-  const load = useCallback(() => getReportes(), []);
+  const [draft, setDraft] = useState({ from: '', to: '', student: '' });
+  const [filters, setFilters] = useState({ from: '', to: '', student: '' });
+  const load = useCallback(() => getReportes(filters), [filters]);
   const { data, error, loading, reload } = useApiResource(load);
   const { toast, showToast } = useToast();
   const max = Math.max(1, ...(data?.series ?? []).map((item) => Number(item.value) || 0));
@@ -41,11 +43,23 @@ export default function Reportes() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="px-3 py-2 rounded-lg bg-surface-container-low font-label-md text-on-surface">{data.range_label}</span>
-                <button type="button" onClick={exportCsv} className="px-3 py-2 rounded-lg bg-surface-container-low font-label-md font-semibold">Excel</button>
-                <button type="button" onClick={exportPdf} className="px-3 py-2 rounded-lg bg-primary text-on-primary font-label-md font-semibold">PDF</button>
+                <button type="button" onClick={exportCsv} className="px-3 py-2 rounded-lg bg-surface-container-low font-label-md font-semibold">CSV</button>
+                <button type="button" onClick={exportPdf} className="px-3 py-2 rounded-lg bg-primary text-on-primary font-label-md font-semibold">Imprimir</button>
               </div>
             </div>
 
+            <form
+              className="flex flex-col sm:flex-row gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                setFilters(draft);
+              }}
+            >
+              <input type="date" value={draft.from} onChange={(event) => setDraft((current) => ({ ...current, from: event.target.value }))} className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Desde" />
+              <input type="date" value={draft.to} onChange={(event) => setDraft((current) => ({ ...current, to: event.target.value }))} className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Hasta" />
+              <input value={draft.student} onChange={(event) => setDraft((current) => ({ ...current, student: event.target.value }))} placeholder="Estudiante o DNI" className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Estudiante" />
+              <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Filtrar</button>
+            </form>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
               {data.kpis.map((kpi) => (
                 <div key={kpi.label} className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">

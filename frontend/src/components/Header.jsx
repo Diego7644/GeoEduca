@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon';
+import NotificationBell from './NotificationBell';
 import SafeImage from './SafeImage';
 import { useAuth } from '../context/AuthContext';
 import { IMAGES } from '../config/images';
@@ -50,15 +51,7 @@ export default function Header({ onMenuClick }) {
           <span className="font-label-sm text-label-sm text-outline font-mono">07:42 AM (Sincronizado)</span>
         </div>
 
-        <button
-          type="button"
-          className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors relative"
-        >
-          <Icon name="notifications" className="text-[22px]" />
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-bold text-on-error">
-            3
-          </span>
-        </button>
+        <NotificationBell />
 
         <div className="flex items-center gap-space-sm pl-space-sm">
           <SafeImage

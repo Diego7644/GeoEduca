@@ -19,7 +19,6 @@ class JustificacionRequest extends FormRequest
             'event_date' => ['required', 'date'],
             'event_time' => ['nullable', 'date_format:H:i'],
             'reason' => ['required', 'string', 'min:10', 'max:1000'],
-            'attachment_name' => ['nullable', 'string', 'max:120'],
         ];
     }
 

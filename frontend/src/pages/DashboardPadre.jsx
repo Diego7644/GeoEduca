@@ -9,7 +9,7 @@ import Toast, { useToast } from '../components/Toast';
 import { IMAGES } from '../config/images';
 import useApiResource from '../hooks/useApiResource';
 import useValidatedField from '../hooks/useValidatedField';
-import { getPadre, linkChild, submitJustification } from '../services/asistenciaService';
+import { getJustificaciones, getPadre, linkChild, submitJustification } from '../services/asistenciaService';
 import { downloadCsv, escapeHtml, inRange, printHtml, shortHash } from '../utils/attendance';
 import { validateEventDate, validateIdentifier, validateJustificationReason } from '../validation/rules';
 
@@ -48,6 +48,7 @@ export default function DashboardPadre() {
   const [eventTime, setEventTime] = useState('11:30');
   const [attachmentName, setAttachmentName] = useState('');
   const [saving, setSaving] = useState(false);
+  const [requests, setRequests] = useState([]);
   const eventDate = useValidatedField(validateEventDate, new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' }));
   const reason = useValidatedField(validateJustificationReason);
   const linkDni = useValidatedField(validateIdentifier);
@@ -67,6 +68,10 @@ export default function DashboardPadre() {
   useEffect(() => {
     setPage(1);
   }, [filter, range, child?.id]);
+
+  useEffect(() => {
+    getJustificaciones().then((result) => setRequests(result.justifications ?? [])).catch(() => setRequests([]));
+  }, [data]);
 
   const rangeRows = useMemo(
     () => (child?.attendance ?? []).filter((row) => inRange(row.iso, range)),
@@ -129,7 +134,6 @@ export default function DashboardPadre() {
         event_date: eventDate.value,
         event_time: eventTime || undefined,
         reason: reason.value.trim(),
-        attachment_name: attachmentName || undefined,
       });
       setData(result.panel);
       setJustifyOpen(false);
@@ -174,7 +178,7 @@ export default function DashboardPadre() {
         {data && !child && (
           <div className="bg-surface-container-lowest rounded-xl p-8 text-center shadow-sm">
             <h2 className="font-title-lg font-bold">No hay estudiantes vinculados</h2>
-            <button type="button" onClick={() => setLinkOpen(true)} className="mt-4 px-4 py-2 rounded-lg bg-primary text-on-primary">Vincular estudiante</button>
+            <p className="mt-4 text-on-surface-variant">La vinculación la realiza administración. No puede reclamar un estudiante por su cuenta.</p>
           </div>
         )}
         {child && (
@@ -202,9 +206,7 @@ export default function DashboardPadre() {
                           {item.id === child.id && <Icon name="check" className="text-secondary" />}
                         </button>
                       ))}
-                      <button type="button" onClick={() => { setMenuOpen(false); setLinkOpen(true); }} className="mt-2 px-3 text-primary font-label-md flex items-center gap-1">
-                        <Icon name="add_circle" className="text-[16px]" /> Vincular otro estudiante
-                      </button>
+                      <p className="mt-2 px-3 text-outline font-body-sm">La vinculación de otro estudiante la realiza administración.</p>
                     </div>
                   )}
                 </div>
@@ -319,6 +321,11 @@ export default function DashboardPadre() {
                       <h4 className="font-bold">Cumplimiento de asistencia</h4>
                       <p className="font-body-sm text-outline">Meta del reglamento: {child.compliance.minimum}% mínimo para promoción.</p>
                     </div>
+                  </div>
+                  <div className="font-body-sm text-on-surface-variant">
+                    {requests.filter((item) => item.student_id === child.id).map((item) => (
+                      <p key={item.id}>{item.event_date}: {item.status}</p>
+                    ))}
                   </div>
                   <button type="button" onClick={() => setJustifyOpen(true)} className="px-3 py-2 rounded-lg bg-surface-container-low text-primary font-semibold flex items-center gap-1">
                     <Icon name="time_to_leave" /> Retiro anticipado
@@ -438,20 +445,7 @@ export default function DashboardPadre() {
                 <textarea rows={3} value={reason.value} onChange={reason.onChange} onBlur={reason.onBlur} className="mt-1 w-full bg-surface-container-low p-2.5 rounded-lg" placeholder="Describa el motivo con al menos 10 caracteres" />
                 <FieldError message={reason.error} />
               </label>
-              <label className="block border-2 border-dashed border-outline-variant p-4 rounded-xl text-center cursor-pointer">
-                <input type="file" accept=".jpg,.jpeg,.png,.pdf" className="sr-only" onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (!file) return;
-                  if (file.size > 5 * 1024 * 1024) {
-                    showToast('El archivo supera 5 MB');
-                    event.target.value = '';
-                    return;
-                  }
-                  setAttachmentName(file.name);
-                }} />
-                <Icon name="cloud_upload" className="text-primary text-[28px]" />
-                <p className="font-body-sm mt-1">{attachmentName || 'Adjuntar JPG, PNG o PDF (máx. 5 MB)'}</p>
-              </label>
+              <p className="font-body-sm text-outline">La solicitud no admite archivos. El motivo y la fecha quedan registrados.</p>
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={() => setJustifyOpen(false)} className="px-4 py-2 rounded-lg bg-surface-container">Cancelar</button>
                 <button type="submit" disabled={saving || !eventDate.isValid || !reason.isValid} className="px-5 py-2 rounded-lg bg-primary text-on-primary disabled:opacity-50">{saving ? 'Enviando...' : 'Enviar a dirección'}</button>
