@@ -51,6 +51,16 @@ export default function DashboardDocente() {
                 </div>
               ))}
             </div>
+            <div className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+              <h2 className="px-6 py-4 font-semibold">Historial de la tutoría</h2>
+              {(data.history ?? []).length === 0 && <p className="px-6 pb-4 text-outline">No hay marcaciones de tus estudiantes.</p>}
+              {(data.history ?? []).map((row) => (
+                <div key={row.id} className="px-6 py-3 border-t border-surface-container flex justify-between gap-3">
+                  <span>{row.date} · {row.student}</span>
+                  <span className="text-primary">{row.status}{row.entry ? ` · ${row.entry}` : ''}{row.exit ? `–${row.exit}` : ''}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </PageState>

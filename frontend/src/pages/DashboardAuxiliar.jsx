@@ -343,6 +343,13 @@ export default function DashboardAuxiliar() {
             </section>
 
             <section className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+              <h3 className="font-bold mb-3">Incidencias del día</h3>
+              {(data.incidents ?? []).length === 0 && <p className="text-outline">No hay códigos vencidos, reutilizados o inválidos hoy.</p>}
+              {(data.incidents ?? []).map((item) => (
+                <p key={item.id} className="py-2 border-t border-surface-container font-body-sm">{item.time} · {item.result} · {item.student || 'sin estudiante'} · {item.detail}</p>
+              ))}
+            </section>
+            <section className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
               <h3 className="font-bold mb-3">Justificaciones</h3>
               {justifications.length === 0 && <p className="text-outline">No hay solicitudes.</p>}
               {justifications.map((item) => (

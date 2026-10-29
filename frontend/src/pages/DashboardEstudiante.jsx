@@ -201,7 +201,7 @@ export default function DashboardEstudiante() {
                     </div>
                   </div>
                   <p className="font-body-sm text-on-surface-variant text-center mb-space-md">
-                    El auxiliar valida este código en el servidor. El dibujo no es un QR de cámara.
+                    El auxiliar valida este código en el servidor. Caduca en {timeLeft}s y solo puede usarse una vez.
                   </p>
                   <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value">{data.token.value}</p>
                   <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
@@ -302,6 +302,7 @@ export default function DashboardEstudiante() {
                         </div>
                         <h3 className="font-headline-md text-on-surface font-bold mt-0.5">
                           {today.time ? `Ingreso marcado: ${today.time}` : 'Todavía no hay marcación de ingreso'}
+                          {today.exit ? ` · Salida: ${today.exit}` : ''}
                         </h3>
                         <p className="font-body-sm text-on-surface-variant mt-1">
                           {today.gate ? <>Verificado en <strong>{today.gate}</strong> mediante {today.method}.</> : data.shift.detail}
@@ -370,6 +371,30 @@ export default function DashboardEstudiante() {
                   </div>
                 </div>
 
+                <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm overflow-x-auto">
+                  <h3 className="font-title-lg font-bold text-on-surface mb-3">Historial</h3>
+                  {(data.attendance ?? []).length === 0 && <p className="text-outline">No hay marcaciones guardadas.</p>}
+                  {(data.attendance ?? []).length > 0 && (
+                    <table className="w-full text-left text-body-sm">
+                      <thead>
+                        <tr className="text-outline uppercase font-label-sm">
+                          {['Fecha', 'Estado', 'Ingreso', 'Salida', 'Origen'].map((label) => <th key={label} className="px-2 py-2">{label}</th>)}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.attendance.map((row) => (
+                          <tr key={row.id} className="border-t border-surface-container">
+                            <td className="px-2 py-2">{row.iso}</td>
+                            <td className="px-2 py-2">{row.status}</td>
+                            <td className="px-2 py-2">{row.time}</td>
+                            <td className="px-2 py-2">{row.exit}</td>
+                            <td className="px-2 py-2">{row.sub}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
                 <div className="relative rounded-2xl overflow-hidden shadow-sm h-36 bg-surface-container">
                   <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${IMAGES.campus}')` }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/40 to-transparent flex items-end p-space-md text-surface-bright">
@@ -393,6 +418,7 @@ export default function DashboardEstudiante() {
             <button type="button" onClick={() => setWeeklyOpen(false)}><Icon name="close" /></button>
           </div>
           <div className="grid gap-3">
+            {(data?.weekly ?? []).length === 0 && <p className="text-outline">No hay un horario semanal cargado. La jornada usa la hora de ingreso y de salida de la configuración.</p>}
             {data?.weekly?.map((day) => (
               <div key={day.day} className="bg-surface-container-low rounded-xl p-3">
                 <p className="font-semibold text-primary">{day.day}</p>

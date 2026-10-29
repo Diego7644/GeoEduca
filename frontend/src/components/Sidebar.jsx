@@ -15,7 +15,11 @@ const IDLE = 'text-on-surface-variant hover:bg-surface-container-high hover:text
  */
 export default function Sidebar({ open = false, onClose = () => {} }) {
   const { user } = useAuth();
-  const items = NAV_ITEMS.filter((item) => !item.roles || item.roles.includes(user?.role));
+  const items = NAV_ITEMS.filter((item) => {
+    if (item.roles && !item.roles.includes(user?.role)) return false;
+    if (item.staffKinds && !item.staffKinds.includes(user?.staffKind)) return false;
+    return true;
+  });
 
   return (
     <>

@@ -134,7 +134,6 @@ export default function DashboardPadre() {
         event_date: eventDate.value,
         event_time: eventTime || undefined,
         reason: reason.value.trim(),
-        attachment_name: attachmentName || undefined,
       });
       setData(result.panel);
       setJustifyOpen(false);
@@ -446,20 +445,7 @@ export default function DashboardPadre() {
                 <textarea rows={3} value={reason.value} onChange={reason.onChange} onBlur={reason.onBlur} className="mt-1 w-full bg-surface-container-low p-2.5 rounded-lg" placeholder="Describa el motivo con al menos 10 caracteres" />
                 <FieldError message={reason.error} />
               </label>
-              <label className="block border-2 border-dashed border-outline-variant p-4 rounded-xl text-center cursor-pointer">
-                <input type="file" accept=".jpg,.jpeg,.png,.pdf" className="sr-only" onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (!file) return;
-                  if (file.size > 5 * 1024 * 1024) {
-                    showToast('El archivo supera 5 MB');
-                    event.target.value = '';
-                    return;
-                  }
-                  setAttachmentName(file.name);
-                }} />
-                <Icon name="cloud_upload" className="text-primary text-[28px]" />
-                <p className="font-body-sm mt-1">{attachmentName || 'Adjuntar JPG, PNG o PDF (máx. 5 MB)'}</p>
-              </label>
+              <p className="font-body-sm text-outline">La solicitud no admite archivos. El motivo y la fecha quedan registrados.</p>
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={() => setJustifyOpen(false)} className="px-4 py-2 rounded-lg bg-surface-container">Cancelar</button>
                 <button type="submit" disabled={saving || !eventDate.isValid || !reason.isValid} className="px-5 py-2 rounded-lg bg-primary text-on-primary disabled:opacity-50">{saving ? 'Enviando...' : 'Enviar a dirección'}</button>

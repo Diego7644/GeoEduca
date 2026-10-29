@@ -44,4 +44,6 @@ export const reviewJustification = (id, decision) => request('post', `/asistenci
 export const createStudent = (payload) => request('post', '/admin/estudiantes', payload);
 export const createAccount = (payload) => request('post', '/admin/cuentas', payload);
 export const resetPassword = (userId, password) => request('post', `/admin/usuarios/${userId}/clave`, { password });
+export const renameAccount = (userId, name) => request('put', `/admin/usuarios/${userId}`, { name });
+export const getActividad = () => request('get', '/admin/actividad');
 export const unlinkGuardian = (payload) => request('delete', '/admin/apoderados', payload);
