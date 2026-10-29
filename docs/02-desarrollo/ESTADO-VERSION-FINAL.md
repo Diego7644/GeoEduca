@@ -43,17 +43,16 @@ La identidad es el par DNI y rol. El id del usuario no es el id del estudiante. 
 
 ## Pruebas
 
-En esta rama, el 2026-10-28:
+En esta rama, el 2026-10-29:
 
-- PHPUnit: 179 pruebas, 668 aserciones, OK.
+- PHPUnit: 183 pruebas, 707 aserciones, OK.
 - Vitest: 13 pruebas, OK.
 - `npm run build`: OK. El paquete JS supera 500 kB por las librerías de QR.
 
+La puerta, la salida, el cierre y la configuración exigen auxiliar o administración en la ruta. El aula exige docente. La revisión de justificaciones exige personal o administración, y el servicio sigue comprobando la tutoría.
+
 ## Pendiente
 
-- La cámara no se pudo leer en el navegador de prueba.
-- Editar estudiante, desvincular, renovar QR, restablecer clave y guardar un horario nuevo no se pulsaron de punta a punta en esta pasada.
-- El docente no se recorrió en el navegador.
-- El cierre de jornada no se lanzó sobre la matrícula real para no crear ausencias masivas. PHPUnit cubre el rechazo antes de la hora de salida.
-- El adjunto de una justificación guarda el nombre del archivo, no su contenido.
-- `npm audit` reportó avisos en dependencias del frontend. No se aplicó una actualización forzada.
+- La cámara abre el video cuando el navegador lo permite. En la prueba no se decodificó un QR desde ese video; el código manual sí registró la entrada.
+- El cierre de jornada se probó antes de la hora de salida y respondió que aún no corresponde. No se generaron ausencias masivas.
+- `npm audit` deja avisos en Vite, Vitest y React Router. Corregirlos exige versiones mayores. No se forzó esa actualización.
