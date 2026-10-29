@@ -157,6 +157,25 @@ class AdminController extends Controller
         return response()->json(['message' => 'Contraseña actualizada. Las sesiones anteriores quedaron cerradas.']);
     }
 
+    public function editarCuenta(Request $request, User $user): JsonResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'min:3', 'max:120'],
+        ]);
+        $user->forceFill(['name' => $data['name']])->save();
+        if ($user->staffProfile) {
+            $user->staffProfile->forceFill(['name' => $data['name']])->save();
+        }
+        AuditLog::query()->create([
+            'actor_user_id' => $request->user()->id,
+            'action' => 'account_renamed',
+            'reason' => 'Nombre actualizado',
+            'metadata' => ['user_id' => $user->id],
+        ]);
+
+        return response()->json(['message' => 'Nombre actualizado.', 'directory' => $this->portal->directorioAdmin()]);
+    }
+
     public function desvincular(Request $request): JsonResponse
     {
         $data = $request->validate([

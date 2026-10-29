@@ -121,16 +121,18 @@ class AttendancePortal
             throw new \RuntimeException('El código QR no es válido.');
         }
 
-        $record = DB::transaction(function () use ($token, $actor) {
+        $failure = null;
+        try {
+            $record = DB::transaction(function () use ($token, $actor, &$failure) {
             $locked = QrToken::query()->whereKey($token->id)->lockForUpdate()->first();
             $student = Student::query()->find($locked->student_id);
             if ($locked->consumed_at !== null) {
-                $this->attempt($student, $actor, AttendanceAttempt::KIND_QR, 'reused', 'código ya usado');
-                throw new \RuntimeException('Ese código QR ya fue utilizado.');
+                $failure = [$student, 'reused', 'código ya usado', 'Ese código QR ya fue utilizado.'];
+                throw new \RuntimeException($failure[3]);
             }
             if ($locked->expires_at->isPast()) {
-                $this->attempt($student, $actor, AttendanceAttempt::KIND_QR, 'expired', 'código vencido');
-                throw new \RuntimeException('Ese código QR ya expiró.');
+                $failure = [$student, 'expired', 'código vencido', 'Ese código QR ya expiró.'];
+                throw new \RuntimeException($failure[3]);
             }
             $existing = AttendanceRecord::query()
                 ->where('student_id', $student->id)
@@ -144,7 +146,13 @@ class AttendancePortal
             $this->attempt($student, $actor, AttendanceAttempt::KIND_QR, 'accepted', 'ingreso');
 
             return $created;
-        });
+            });
+        } catch (\RuntimeException $exception) {
+            if ($failure) {
+                $this->attempt($failure[0], $actor, AttendanceAttempt::KIND_QR, $failure[1], $failure[2]);
+            }
+            throw $exception;
+        }
 
         return [
             'message' => 'Ingreso registrado con QR.',
@@ -191,7 +199,7 @@ class AttendancePortal
             'event_date' => $data['event_date'],
             'event_time' => $data['event_time'] ?? null,
             'reason' => $data['reason'],
-            'attachment_name' => $data['attachment_name'] ?? null,
+            'attachment_name' => null,
             'status' => 'submitted',
         ]);
         $this->notifyStaff('Nueva justificación', $student->name.': '.$data['reason'], 'justification:'.$item->id);
@@ -242,6 +250,13 @@ class AttendancePortal
                 'dni' => $student->dni,
             ])->all(),
             'reader' => 'No hay lectores NFC ni molinetes conectados. El ingreso se registra con QR o con el DNI en este panel.',
+            'incidents' => AttendanceAttempt::query()->with('student')->whereDate('created_at', $today)->whereIn('result', ['invalid', 'expired', 'reused'])->latest('id')->limit(8)->get()->map(fn (AttendanceAttempt $attempt) => [
+                'id' => $attempt->id,
+                'result' => $attempt->result,
+                'student' => $attempt->student?->name,
+                'detail' => $attempt->detail,
+                'time' => optional($attempt->created_at)->timezone('America/Lima')->format('H:i:s'),
+            ])->all(),
         ];
     }
 
@@ -399,6 +414,14 @@ class AttendancePortal
                 ];
             })->all(),
             'justifications' => $this->justificaciones($user)['justifications'],
+            'history' => AttendanceRecord::query()->with('student')->whereIn('student_id', $students->pluck('id'))->orderByDesc('attended_on')->limit(30)->get()->map(fn (AttendanceRecord $record) => [
+                'id' => $record->id,
+                'date' => $record->attended_on->format('Y-m-d'),
+                'student' => $record->student->name,
+                'status' => $record->status,
+                'entry' => $record->entry_time ? substr((string) $record->entry_time, 0, 5) : null,
+                'exit' => $record->exit_time ? substr((string) $record->exit_time, 0, 5) : null,
+            ])->all(),
         ];
     }
 
@@ -707,7 +730,7 @@ class AttendancePortal
                 'title' => 'Solicitud enviada',
                 'time' => optional($item->created_at)->timezone('America/Lima')->format('H:i'),
                 'text' => $item->reason,
-                'meta' => $item->attachment_name ?: 'Sin archivo adjunto',
+                'meta' => $item->status,
                 'rowId' => null,
             ])->all();
 
@@ -780,13 +803,18 @@ class AttendancePortal
         $label = [
             AttendanceRecord::STATUS_ON_TIME => 'A Tiempo',
             AttendanceRecord::STATUS_LATE => 'Tardanza',
-            AttendanceRecord::STATUS_ABSENT => 'Sin registro',
+            AttendanceRecord::STATUS_ABSENT => 'Ausencia',
         ][$record->status] ?? 'Registro';
 
         return [
-            'status' => $record->status === AttendanceRecord::STATUS_ON_TIME ? 'puntual' : 'tardanza',
+            'status' => [
+                AttendanceRecord::STATUS_ON_TIME => 'puntual',
+                AttendanceRecord::STATUS_LATE => 'tardanza',
+                AttendanceRecord::STATUS_ABSENT => 'ausencia',
+            ][$record->status] ?? 'registro',
             'statusLabel' => $label,
             'time' => $record->entry_time ? substr((string) $record->entry_time, 0, 5) : null,
+            'exit' => $record->exit_time ? substr((string) $record->exit_time, 0, 5) : null,
             'gate' => $record->gate,
             'method' => $record->method,
             'notified' => true,

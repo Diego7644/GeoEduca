@@ -77,6 +77,7 @@ final class AsistenciaRealTest extends TestCase
         $this->withToken($staff)->postJson('/api/asistencia/qr/validar', ['value' => $qr])
             ->assertStatus(422)
             ->assertJsonPath('message', 'Ese código QR ya fue utilizado.');
+        $this->assertSame(1, \App\Models\AttendanceAttempt::query()->where('result', 'reused')->count());
 
         $this->assertSame(1, AttendanceRecord::query()->count());
     }

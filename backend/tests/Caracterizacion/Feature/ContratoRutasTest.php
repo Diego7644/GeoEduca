@@ -71,6 +71,7 @@ final class ContratoRutasTest extends TestCase
             'PUT api/admin/estudiantes/{student}',
             'POST api/admin/cuentas',
             'POST api/admin/usuarios/{user}/clave',
+            'PUT api/admin/usuarios/{user}',
             'DELETE api/admin/apoderados',
             'GET api/asistencia/justificaciones',
             'POST api/asistencia/justificaciones/{id}/revisar',

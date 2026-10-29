@@ -45,22 +45,36 @@ Route::middleware('auth:sanctum')->prefix('asistencia')->group(function () {
         Route::post('/justificacion', [AsistenciaController::class, 'justificar']);
     });
 
-    Route::middleware('role:staff')->group(function () {
+    Route::middleware(['role:staff', 'staff.kind:auxiliar'])->group(function () {
         Route::get('/auxiliar/casos', [AsistenciaController::class, 'casosAuxiliar']);
         Route::post('/auxiliar/aprobar', [AsistenciaController::class, 'aprobarIngreso']);
         Route::post('/qr/validar', [AsistenciaController::class, 'validarQr']);
-        Route::get('/docente', [AsistenciaController::class, 'docente']);
-        Route::put('/configuracion', [AsistenciaController::class, 'actualizarConfiguracion']);
     });
 
-    Route::get('/reportes', [AsistenciaController::class, 'reportes']);
-    Route::get('/configuracion', [AsistenciaController::class, 'configuracion']);
-    Route::get('/justificaciones', [AsistenciaController::class, 'justificaciones']);
-    Route::post('/justificaciones/{id}/revisar', [AsistenciaController::class, 'revisarJustificacion']);
-    Route::post('/salida', [AsistenciaController::class, 'salida']);
-    Route::post('/jornada/cerrar', [AsistenciaController::class, 'cerrarJornada']);
-    Route::get('/notificaciones', [AsistenciaController::class, 'notificaciones']);
-    Route::post('/notificaciones/leidas', [AsistenciaController::class, 'leerNotificaciones']);
+    Route::middleware(['role:staff', 'staff.kind:docente'])->group(function () {
+        Route::get('/docente', [AsistenciaController::class, 'docente']);
+    });
+
+    Route::middleware('staff.kind:auxiliar,admin')->group(function () {
+        Route::put('/configuracion', [AsistenciaController::class, 'actualizarConfiguracion']);
+        Route::post('/salida', [AsistenciaController::class, 'salida']);
+        Route::post('/jornada/cerrar', [AsistenciaController::class, 'cerrarJornada']);
+    });
+
+    Route::middleware('role:student,parent,staff,admin')->group(function () {
+        Route::get('/reportes', [AsistenciaController::class, 'reportes']);
+        Route::get('/configuracion', [AsistenciaController::class, 'configuracion']);
+        Route::get('/notificaciones', [AsistenciaController::class, 'notificaciones']);
+        Route::post('/notificaciones/leidas', [AsistenciaController::class, 'leerNotificaciones']);
+    });
+
+    Route::middleware('role:parent,staff,admin')->group(function () {
+        Route::get('/justificaciones', [AsistenciaController::class, 'justificaciones']);
+    });
+
+    Route::middleware('role:staff,admin')->group(function () {
+        Route::post('/justificaciones/{id}/revisar', [AsistenciaController::class, 'revisarJustificacion']);
+    });
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
@@ -69,6 +83,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::put('/estudiantes/{student}', [\App\Http\Controllers\AdminController::class, 'editarEstudiante']);
     Route::post('/cuentas', [\App\Http\Controllers\AdminController::class, 'crearCuenta']);
     Route::post('/usuarios/{user}/clave', [\App\Http\Controllers\AdminController::class, 'clave']);
+    Route::put('/usuarios/{user}', [\App\Http\Controllers\AdminController::class, 'editarCuenta']);
     Route::post('/apoderados', [\App\Http\Controllers\AdminController::class, 'vincular']);
     Route::delete('/apoderados', [\App\Http\Controllers\AdminController::class, 'desvincular']);
     Route::get('/actividad', [\App\Http\Controllers\AdminController::class, 'actividad']);
