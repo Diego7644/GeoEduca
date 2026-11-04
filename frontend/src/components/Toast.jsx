@@ -23,6 +23,8 @@ export function useToast(duration = 3500) {
 export default function Toast({ toast }) {
   return (
     <div
+      role="status"
+      aria-live="polite"
       className={`fixed bottom-6 right-6 z-[60] pointer-events-none transition-all duration-300 transform ${
         toast.visible ? 'translate-y-0 opacity-100' : 'translate-y-24 opacity-0'
       }`}

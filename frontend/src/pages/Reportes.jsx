@@ -98,7 +98,7 @@ export default function Reportes() {
                     <thead>
                       <tr className="bg-surface-container-low text-outline font-label-sm uppercase">
                         {data.columns.map((column) => (
-                          <th key={column} className="px-4 py-3">{column}</th>
+                          <th key={column} scope="col" className="px-4 py-3">{column}</th>
                         ))}
                       </tr>
                     </thead>

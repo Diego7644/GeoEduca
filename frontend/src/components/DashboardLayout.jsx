@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }) {
       <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
       <div className="md:pl-64">
         <Header onMenuClick={() => setMenuOpen(true)} />
-        <main className="relative w-full pt-16 bg-surface min-h-screen px-space-md lg:px-gutter py-space-lg">
+        <main id="contenido" className="relative w-full pt-16 bg-surface min-h-screen px-space-md lg:px-gutter py-space-lg">
           {children}
         </main>
       </div>

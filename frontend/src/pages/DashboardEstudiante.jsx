@@ -203,7 +203,7 @@ export default function DashboardEstudiante() {
                   <p className="font-body-sm text-on-surface-variant text-center mb-space-md">
                     El auxiliar valida este código en el servidor. Caduca en {timeLeft}s y solo puede usarse una vez.
                   </p>
-                  <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value">{data.token.value}</p>
+                  <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value" data-geo-private="true">{data.token.value}</p>
                   <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
                     {qrUrl ? (
                       <img src={qrUrl} alt="Código QR de asistencia" className={`w-56 h-56 sm:w-64 sm:h-64 ${flash ? 'opacity-40' : ''}`} />
@@ -378,7 +378,7 @@ export default function DashboardEstudiante() {
                     <table className="w-full text-left text-body-sm">
                       <thead>
                         <tr className="text-outline uppercase font-label-sm">
-                          {['Fecha', 'Estado', 'Ingreso', 'Salida', 'Origen'].map((label) => <th key={label} className="px-2 py-2">{label}</th>)}
+                          {['Fecha', 'Estado', 'Ingreso', 'Salida', 'Origen'].map((label) => <th key={label} scope="col" className="px-2 py-2">{label}</th>)}
                         </tr>
                       </thead>
                       <tbody>
