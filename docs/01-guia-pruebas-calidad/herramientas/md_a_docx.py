@@ -8,6 +8,7 @@ viñetas y numeradas, citas (>), bloques de código (```), tablas con tuberías,
 formato en línea (**negrita**, *cursiva*, `código`, [texto](enlace)). No instala ni requiere nada más.
 Las imágenes se resuelven respecto de la carpeta del archivo de entrada.
 """
+import os
 import re
 import struct
 import sys
@@ -157,7 +158,13 @@ def dividir_fila(linea):
 
 
 def es_separador(linea):
-    return bool(re.match(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$", linea))
+    s = linea.strip()
+    if s.startswith("|"):
+        s = s[1:]
+    if s.endswith("|"):
+        s = s[:-1]
+    celdas = s.split("|")
+    return bool(celdas) and all(re.fullmatch(r":?-{3,}:?", c.strip()) for c in celdas)
 
 
 def tabla(doc, filas, alineaciones):
@@ -234,13 +241,13 @@ def convertir(doc, lineas):
             i += 1
             continue
         # encabezados
-        m = re.match(r"^(#{1,3})\s+(.*)$", s)
+        m = re.match(r"^(#{1,3})\s(.*)$", s)
         if m:
             nivel = len(m.group(1))
             extra = '<w:pageBreakBefore w:val="0"/>' if (nivel == 1 and primer_h1) else ""
             if nivel == 1:
                 primer_h1 = False
-            doc.cuerpo.append(parrafo(inline(doc, m.group(2)), f"Heading{nivel}", extra))
+            doc.cuerpo.append(parrafo(inline(doc, m.group(2).strip()), f"Heading{nivel}", extra))
             i += 1
             continue
         # tabla
@@ -272,11 +279,11 @@ def convertir(doc, lineas):
             doc.cuerpo.append(parrafo(inline(doc, texto, italic=False), extra_ppr='<w:pBdr><w:left w:val="single" w:sz="18" w:space="8" w:color="C0504D"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="FBEFEE"/><w:spacing w:before="60" w:after="120"/><w:ind w:left="240"/>'))
             continue
         # listas
-        m = re.match(r"^(\s*)([-*]|\d+\.)\s+(.*)$", linea)
+        m = re.match(r"^(\s*)([-*]|\d+\.)\s(.*)$", linea)
         if m:
             sangria = len(m.group(1)) // 2
             marca = "•" if m.group(2) in "-*" else m.group(2)
-            texto = m.group(3)
+            texto = m.group(3).lstrip()
             i += 1
             while i < n and lineas[i].startswith("  ") and lineas[i].strip() and not re.match(r"^\s*([-*]|\d+\.)\s+", lineas[i]) and not lineas[i].strip().startswith("|"):
                 texto += " " + lineas[i].strip()
@@ -314,6 +321,15 @@ ESTILOS = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 </w:styles>"""
 
 
+def ruta_segura(nombre):
+    """Resuelve la ruta y rechaza cualquier archivo fuera de la carpeta de trabajo (evita path traversal)."""
+    base = os.path.realpath(os.getcwd())
+    ruta = os.path.realpath(os.path.join(base, nombre))
+    if not ruta.startswith(base + os.sep):
+        raise ValueError(f"Ruta fuera de la carpeta de trabajo: {nombre}")
+    return ruta
+
+
 def construir(md: Path, salida: Path):
     doc = Documento(md.parent)
     lineas = md.read_text(encoding="utf-8").splitlines()
@@ -347,7 +363,7 @@ def construir(md: Path, salida: Path):
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         sys.exit(__doc__)
-    d = construir(Path(sys.argv[1]), Path(sys.argv[2]))
+    d = construir(Path(ruta_segura(sys.argv[1])), Path(ruta_segura(sys.argv[2])))
     print(f"DOCX generado: {sys.argv[2]} | imágenes incrustadas: {len(d.imagenes)} | imágenes no encontradas: {len(d.faltantes)}")
     for f in d.faltantes:
         print("  FALTA:", f)
