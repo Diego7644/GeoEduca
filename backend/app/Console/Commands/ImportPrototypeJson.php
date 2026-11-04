@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\SchoolSetting;
+use App\Support\InstitutionIdentity;
 use App\Models\StaffMember;
 use App\Models\Student;
 use App\Models\User;
@@ -77,18 +78,19 @@ class ImportPrototypeJson extends Command
 
     private function settings(array $config, array &$report, bool $dry): void
     {
+        $foreign = InstitutionIdentity::isForeignDemo($config['school'] ?? '', $config['address'] ?? '');
         $values = [
-            'school' => $config['school'] ?? 'Colegio San Gabriel',
-            'campus' => $config['campus'] ?? 'Sede Central',
-            'address' => $config['address'] ?? 'Av. Las Palmeras 450, Urb. Monterrico',
+            'school' => $foreign ? InstitutionIdentity::NAME : ($config['school'] ?? InstitutionIdentity::NAME),
+            'campus' => $foreign ? InstitutionIdentity::CAMPUS : ($config['campus'] ?? InstitutionIdentity::CAMPUS),
+            'address' => $foreign ? InstitutionIdentity::ADDRESS : ($config['address'] ?? InstitutionIdentity::ADDRESS),
             'year' => (string) ($config['year'] ?? '2026'),
             'entry_limit' => substr((string) ($config['entry_limit'] ?? '08:00'), 0, 5),
             'exit_time' => substr((string) ($config['exit_time'] ?? '14:30'), 0, 5),
-            'geofence_m' => (int) ($config['geofence_m'] ?? 50),
+            'geofence_m' => (int) ($config['geofence_m'] ?? 100),
             'promotion_min' => (int) ($config['promotion_min'] ?? 85),
             'tolerance_min' => (int) ($config['tolerance_min'] ?? 10),
-            'lat' => $config['lat'] ?? -12.0862,
-            'lng' => $config['lng'] ?? -77.0543,
+            'lat' => $foreign ? null : ($config['lat'] ?? null),
+            'lng' => $foreign ? null : ($config['lng'] ?? null),
         ];
         $exists = SchoolSetting::query()->exists();
         $report[$exists ? 'updated' : 'created'][] = 'school_settings';

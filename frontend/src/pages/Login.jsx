@@ -92,7 +92,7 @@ export default function Login() {
               </div>
               <h1 className="font-headline-lg text-headline-lg text-on-surface">Iniciar Sesión en GEOEDUCA</h1>
               <p className="font-body-md text-body-md text-on-surface-variant mt-1.5 max-w-md">
-                Plataforma oficial de control biométrico y asistencia escolar en tiempo real.
+                Control de asistencia de la Institución Educativa Mariscal Castilla, El Tambo, Huancayo.
               </p>
             </div>
 

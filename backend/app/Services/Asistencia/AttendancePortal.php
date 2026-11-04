@@ -12,6 +12,7 @@ use App\Models\SchoolSetting;
 use App\Models\StaffMember;
 use App\Models\Student;
 use App\Models\User;
+use App\Support\InstitutionIdentity;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -44,13 +45,15 @@ class AttendancePortal
             ],
             'token' => $token,
             'gps' => [
+                'available' => $settings->lat !== null && $settings->lng !== null,
                 'campus' => $settings->school.' • '.$settings->campus,
                 'gate' => 'Referencia institucional',
-                'lat' => (float) $settings->lat,
-                'lng' => (float) $settings->lng,
+                'lat' => $settings->lat,
+                'lng' => $settings->lng,
                 'radius' => (int) $settings->geofence_m,
                 'address' => $settings->address,
             ],
+            'institution' => InstitutionIdentity::card(),
             'kpis' => $this->kpis($student, $settings),
             'today' => $today,
             'scheduleTitle' => 'Sin horario institucional cargado',
@@ -83,6 +86,15 @@ class AttendancePortal
     {
         $student = $this->ownStudent($user);
         $settings = $this->settings();
+        if ($settings->lat === null || $settings->lng === null) {
+            return [
+                'result' => 'unconfigured',
+                'distance_m' => null,
+                'radius_m' => (int) $settings->geofence_m,
+                'marked_attendance' => false,
+                'message' => 'No hay una coordenada oficial del local. No se registró asistencia.',
+            ];
+        }
         $distance = $this->meters($lat, $lng, (float) $settings->lat, (float) $settings->lng);
         $uncertain = $accuracy === null || $accuracy > (int) $settings->geofence_m;
         $inside = ! $uncertain && $distance <= (int) $settings->geofence_m;
@@ -464,6 +476,7 @@ class AttendancePortal
         return [
             'title' => 'Asistencia registrada',
             'subtitle' => $user->name,
+            'institution' => InstitutionIdentity::card(),
             'range_label' => trim(($filters['from'] ?? '').' '.($filters['to'] ?? '')) !== ''
                 ? trim(($filters['from'] ?? '…').' a '.($filters['to'] ?? '…'))
                 : 'Registros persistidos',
@@ -480,6 +493,7 @@ class AttendancePortal
     {
         return [
             'can_edit' => $this->canEditSettings($user),
+            'institution' => InstitutionIdentity::card(),
             'config' => $this->settings()->only([
                 'school', 'campus', 'address', 'year', 'entry_limit', 'exit_time',
                 'geofence_m', 'promotion_min', 'tolerance_min', 'lat', 'lng',
@@ -905,19 +919,7 @@ class AttendancePortal
             return $existing;
         }
 
-        return SchoolSetting::query()->create([
-            'school' => 'Colegio San Gabriel',
-            'campus' => 'Sede Central',
-            'address' => 'Av. Las Palmeras 450, Urb. Monterrico',
-            'year' => '2026',
-            'entry_limit' => '08:00',
-            'exit_time' => '14:30',
-            'geofence_m' => 50,
-            'promotion_min' => 85,
-            'tolerance_min' => 10,
-            'lat' => -12.0862,
-            'lng' => -77.0543,
-        ]);
+        return SchoolSetting::query()->create(InstitutionIdentity::settingsDefaults());
     }
 
     private function meters(float $lat1, float $lng1, float $lat2, float $lng2): float

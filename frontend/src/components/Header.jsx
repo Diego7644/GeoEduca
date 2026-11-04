@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon';
 import NotificationBell from './NotificationBell';
@@ -5,10 +6,15 @@ import SafeImage from './SafeImage';
 import { useAuth } from '../context/AuthContext';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { IMAGES } from '../config/images';
+import useApiResource from '../hooks/useApiResource';
+import { getConfiguracion } from '../services/asistenciaService';
 
 export default function Header({ onMenuClick }) {
   const { user, logout } = useAuth();
   const { toggleTheme } = useAccessibility();
+  const loadInstitution = useCallback(() => getConfiguracion(), []);
+  const { data: institutionData } = useApiResource(loadInstitution);
+  const todayLabel = new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -43,14 +49,14 @@ export default function Header({ onMenuClick }) {
           <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary" />
         </span>
         <span className="font-label-md text-label-md text-on-secondary-container font-semibold">
-          Geo-Verificación Activa: Perímetro Escolar 50m (GPS OK)
+          {institutionData?.institution?.name || 'Institución educativa'}
         </span>
       </div>
 
       <div className="flex items-center gap-space-md">
         <div className="hidden lg:flex flex-col text-right">
-          <span className="font-label-md text-label-md font-semibold text-on-surface">Lunes, 24 Octubre 2025</span>
-          <span className="font-label-sm text-label-sm text-outline font-mono">07:42 AM (Sincronizado)</span>
+          <span className="font-label-md text-label-md font-semibold text-on-surface capitalize">{todayLabel}</span>
+          <span className="font-label-sm text-label-sm text-outline">Horario local del navegador</span>
         </div>
 
         <button type="button" onClick={toggleTheme} aria-label="Cambiar entre modo claro y oscuro" className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container">
