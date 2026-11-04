@@ -39,18 +39,9 @@ php artisan db:seed
 
 `db:seed` crea la fila de `school_settings`. Con `GEO_DEV_PASSWORD` siembra `10000001`–`10000003`. Con `GEO_SEED_PROTOTYPE=true` (solo `APP_ENV=local`) siembra hasheadas las cuentas históricas del prototipo para que el frontend de demostración pueda entrar. El autenticador nunca lee `DemoAccounts`.
 
-## Arranque del prototipo sin PostgreSQL
+## Si el login responde que no hay base de datos
 
-En `backend/.env` puede dejar:
-
-```
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
-```
-
-`php artisan serve` no consulta las tablas nuevas. El frontend no cambia.
-
-Si `.env` apunta a PostgreSQL y el contenedor está caído, el prototipo JSON sigue respondiendo: Laravel no abre conexión hasta la primera consulta Eloquent.
+`POST /api/auth/login` abre PostgreSQL en la primera consulta. Una clave vacía produce `fe_sendauth: no password supplied`. En Windows, el puerto 5432 puede pertenecer a otro PostgreSQL y Docker debe publicarse en `5433`. El archivo `.env` no se sube al repositorio: hay que definirlo en cada máquina. PHPUnit sigue usando SQLite en memoria y no necesita este contenedor.
 
 ## Pruebas
 

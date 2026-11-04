@@ -39,21 +39,44 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 
 Las cuentas locales salen de `db:seed` cuando `APP_ENV=local` y `GEO_SEED_PROTOTYPE=true`. La contraseña es `GEO_DEV_PASSWORD` en `backend/.env` y no se publica. La matriz está en [`docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md).
 
-## Instalación y ejecución
+## Instalación desde cero
 
-Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. El login real necesita las tablas (`php artisan migrate`). Sin PostgreSQL se puede usar SQLite solo para arrancar. Ver [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
+Hacen falta PHP 8.2+ con `pdo_pgsql`, Composer, Node.js 18+, npm y Docker. El inicio de sesión consulta PostgreSQL. Si `DB_PASSWORD` está vacío, `POST /api/auth/login` no puede autenticarse contra el servidor y responde error de conexión.
 
-### Backend
+1. Clonar el repositorio y entrar en la carpeta.
+2. Copiar la plantilla de entorno y generar la clave de Laravel:
 
 ```bash
 cd backend
 composer install
-cp .env.example .env          # en Windows: copy .env.example .env
+copy .env.example .env
 php artisan key:generate
-php artisan serve             # http://127.0.0.1:8000
 ```
 
-Para login y recuperación: defina `DB_PASSWORD` en `backend/.env`, levante Docker si usa PostgreSQL y ejecute `php artisan migrate` (instrucciones en la guía de PostgreSQL).
+En Linux o macOS, `cp .env.example .env`.
+
+3. Editar `backend/.env` (no se versiona). `DB_PASSWORD` y `GEO_DEV_PASSWORD` son obligatorias para el entorno local y no deben ser contraseñas reales. Si el puerto 5432 ya lo usa otro PostgreSQL, use `DB_PORT=5433`.
+4. Desde la raíz del repositorio:
+
+```bash
+docker compose --env-file backend/.env up -d
+cd backend
+php artisan migrate
+php artisan db:seed
+php artisan serve
+```
+
+`db:seed` crea la configuración del colegio. Con `GEO_DEV_PASSWORD` crea las cuentas ficticias `10000001` (estudiante), `10000002` (apoderado) y `10000003` (personal). No imprime la contraseña.
+
+5. En otra terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Vite reenvía `/api` a `http://127.0.0.1:8000`. El detalle de PostgreSQL está en [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
 
 ### Frontend
 
