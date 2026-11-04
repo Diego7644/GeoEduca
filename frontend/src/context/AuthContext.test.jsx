@@ -142,6 +142,48 @@ describe('sesión contra /api/auth/me', () => {
     expect(screen.queryByText('PANEL-AUXILIAR')).not.toBeInTheDocument();
   });
 
+  it('un 401 tardío de /me no borra el login que acaba de entrar', async () => {
+    localStorage.setItem('geoeduca_token', '1|viejo');
+    let rejectMe;
+    authService.currentUser.mockImplementation(() => new Promise((_resolve, reject) => {
+      rejectMe = reject;
+    }));
+    authService.login.mockResolvedValue({ token: '2|nuevo', user: student });
+    const user = userEvent.setup();
+
+    function Enter() {
+      const { login, user: session } = useAuth();
+      return (
+        <>
+          <button type="button" onClick={() => login({ identifier: '10000001', password: 'clave-valida', role: 'student' })}>entrar</button>
+          <p>{session?.name || 'sin-sesion'}</p>
+        </>
+      );
+    }
+
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <AuthProvider>
+          <Enter />
+          <Routes>
+            <Route path="/login" element={<p>LOGIN</p>} />
+            <Route element={<ProtectedRoute roles={['student']} />}>
+              <Route path="/estudiante" element={<p>PANEL-ESTUDIANTE</p>} />
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </MemoryRouter>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'entrar' }));
+    const late = new Error('No autenticado.');
+    late.status = 401;
+    rejectMe(late);
+
+    await waitFor(() => expect(screen.getByText('Estudiante de desarrollo')).toBeInTheDocument());
+    expect(localStorage.getItem('geoeduca_token')).toBe('2|nuevo');
+  });
+
   it('una respuesta tardía de /me no restaura la sesión cerrada', async () => {
     localStorage.setItem('geoeduca_token', '1|valido');
     let resolveMe;

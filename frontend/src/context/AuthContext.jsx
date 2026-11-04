@@ -58,12 +58,13 @@ export function AuthProvider({ children }) {
       })
       .catch((error) => {
         if (!active || epoch !== epochRef.current) return;
-        if (error?.status === 401) {
+        if (error?.status === 401 && localStorage.getItem(TOKEN_KEY) === token) {
           clearStoredSession();
           setUser(null);
           setStatus('anonymous');
           return;
         }
+        if (error?.status === 401) return;
         setUser(null);
         setStatus(error?.status === 0 ? 'offline' : 'error');
       });
@@ -74,6 +75,7 @@ export function AuthProvider({ children }) {
   }, [attempt]);
 
   const login = useCallback(async (credentials) => {
+    epochRef.current += 1;
     const epoch = epochRef.current;
     const { token, user: account } = await authService.login(credentials);
     if (epoch !== epochRef.current) return account;
