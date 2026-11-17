@@ -168,7 +168,11 @@ class AttendancePortal
 
         return [
             'message' => 'Ingreso registrado con QR.',
-            'student' => ['id' => $record->student_id, 'name' => $record->student->name],
+            'student' => [
+                'id' => $record->student_id,
+                'name' => $record->student->name,
+                'grade' => $record->student->grade_short,
+            ],
             'attendance' => $this->recordPayload($record),
             'panel' => $this->auxiliar($actor),
         ];
@@ -453,6 +457,16 @@ class AttendancePortal
                 $builder->where('name', 'like', '%'.$needle.'%')->orWhere('dni', 'like', '%'.$needle.'%');
             });
         }
+        if (! empty($filters['grade'])) {
+            $grade = mb_strtolower(str_replace(['%', '_'], ['\\%', '\\_'], $filters['grade']));
+            $query->whereHas('student', function ($builder) use ($grade) {
+                $builder->where(function ($inner) use ($grade) {
+                    foreach (['grade', 'grade_long', 'grade_short'] as $column) {
+                        $inner->orWhereRaw('lower('.$column.') like ?', ['%'.$grade.'%']);
+                    }
+                });
+            });
+        }
         if ($user->isStudent()) {
             $query->where('student_id', $this->ownStudent($user)->id);
         } elseif ($user->isParent()) {
@@ -467,6 +481,7 @@ class AttendancePortal
             $rows[] = [
                 $record->attended_on->format('Y-m-d'),
                 $record->student->name,
+                $record->student->grade_short,
                 $record->status,
                 $record->source,
                 (string) ($record->entry_time ?? ''),
@@ -484,7 +499,7 @@ class AttendancePortal
             'series_unit' => 'count',
             'kpis' => [],
             'series' => [],
-            'columns' => ['Fecha', 'Estudiante', 'Estado', 'Origen', 'Hora'],
+            'columns' => ['Fecha', 'Estudiante', 'Grado', 'Estado', 'Origen', 'Hora'],
             'rows' => $rows,
         ];
     }

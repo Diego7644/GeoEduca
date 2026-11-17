@@ -204,7 +204,7 @@ export default function DashboardAuxiliar() {
                   try {
                     const result = await validateQr(value);
                     setData(result.panel);
-                    showToast(result.message);
+                    showToast(result.message, [result.student?.name, result.student?.grade].filter(Boolean).join(' · '));
                   } catch (err) {
                     showToast(err.message);
                   }
@@ -218,7 +218,7 @@ export default function DashboardAuxiliar() {
                     const result = await validateQr(qrValue.trim());
                     setData(result.panel);
                     setQrValue('');
-                    showToast(result.message);
+                    showToast(result.message, [result.student?.name, result.student?.grade].filter(Boolean).join(' · '));
                   } catch (err) {
                     showToast(err.message);
                   }

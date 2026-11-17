@@ -115,6 +115,7 @@ class AsistenciaController extends Controller
             'from' => ['nullable', 'date_format:Y-m-d'],
             'to' => ['nullable', 'date_format:Y-m-d'],
             'student' => ['nullable', 'string', 'max:80'],
+            'grade' => ['nullable', 'string', 'max:40'],
         ]);
 
         return $this->run(fn (User $user) => $this->portal->reportes($user, $filters), $request);

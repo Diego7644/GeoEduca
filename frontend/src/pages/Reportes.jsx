@@ -7,8 +7,8 @@ import { getReportes } from '../services/asistenciaService';
 import { downloadCsv, escapeHtml, printHtml } from '../utils/attendance';
 
 export default function Reportes() {
-  const [draft, setDraft] = useState({ from: '', to: '', student: '' });
-  const [filters, setFilters] = useState({ from: '', to: '', student: '' });
+  const [draft, setDraft] = useState({ from: '', to: '', student: '', grade: '' });
+  const [filters, setFilters] = useState({ from: '', to: '', student: '', grade: '' });
   const load = useCallback(() => getReportes(filters), [filters]);
   const { data, error, loading, reload } = useApiResource(load);
   const { toast, showToast } = useToast();
@@ -59,6 +59,7 @@ export default function Reportes() {
               <input type="date" value={draft.from} onChange={(event) => setDraft((current) => ({ ...current, from: event.target.value }))} className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Desde" />
               <input type="date" value={draft.to} onChange={(event) => setDraft((current) => ({ ...current, to: event.target.value }))} className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Hasta" />
               <input value={draft.student} onChange={(event) => setDraft((current) => ({ ...current, student: event.target.value }))} placeholder="Estudiante o DNI" className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Estudiante" />
+              <input value={draft.grade} onChange={(event) => setDraft((current) => ({ ...current, grade: event.target.value }))} placeholder="Grado o sección" className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Grado o sección" />
               <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Filtrar</button>
             </form>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
