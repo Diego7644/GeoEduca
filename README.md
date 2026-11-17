@@ -37,11 +37,13 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 | Justificaciones | El apoderado envía; auxiliar, docente de tutoría o administración revisan |
 | GPS y NFC | El GPS no marca asistencia. No hay molinetes ni lector NFC |
 
-Las cuentas locales salen de `db:seed` cuando `APP_ENV=local` y `GEO_SEED_PROTOTYPE=true`. La contraseña es `GEO_DEV_PASSWORD` en `backend/.env` y no se publica. La matriz está en [`docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md).
+Las cuentas de demostración salen de `db:seed`. La contraseña de la plantilla está en [`docs/02-desarrollo/INSTALACION-DEMO.md`](docs/02-desarrollo/INSTALACION-DEMO.md). La matriz está en [`docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md).
 
 ## Instalación desde cero
 
-Hacen falta PHP 8.2+ con `pdo_pgsql`, Composer, Node.js 18+, npm y Docker. El inicio de sesión consulta PostgreSQL. Si `DB_PASSWORD` está vacío, `POST /api/auth/login` no puede autenticarse contra el servidor y responde error de conexión.
+Hacen falta PHP 8.2+ con `pdo_pgsql`, Composer, Node.js 18+, npm y Docker. En Windows también puede usarse [`scripts/instalar-demo.ps1`](scripts/instalar-demo.ps1), que copia `backend/.env.demo` solo si todavía no existe `backend/.env`.
+
+La plantilla de demostración crea administrador, auxiliar, padre/tutor y tres estudiantes sintéticos de 1.º A, 3.º B y 5.º C. La contraseña documentada es `prueba123`. El detalle está en [`docs/02-desarrollo/INSTALACION-DEMO.md`](docs/02-desarrollo/INSTALACION-DEMO.md).
 
 1. Clonar el repositorio y entrar en la carpeta.
 2. Copiar la plantilla de entorno y generar la clave de Laravel:
@@ -49,13 +51,13 @@ Hacen falta PHP 8.2+ con `pdo_pgsql`, Composer, Node.js 18+, npm y Docker. El in
 ```bash
 cd backend
 composer install
-copy .env.example .env
+copy .env.demo .env
 php artisan key:generate
 ```
 
-En Linux o macOS, `cp .env.example .env`.
+En Linux o macOS, `cp .env.demo .env`.
 
-3. Editar `backend/.env` (no se versiona). `DB_PASSWORD` y `GEO_DEV_PASSWORD` son obligatorias para el entorno local y no deben ser contraseñas reales. Si el puerto 5432 ya lo usa otro PostgreSQL, use `DB_PORT=5433`.
+3. No edite un `.env` personal encima de una base que ya tenga datos. `DB_PASSWORD` de la plantilla solo abre el PostgreSQL nuevo de Docker.
 4. Desde la raíz del repositorio:
 
 ```bash
@@ -66,7 +68,7 @@ php artisan db:seed
 php artisan serve
 ```
 
-`db:seed` crea la configuración del colegio. Con `GEO_DEV_PASSWORD` crea las cuentas ficticias `10000001` (estudiante), `10000002` (apoderado) y `10000003` (personal). No imprime la contraseña.
+`db:seed` crea la configuración de la I.E. Mariscal Castilla y las cuentas de la tabla de instalación. No imprime la contraseña y no borra asistencias ya guardadas.
 
 5. En otra terminal:
 

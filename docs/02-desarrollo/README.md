@@ -22,6 +22,7 @@ PostgreSQL es el almacén de asistencia. El JSON original permanece como respald
 | [`ACCESIBILIDAD.md`](ACCESIBILIDAD.md) | Temas, panel inclusivo y lo que falta para una auditoría WCAG |
 | [`INSTITUCION.md`](INSTITUCION.md) | Identidad de la I.E. Mariscal Castilla y datos aún no oficiales |
 | [`CAMARA-IOS.md`](CAMARA-IOS.md) | Cámara de Safari, Tailscale Serve y el primer escaneo con iPhone |
+| [`INSTALACION-DEMO.md`](INSTALACION-DEMO.md) | Instalación nueva, cuentas sintéticas y contraseña de demostración |
 | [`ESTADO-VERSION-FINAL.md`](ESTADO-VERSION-FINAL.md) | Cómo ejecutar la versión local y qué queda pendiente |
 | [`PROXIMAS-TAREAS.md`](PROXIMAS-TAREAS.md) | Siguiente etapa histórica: asistencia fuera del JSON |
 | [`RESULTADOS-PHPUNIT-F1.1.md`](RESULTADOS-PHPUNIT-F1.1.md) | PHPUnit de F1.1 |

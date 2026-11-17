@@ -22,13 +22,13 @@ class DevelopmentUserSeeder extends Seeder
             return;
         }
 
-        if (! app()->environment(['local', 'development'])) {
-            $this->command?->warn('DevelopmentUserSeeder solo corre en local/development.');
+        if (! app()->environment(['local', 'development', 'demo'])) {
+            $this->command?->warn('DevelopmentUserSeeder solo corre en local, development o demo.');
 
             return;
         }
 
-        $studentUser = User::query()->updateOrCreate(
+        $studentUser = User::query()->firstOrCreate(
             ['dni' => '10000001', 'role' => User::ROLE_STUDENT],
             [
                 'name' => 'Estudiante de desarrollo',
@@ -37,7 +37,7 @@ class DevelopmentUserSeeder extends Seeder
             ]
         );
 
-        $parent = User::query()->updateOrCreate(
+        $parent = User::query()->firstOrCreate(
             ['dni' => '10000002', 'role' => User::ROLE_PARENT],
             [
                 'name' => 'Tutor de desarrollo',
@@ -46,7 +46,7 @@ class DevelopmentUserSeeder extends Seeder
             ]
         );
 
-        $staffUser = User::query()->updateOrCreate(
+        $staffUser = User::query()->firstOrCreate(
             ['dni' => '10000003', 'role' => User::ROLE_STAFF],
             [
                 'name' => 'Auxiliar de desarrollo',
@@ -55,17 +55,26 @@ class DevelopmentUserSeeder extends Seeder
             ]
         );
 
-        $auxiliar = StaffMember::query()->updateOrCreate(
+        User::query()->firstOrCreate(
+            ['dni' => '10000007', 'role' => User::ROLE_ADMIN],
+            [
+                'name' => 'Admin de demostracion',
+                'role_label' => 'Administrador',
+                'password' => $password,
+            ]
+        );
+
+        $auxiliar = StaffMember::query()->firstOrCreate(
             ['user_id' => $staffUser->id],
             ['name' => $staffUser->name, 'kind' => StaffMember::KIND_AUXILIAR]
         );
 
-        $docente = StaffMember::query()->updateOrCreate(
+        $docente = StaffMember::query()->firstOrCreate(
             ['name' => 'Prof. R. Morales', 'kind' => StaffMember::KIND_DOCENTE],
             ['user_id' => null]
         );
 
-        $student = Student::query()->updateOrCreate(
+        $student = Student::query()->firstOrCreate(
             ['dni' => '10000001'],
             [
                 'user_id' => $studentUser->id,
@@ -81,7 +90,7 @@ class DevelopmentUserSeeder extends Seeder
             ]
         );
 
-        $sibling = Student::query()->updateOrCreate(
+        $sibling = Student::query()->firstOrCreate(
             ['dni' => '10000004'],
             [
                 'user_id' => null,
@@ -99,7 +108,7 @@ class DevelopmentUserSeeder extends Seeder
 
         $parent->wards()->syncWithoutDetaching([$student->id, $sibling->id]);
 
-        $this->command?->info('Usuarios de desarrollo: DNI 10000001 (student), 10000002 (parent), 10000003 (staff).');
+        $this->command?->info('Usuarios de desarrollo: DNI 10000001 (student), 10000002 (parent), 10000003 (staff), 10000007 (admin).');
         unset($auxiliar);
     }
 }
