@@ -6,13 +6,24 @@ Uso:  python redactar_png.py <entrada.png> <salida.png> x1,y1,x2,y2 [x1,y1,x2,y2
 Solo usa la biblioteca estandar. Lee PNG de 8 bits (RGB o RGBA, sin entrelazado), aplica las barras
 sobre los pixeles, y vuelve a escribir un PNG limpio (sin bloques de metadatos). La entrada no se modifica.
 """
+import os
 import struct
 import sys
 import zlib
 
 
+def ruta_segura(nombre):
+    """Resuelve la ruta y rechaza cualquier archivo fuera de la carpeta de trabajo (evita path traversal)."""
+    base = os.path.realpath(os.getcwd())
+    ruta = os.path.realpath(os.path.join(base, nombre))
+    if not ruta.startswith(base + os.sep):
+        raise ValueError(f"Ruta fuera de la carpeta de trabajo: {nombre}")
+    return ruta
+
+
 def leer_png(ruta):
-    datos = open(ruta, "rb").read()
+    with open(ruta, "rb") as archivo:
+        datos = archivo.read()
     if datos[:8] != b"\x89PNG\r\n\x1a\n":
         raise ValueError("No es un PNG")
     pos, idat, ihdr = 8, b"", None
@@ -72,13 +83,14 @@ def escribir_png(ruta, ancho, alto, color, filas):
     salida += bloque(b"IHDR", struct.pack(">IIBBBBB", ancho, alto, 8, color, 0, 0, 0))
     salida += bloque(b"IDAT", zlib.compress(crudo, 9))
     salida += bloque(b"IEND", b"")
-    open(ruta, "wb").write(salida)
+    with open(ruta, "wb") as archivo:
+        archivo.write(salida)
 
 
 def main():
     if len(sys.argv) < 4:
         sys.exit(__doc__)
-    entrada, salida = sys.argv[1], sys.argv[2]
+    entrada, salida = ruta_segura(sys.argv[1]), ruta_segura(sys.argv[2])
     rects = [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]]
     ancho, alto, canales, color, filas = leer_png(entrada)
     tapados = 0

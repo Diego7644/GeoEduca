@@ -30,7 +30,14 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
 
   return (
     <>
-      {open && <div className="fixed inset-0 z-40 bg-inverse-surface/40 md:hidden" onClick={onClose} />}
+      {open && (
+        <button
+          type="button"
+          aria-label="Cerrar menú"
+          className="fixed inset-0 z-40 bg-inverse-surface/40 md:hidden cursor-default"
+          onClick={onClose}
+        />
+      )}
 
       <aside
         className={`fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between transition-transform duration-200 md:translate-x-0 ${
