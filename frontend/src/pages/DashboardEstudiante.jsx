@@ -207,7 +207,7 @@ export default function DashboardEstudiante() {
                   <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value" data-geo-private="true">{data.token.value}</p>
                   <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
                     {qrUrl ? (
-                      <img src={qrUrl} alt="Código QR de asistencia" className={`w-56 h-56 sm:w-64 sm:h-64 ${flash ? 'opacity-40' : ''}`} />
+                      <img src={qrUrl} alt="Código QR de asistencia" className={`w-64 h-64 sm:w-80 sm:h-80 max-w-full ${flash ? 'opacity-40' : ''}`} />
                     ) : (
                       <QrGraphic seed={data.token.value} dimmed={flash} />
                     )}
