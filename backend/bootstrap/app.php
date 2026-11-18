@@ -6,6 +6,7 @@ use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\ResetAuthGuard;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -39,6 +40,19 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->is('api/*') || $request->expectsJson()) {
                 return response()->json(['message' => 'No autenticado.'], 401);
+            }
+
+            return null;
+        });
+
+        $exceptions->render(function (QueryException $e, Request $request) {
+            $previous = $e->getPrevious();
+            $sqlState = $previous instanceof \PDOException ? (string) $previous->getCode() : '';
+            $unreachable = in_array($sqlState, ['7', '08006', '08001', '08004'], true);
+            if (($request->is('api/*') || $request->expectsJson()) && $unreachable) {
+                return response()->json([
+                    'message' => 'No se pudo conectar con la base de datos.',
+                ], 503);
             }
 
             return null;

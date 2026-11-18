@@ -1,0 +1,213 @@
+:root {
+  color-scheme: light;
+  --c-on-tertiary: 255 255 255;
+  --c-on-error: 255 255 255;
+  --c-on-surface-variant: 67 70 84;
+  --c-outline: 115 118 133;
+  --c-on-secondary-fixed-variant: 0 82 54;
+  --c-surface-tint: 27 86 205;
+  --c-inverse-surface: 40 48 68;
+  --c-surface-container-highest: 218 226 253;
+  --c-on-primary: 255 255 255;
+  --c-primary-container: 0 75 195;
+  --c-on-secondary-container: 0 113 77;
+  --c-primary-fixed: 219 225 255;
+  --c-error: 186 26 26;
+  --c-secondary-container: 108 248 187;
+  --c-tertiary: 89 54 0;
+  --c-on-secondary-fixed: 0 33 19;
+  --c-error-container: 255 218 214;
+  --c-secondary-fixed-dim: 78 222 163;
+  --c-surface-container-high: 226 231 255;
+  --c-on-primary-container: 183 200 255;
+  --c-on-secondary: 255 255 255;
+  --c-on-tertiary-fixed: 42 23 0;
+  --c-on-error-container: 147 0 10;
+  --c-outline-variant: 195 198 214;
+  --c-tertiary-fixed-dim: 255 185 95;
+  --c-secondary: 0 108 73;
+  --c-surface-container-low: 242 243 255;
+  --c-surface-bright: 250 248 255;
+  --c-inverse-on-surface: 238 240 255;
+  --c-on-primary-fixed: 0 24 74;
+  --c-primary-fixed-dim: 179 197 255;
+  --c-surface: 250 248 255;
+  --c-on-surface: 19 27 46;
+  --c-on-background: 19 27 46;
+  --c-tertiary-fixed: 255 221 184;
+  --c-surface-container-lowest: 255 255 255;
+  --c-surface-container: 234 237 255;
+  --c-primary: 0 54 146;
+  --c-inverse-primary: 179 197 255;
+  --c-surface-dim: 210 217 244;
+  --c-background: 250 248 255;
+  --c-on-tertiary-fixed-variant: 101 62 0;
+  --c-on-tertiary-container: 255 189 107;
+  --c-on-primary-fixed-variant: 0 63 165;
+  --c-tertiary-container: 120 75 0;
+  --c-secondary-fixed: 111 251 190;
+  --c-surface-variant: 218 226 253;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --c-surface: 15 20 36;
+  --c-background: 15 20 36;
+  --c-on-surface: 236 239 255;
+  --c-on-background: 236 239 255;
+  --c-on-surface-variant: 196 204 230;
+  --c-outline: 176 184 210;
+  --c-outline-variant: 90 100 130;
+  --c-surface-bright: 36 46 74;
+  --c-surface-dim: 10 14 26;
+  --c-surface-container-lowest: 20 27 48;
+  --c-surface-container-low: 26 34 58;
+  --c-surface-container: 32 42 70;
+  --c-surface-container-high: 42 54 86;
+  --c-surface-container-highest: 52 66 102;
+  --c-surface-variant: 42 54 86;
+  --c-primary: 179 197 255;
+  --c-on-primary: 0 24 74;
+  --c-primary-container: 179 197 255;
+  --c-on-primary-container: 0 24 74;
+  --c-primary-fixed: 26 36 64;
+  --c-primary-fixed-dim: 140 164 230;
+  --c-on-primary-fixed: 236 239 255;
+  --c-on-primary-fixed-variant: 179 197 255;
+  --c-inverse-primary: 0 54 146;
+  --c-inverse-surface: 236 239 255;
+  --c-inverse-on-surface: 15 20 36;
+  --c-surface-tint: 179 197 255;
+  --c-secondary: 111 251 190;
+  --c-on-secondary: 0 40 24;
+  --c-secondary-container: 0 90 62;
+  --c-on-secondary-container: 210 255 234;
+  --c-secondary-fixed: 0 70 48;
+  --c-secondary-fixed-dim: 78 222 163;
+  --c-on-secondary-fixed: 210 255 234;
+  --c-on-secondary-fixed-variant: 111 251 190;
+  --c-tertiary: 255 189 107;
+  --c-on-tertiary: 42 23 0;
+  --c-tertiary-container: 255 189 107;
+  --c-on-tertiary-container: 42 23 0;
+  --c-tertiary-fixed: 70 42 0;
+  --c-tertiary-fixed-dim: 255 185 95;
+  --c-on-tertiary-fixed: 255 236 214;
+  --c-on-tertiary-fixed-variant: 255 189 107;
+  --c-error: 255 180 176;
+  --c-on-error: 80 0 8;
+  --c-error-container: 147 0 10;
+  --c-on-error-container: 255 218 214;
+}
+
+[data-contrast='high'] {
+  --c-surface: 255 255 255;
+  --c-background: 255 255 255;
+  --c-on-surface: 0 0 0;
+  --c-on-background: 0 0 0;
+  --c-on-surface-variant: 0 0 0;
+  --c-outline: 0 0 0;
+  --c-primary: 0 32 96;
+  --c-on-primary: 255 255 255;
+  --c-primary-container: 0 32 96;
+  --c-surface-container-lowest: 255 255 255;
+  --c-surface-container-low: 255 255 255;
+  --c-surface-container: 245 245 245;
+}
+
+[data-theme='dark'][data-contrast='high'] {
+  --c-surface: 0 0 0;
+  --c-background: 0 0 0;
+  --c-on-surface: 255 255 255;
+  --c-on-background: 255 255 255;
+  --c-on-surface-variant: 255 255 255;
+  --c-outline: 255 255 255;
+  --c-primary: 255 255 255;
+  --c-on-primary: 0 0 0;
+  --c-primary-container: 255 255 255;
+  --c-surface-container-lowest: 0 0 0;
+  --c-surface-container-low: 12 12 12;
+  --c-surface-container: 18 18 18;
+  --c-surface-container-high: 28 28 28;
+}
+
+html[data-text-size='lg'] { font-size: 112.5%; }
+html[data-text-size='xl'] { font-size: 125%; }
+html[data-text-size='xxl'] { font-size: 150%; }
+
+html[data-spacing='roomy'] body {
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+}
+
+html[data-links='on'] a {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  font-weight: 600;
+}
+
+html[data-easy='on'] main p,
+html[data-easy='on'] main li {
+  max-width: 68ch;
+  line-height: 1.7;
+}
+
+html[data-motion='reduce'] *,
+html[data-motion='reduce'] *::before,
+html[data-motion='reduce'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion='full']) *,
+  html:not([data-motion='full']) *::before,
+  html:not([data-motion='full']) *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid rgb(var(--c-primary));
+  outline-offset: 3px;
+}
+
+.geo-skip {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 80;
+  transform: translateY(-150%);
+  background: rgb(var(--c-primary));
+  color: rgb(var(--c-on-primary));
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+}
+
+.geo-skip:focus {
+  transform: none;
+}
+
+.geo-a11y-button,
+.geo-a11y-panel button,
+.geo-a11y-panel select {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
+.geo-read-target {
+  outline: 3px solid rgb(var(--c-primary));
+  outline-offset: 4px;
+  background: rgb(var(--c-primary-fixed) / 0.85);
+  border-radius: 0.5rem;
+}
+
+html[data-guided='on'] main {
+  scroll-padding-top: 5rem;
+}

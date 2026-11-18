@@ -7,8 +7,8 @@ import { getReportes } from '../services/asistenciaService';
 import { downloadCsv, escapeHtml, printHtml } from '../utils/attendance';
 
 export default function Reportes() {
-  const [draft, setDraft] = useState({ from: '', to: '', student: '' });
-  const [filters, setFilters] = useState({ from: '', to: '', student: '' });
+  const [draft, setDraft] = useState({ from: '', to: '', student: '', grade: '' });
+  const [filters, setFilters] = useState({ from: '', to: '', student: '', grade: '' });
   const load = useCallback(() => getReportes(filters), [filters]);
   const { data, error, loading, reload } = useApiResource(load);
   const { toast, showToast } = useToast();
@@ -38,6 +38,7 @@ export default function Reportes() {
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
               <div>
                 <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline">Reportes y estadísticas</span>
+                <p className="font-label-md text-primary">{data.institution?.name}</p>
                 <h1 className="font-headline-lg text-headline-lg text-on-surface font-bold">{data.title}</h1>
                 <p className="font-body-md text-on-surface-variant">{data.subtitle}</p>
               </div>
@@ -58,6 +59,7 @@ export default function Reportes() {
               <input type="date" value={draft.from} onChange={(event) => setDraft((current) => ({ ...current, from: event.target.value }))} className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Desde" />
               <input type="date" value={draft.to} onChange={(event) => setDraft((current) => ({ ...current, to: event.target.value }))} className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Hasta" />
               <input value={draft.student} onChange={(event) => setDraft((current) => ({ ...current, student: event.target.value }))} placeholder="Estudiante o DNI" className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Estudiante" />
+              <input value={draft.grade} onChange={(event) => setDraft((current) => ({ ...current, grade: event.target.value }))} placeholder="Grado o sección" className="bg-surface-container-low rounded-lg px-3 py-2" aria-label="Grado o sección" />
               <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Filtrar</button>
             </form>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
@@ -98,7 +100,7 @@ export default function Reportes() {
                     <thead>
                       <tr className="bg-surface-container-low text-outline font-label-sm uppercase">
                         {data.columns.map((column) => (
-                          <th key={column} className="px-4 py-3">{column}</th>
+                          <th key={column} scope="col" className="px-4 py-3">{column}</th>
                         ))}
                       </tr>
                     </thead>

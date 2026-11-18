@@ -204,7 +204,7 @@ export default function DashboardAuxiliar() {
                   try {
                     const result = await validateQr(value);
                     setData(result.panel);
-                    showToast(result.message);
+                    showToast(result.message, [result.student?.name, result.student?.grade].filter(Boolean).join(' · '));
                   } catch (err) {
                     showToast(err.message);
                   }
@@ -218,7 +218,7 @@ export default function DashboardAuxiliar() {
                     const result = await validateQr(qrValue.trim());
                     setData(result.panel);
                     setQrValue('');
-                    showToast(result.message);
+                    showToast(result.message, [result.student?.name, result.student?.grade].filter(Boolean).join(' · '));
                   } catch (err) {
                     showToast(err.message);
                   }
@@ -228,10 +228,14 @@ export default function DashboardAuxiliar() {
                   value={qrValue}
                   onChange={(event) => setQrValue(event.target.value)}
                   placeholder="Código QR del estudiante"
-                  className="flex-1 bg-surface-container-low rounded-lg px-3 py-2 font-mono"
+                  className="min-h-11 flex-1 bg-surface-container-low rounded-lg px-3 py-2 font-mono"
                   aria-label="Código QR del estudiante"
+                  autoComplete="off"
+                  autoCapitalize="none"
+                  spellCheck="false"
+                  inputMode="text"
                 />
-                <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Validar QR</button>
+                <button type="submit" className="min-h-11 px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold">Validar QR</button>
               </form>
               <form
                 className="mb-4 flex flex-col sm:flex-row gap-2"

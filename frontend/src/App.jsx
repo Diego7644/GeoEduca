@@ -11,6 +11,9 @@ import Reportes from './pages/Reportes';
 import Configuracion from './pages/Configuracion';
 import DashboardDocente from './pages/DashboardDocente';
 import DashboardAdmin from './pages/DashboardAdmin';
+import SkipLink from './components/SkipLink';
+import AccessibilityPanel from './components/AccessibilityPanel';
+import GuidedReading from './components/GuidedReading';
 
 function HomeRedirect() {
   const { user, status, retry, abandonSession } = useAuth();
@@ -23,6 +26,8 @@ function HomeRedirect() {
 
 export default function App() {
   return (
+    <>
+    <SkipLink />
     <Routes>
       <Route path="/" element={<HomeRedirect />} />
       <Route path="/login" element={<Login />} />
@@ -49,5 +54,8 @@ export default function App() {
 
       <Route path="*" element={<HomeRedirect />} />
     </Routes>
+    <GuidedReading />
+    <AccessibilityPanel />
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { resolveApiBase } from './apiBase';
 import { shouldDropSession } from './sessionPolicy';
 
 export const TOKEN_KEY = 'geoeduca_token';
@@ -16,7 +17,7 @@ export function setUnauthorizedHandler(handler) {
  * Todas las llamadas reales deben pasar por esta instancia.
  */
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: resolveApiBase(import.meta.env.VITE_API_URL, globalThis.location?.hostname),
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

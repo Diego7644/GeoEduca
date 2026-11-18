@@ -19,6 +19,8 @@ Thumbs.db
 # Variables de entorno: nunca versionar, salvo las plantillas .env.example
 .env.*
 !.env.example
+!.env.demo
+!backend/.env.demo
 
 # Credenciales y claves
 *.pem

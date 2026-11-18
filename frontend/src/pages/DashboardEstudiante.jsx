@@ -111,7 +111,7 @@ export default function DashboardEstudiante() {
   }, [data?.token?.value]);
 
   useEffect(() => {
-    if (!data?.gps || !navigator.geolocation) {
+    if (!data?.gps?.available || !navigator.geolocation) {
       if (data?.gps) setPosition({ status: 'unsupported', meters: null });
       return undefined;
     }
@@ -136,6 +136,7 @@ export default function DashboardEstudiante() {
 
   const offset = CIRCUMFERENCE - (timeLeft / TOTAL_TIME) * CIRCUMFERENCE;
   const gpsCopy = useMemo(() => {
+    if (!data?.gps?.available) return { label: 'Sin coordenada oficial', detail: 'El local no tiene un punto GPS cargado. La asistencia se registra con QR o en mesa.' };
     if (!data?.gps) return { label: 'GPS', detail: '' };
     if (position.status === 'locating') return { label: 'Buscando señal', detail: 'Esperando la ubicación de este dispositivo.' };
     if (position.status === 'denied') return { label: 'Ubicación no disponible', detail: 'Autoriza el GPS o presenta tu carnet en la mesa del auxiliar.' };
@@ -203,10 +204,10 @@ export default function DashboardEstudiante() {
                   <p className="font-body-sm text-on-surface-variant text-center mb-space-md">
                     El auxiliar valida este código en el servidor. Caduca en {timeLeft}s y solo puede usarse una vez.
                   </p>
-                  <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value">{data.token.value}</p>
+                  <p className="font-mono text-label-sm break-all text-center mb-space-md" data-testid="student-qr-value" data-geo-private="true">{data.token.value}</p>
                   <div className="relative p-space-md bg-surface-container-lowest rounded-2xl shadow-md">
                     {qrUrl ? (
-                      <img src={qrUrl} alt="Código QR de asistencia" className={`w-56 h-56 sm:w-64 sm:h-64 ${flash ? 'opacity-40' : ''}`} />
+                      <img src={qrUrl} alt="Código QR de asistencia" className={`w-64 h-64 sm:w-80 sm:h-80 max-w-full ${flash ? 'opacity-40' : ''}`} />
                     ) : (
                       <QrGraphic seed={data.token.value} dimmed={flash} />
                     )}
@@ -378,7 +379,7 @@ export default function DashboardEstudiante() {
                     <table className="w-full text-left text-body-sm">
                       <thead>
                         <tr className="text-outline uppercase font-label-sm">
-                          {['Fecha', 'Estado', 'Ingreso', 'Salida', 'Origen'].map((label) => <th key={label} className="px-2 py-2">{label}</th>)}
+                          {['Fecha', 'Estado', 'Ingreso', 'Salida', 'Origen'].map((label) => <th key={label} scope="col" className="px-2 py-2">{label}</th>)}
                         </tr>
                       </thead>
                       <tbody>
@@ -395,15 +396,14 @@ export default function DashboardEstudiante() {
                     </table>
                   )}
                 </div>
-                <div className="relative rounded-2xl overflow-hidden shadow-sm h-36 bg-surface-container">
-                  <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${IMAGES.campus}')` }} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/40 to-transparent flex items-end p-space-md text-surface-bright">
-                    <div>
-                      <span className="font-label-sm uppercase">Ubicación del colegio</span>
-                      <p className="font-bold">{data.campus.name}</p>
-                      <p className="font-body-sm opacity-80">{data.campus.address}</p>
-                    </div>
-                  </div>
+                <div className="rounded-2xl bg-surface-container-low p-space-lg shadow-sm">
+                  <span className="font-label-sm uppercase text-outline">Institución</span>
+                  <p className="font-bold text-on-surface">{data.institution?.name || data.campus.name}</p>
+                  <p className="font-body-sm text-on-surface-variant">{data.institution?.address || data.campus.address}</p>
+                  {data.institution?.modular_code && (
+                    <p className="font-body-sm text-outline mt-1">Código modular {data.institution.modular_code} · {data.institution.ugel} · {data.institution.level}</p>
+                  )}
+                  <p className="font-label-sm text-outline mt-2">No hay un escudo oficial cargado.</p>
                 </div>
               </div>
             </div>

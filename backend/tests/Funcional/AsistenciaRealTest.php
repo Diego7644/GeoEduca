@@ -167,4 +167,45 @@ final class AsistenciaRealTest extends TestCase
         Artisan::call('geoeduca:import-json', ['--dry-run' => true]);
         $this->assertSame($antes, Student::query()->count());
     }
+
+    #[TestDox('El reporte separa la asistencia por fecha, grado y sección')]
+    public function test_el_reporte_filtra_por_fecha_grado_y_seccion(): void
+    {
+        $cuarto = Student::query()->where('dni', '71405255')->firstOrFail();
+        $quinto = Student::query()->where('dni', '74829104')->firstOrFail();
+        AttendanceRecord::query()->create([
+            'student_id' => $cuarto->id,
+            'attended_on' => '2026-11-17',
+            'status' => AttendanceRecord::STATUS_ON_TIME,
+            'source' => 'qr',
+            'entry_time' => '07:50:00',
+        ]);
+        AttendanceRecord::query()->create([
+            'student_id' => $quinto->id,
+            'attended_on' => '2026-11-16',
+            'status' => AttendanceRecord::STATUS_LATE,
+            'source' => 'qr',
+            'entry_time' => '08:20:00',
+        ]);
+
+        User::query()->create([
+            'dni' => '90000007',
+            'role' => User::ROLE_ADMIN,
+            'name' => 'Admin de reportes',
+            'role_label' => 'Administrador',
+            'password' => 'Clave-admin-07',
+        ]);
+        $token = $this->postJson('/api/auth/login', [
+            'identifier' => '90000007',
+            'password' => 'Clave-admin-07',
+            'role' => 'admin',
+        ])->assertOk()->json('token');
+
+        $porGrado = $this->withToken($token)->getJson('/api/asistencia/reportes?from=2026-11-17&to=2026-11-17&grade=4to%20Sec%20B')
+            ->assertOk();
+        $this->assertSame(['4to Sec B'], array_column($porGrado->json('rows'), 2));
+
+        $porSeccion = $this->withToken($token)->getJson('/api/asistencia/reportes?grade=Sec%20A')->assertOk();
+        $this->assertSame(['5to Sec A'], array_column($porSeccion->json('rows'), 2));
+    }
 }

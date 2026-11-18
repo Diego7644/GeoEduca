@@ -24,6 +24,7 @@ export const getReportes = (params = {}) => {
   if (params.from) query.set('from', params.from);
   if (params.to) query.set('to', params.to);
   if (params.student) query.set('student', params.student);
+  if (params.grade) query.set('grade', params.grade);
   const suffix = query.toString();
 
   return request('get', suffix ? `/asistencia/reportes?${suffix}` : '/asistencia/reportes');

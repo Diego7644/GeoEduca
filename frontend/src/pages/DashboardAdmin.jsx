@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import PageState from '../components/PageState';
 import Toast, { useToast } from '../components/Toast';
@@ -31,6 +31,13 @@ export default function DashboardAdmin() {
   const [editForm, setEditForm] = useState(null);
   const [renameForm, setRenameForm] = useState({ userId: '', name: '' });
   const [logs, setLogs] = useState([]);
+  const [directoryQuery, setDirectoryQuery] = useState('');
+  const visibleStudents = useMemo(() => {
+    const students = data?.students ?? [];
+    const needle = directoryQuery.trim().toLowerCase();
+    if (!needle) return students;
+    return students.filter((student) => [student.name, student.dni, student.grade, student.code].join(' ').toLowerCase().includes(needle));
+  }, [data, directoryQuery]);
 
   const link = async (event) => {
     event.preventDefault();
@@ -141,10 +148,16 @@ export default function DashboardAdmin() {
               }}>Desvincular</button>
             </form>
             <div className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
-              {data.students.map((student) => (
+              <label className="block px-6 pt-4 font-label-sm text-outline">
+                Buscar por grado o sección
+                <input value={directoryQuery} onChange={(event) => setDirectoryQuery(event.target.value)} placeholder="Ej. 1.º A" className="mt-1 w-full bg-surface-container-low rounded-lg px-3 py-2 text-on-surface" />
+              </label>
+              {visibleStudents.length === 0 && <p className="px-6 py-4 text-outline">Ningún estudiante coincide con ese grado o sección.</p>}
+              {visibleStudents.map((student) => (
                 <div key={student.id} className="px-6 py-4 border-b border-surface-container">
                   <div className="flex justify-between gap-3">
-                    <p className="font-semibold text-on-surface">{student.name} · {student.dni}</p>
+                    <p className="font-semibold text-on-surface">{student.name} · {student.grade}</p>
+                    <p className="font-body-sm text-outline">DNI {student.dni}</p>
                     <button type="button" className="text-primary font-semibold" onClick={() => setEditForm({ id: student.id, name: student.name, grade: student.grade, code: student.code })}>Editar</button>
                   </div>
                   <p className="font-body-sm text-on-surface-variant">

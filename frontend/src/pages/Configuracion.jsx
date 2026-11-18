@@ -59,6 +59,11 @@ export default function Configuracion() {
             <div>
               <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline">Configuración del colegio</span>
               <h1 className="font-headline-lg text-headline-lg text-on-surface font-bold">Parámetros de la jornada</h1>
+              {data.institution && (
+                <p className="font-body-sm text-on-surface-variant mt-2">
+                  {data.institution.name}. Código modular {data.institution.modular_code}. {data.institution.ugel}. {data.institution.level}. Fuente: {data.institution.source}.
+                </p>
+              )}
               <p className="font-body-md text-on-surface-variant">
                 {data.can_edit
                   ? 'Estos valores cambian el límite de ingreso, la salida y la puntualidad que ven estudiantes y familias.'

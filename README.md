@@ -37,23 +37,48 @@ El código de la aplicación está en `backend/` y `frontend/`. La guía académ
 | Justificaciones | El apoderado envía; auxiliar, docente de tutoría o administración revisan |
 | GPS y NFC | El GPS no marca asistencia. No hay molinetes ni lector NFC |
 
-Las cuentas locales salen de `db:seed` cuando `APP_ENV=local` y `GEO_SEED_PROTOTYPE=true`. La contraseña es `GEO_DEV_PASSWORD` en `backend/.env` y no se publica. La matriz está en [`docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md).
+Las cuentas de demostración salen de `db:seed`. La contraseña de la plantilla está en [`docs/02-desarrollo/INSTALACION-DEMO.md`](docs/02-desarrollo/INSTALACION-DEMO.md). La matriz está en [`docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md`](docs/02-desarrollo/MATRIZ-CUMPLIMIENTO-FUNCIONAL.md).
 
-## Instalación y ejecución
+## Instalación desde cero
 
-Hacen falta PHP 8.2+, Composer, Node.js 18+ y npm. El login real necesita las tablas (`php artisan migrate`). Sin PostgreSQL se puede usar SQLite solo para arrancar. Ver [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
+Hacen falta PHP 8.2+ con `pdo_pgsql`, Composer, Node.js 18+, npm y Docker. En Windows también puede usarse [`scripts/instalar-demo.ps1`](scripts/instalar-demo.ps1), que copia `backend/.env.demo` solo si todavía no existe `backend/.env`.
 
-### Backend
+La plantilla de demostración crea administrador, auxiliar, padre/tutor y tres estudiantes sintéticos de 1.º A, 3.º B y 5.º C. La contraseña documentada es `prueba123`. El detalle está en [`docs/02-desarrollo/INSTALACION-DEMO.md`](docs/02-desarrollo/INSTALACION-DEMO.md).
+
+1. Clonar el repositorio y entrar en la carpeta.
+2. Copiar la plantilla de entorno y generar la clave de Laravel:
 
 ```bash
 cd backend
 composer install
-cp .env.example .env          # en Windows: copy .env.example .env
+copy .env.demo .env
 php artisan key:generate
-php artisan serve             # http://127.0.0.1:8000
 ```
 
-Para login y recuperación: defina `DB_PASSWORD` en `backend/.env`, levante Docker si usa PostgreSQL y ejecute `php artisan migrate` (instrucciones en la guía de PostgreSQL).
+En Linux o macOS, `cp .env.demo .env`.
+
+3. No edite un `.env` personal encima de una base que ya tenga datos. `DB_PASSWORD` de la plantilla solo abre el PostgreSQL nuevo de Docker.
+4. Desde la raíz del repositorio:
+
+```bash
+docker compose --env-file backend/.env up -d
+cd backend
+php artisan migrate
+php artisan db:seed
+php artisan serve
+```
+
+`db:seed` crea la configuración de la I.E. Mariscal Castilla y las cuentas de la tabla de instalación. No imprime la contraseña y no borra asistencias ya guardadas.
+
+5. En otra terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Vite reenvía `/api` a `http://127.0.0.1:8000`. El detalle de PostgreSQL está en [`docs/02-desarrollo/CONFIGURACION-POSTGRES.md`](docs/02-desarrollo/CONFIGURACION-POSTGRES.md).
 
 ### Frontend
 

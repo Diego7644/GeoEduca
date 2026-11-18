@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\SchoolSetting;
+use App\Support\InstitutionIdentity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,17 +16,17 @@ class SchoolSettingFactory extends Factory
     public function definition(): array
     {
         return [
-            'school' => 'Colegio de desarrollo',
-            'campus' => 'Sede Central',
-            'address' => 'Av. Ejemplo 100',
+            'school' => InstitutionIdentity::NAME,
+            'campus' => InstitutionIdentity::CAMPUS,
+            'address' => InstitutionIdentity::ADDRESS,
             'year' => '2026',
             'entry_limit' => '08:00',
             'exit_time' => '14:30',
             'geofence_m' => 50,
             'promotion_min' => 85,
             'tolerance_min' => 10,
-            'lat' => -12.086200,
-            'lng' => -77.054300,
+            'lat' => null,
+            'lng' => null,
         ];
     }
 }

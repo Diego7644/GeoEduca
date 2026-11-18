@@ -4,6 +4,7 @@ namespace App\Services\Asistencia;
 
 use App\Auth\DemoAccounts;
 use App\Models\User;
+use App\Support\InstitutionIdentity;
 
 /**
  * Estado de demostración (archivo JSON, sin BD).
@@ -1358,17 +1359,17 @@ class AsistenciaStore
             'linked' => ['2' => [1, 4]],
             'manual_count' => 7,
             'config' => [
-                'school' => 'Colegio San Gabriel',
-                'campus' => 'Sede Central',
-                'address' => 'Av. Las Palmeras 450, Urb. Monterrico',
+                'school' => InstitutionIdentity::NAME,
+                'campus' => InstitutionIdentity::CAMPUS,
+                'address' => InstitutionIdentity::ADDRESS,
                 'year' => '2026',
                 'entry_limit' => '08:00',
                 'exit_time' => '14:30',
                 'geofence_m' => 50,
                 'promotion_min' => 85,
                 'tolerance_min' => 10,
-                'lat' => -12.0862,
-                'lng' => -77.0543,
+                'lat' => null,
+                'lng' => null,
             ],
             'audit' => [
                 ['id' => 'a1', 'time' => '07:44:12 AM', 'name' => 'Mateo Salazar Peña', 'grade' => '1ro Secundaria B', 'reason' => 'Olvido de smartphone (carnet físico)', 'dot' => 'bg-tertiary', 'notif' => ['sms', 'SMS enviado'], 'status' => 'Ingresó', 'operator' => 'Aux. Ricardo Paz', 'fresh' => null],

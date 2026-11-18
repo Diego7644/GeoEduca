@@ -3,6 +3,9 @@ import Icon from './Icon';
 import SafeImage from './SafeImage';
 import { useAuth } from '../context/AuthContext';
 import { NAV_ITEMS } from '../config/roles';
+import useApiResource from '../hooks/useApiResource';
+import { getConfiguracion } from '../services/asistenciaService';
+import { useCallback } from 'react';
 import { IMAGES } from '../config/images';
 
 const BASE = 'flex items-center gap-space-sm px-space-md py-2.5 rounded-lg transition-all';
@@ -15,6 +18,10 @@ const IDLE = 'text-on-surface-variant hover:bg-surface-container-high hover:text
  */
 export default function Sidebar({ open = false, onClose = () => {} }) {
   const { user } = useAuth();
+  const loadInstitution = useCallback(() => getConfiguracion(), []);
+  const { data: institutionData } = useApiResource(loadInstitution);
+  const institution = institutionData?.institution;
+  const campus = institutionData?.config;
   const items = NAV_ITEMS.filter((item) => {
     if (item.roles && !item.roles.includes(user?.role)) return false;
     if (item.staffKinds && !item.staffKinds.includes(user?.staffKind)) return false;
@@ -87,11 +94,11 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
               <span className="font-label-md text-label-md uppercase tracking-wider font-semibold">Sede Académica</span>
             </div>
             <div className="font-title-lg text-body-md font-semibold text-on-surface leading-tight">
-              Colegio San Gabriel
+              {institution?.name || campus?.school || 'Institución no cargada'}
             </div>
             <div className="flex items-center justify-between text-outline font-label-sm text-label-sm pt-space-xs">
-              <span>Sede Central</span>
-              <span className="bg-surface-container-highest text-primary font-semibold px-1.5 py-0.5 rounded">2025</span>
+              <span>{institution?.campus || campus?.campus || 'Sede'}</span>
+              <span className="bg-surface-container-highest text-primary font-semibold px-1.5 py-0.5 rounded">{campus?.year || ''}</span>
             </div>
           </div>
         </div>

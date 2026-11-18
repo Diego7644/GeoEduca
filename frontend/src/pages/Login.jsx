@@ -74,7 +74,7 @@ export default function Login() {
 
   return (
     <div className="bg-surface font-body-md text-on-surface antialiased flex items-center justify-center min-h-screen">
-      <main className="w-full">
+      <main id="contenido" className="w-full">
         <div className="flex flex-col w-full items-center justify-center py-10 px-4 sm:px-6 relative overflow-hidden">
           <div className="absolute -top-36 -left-36 w-96 h-96 rounded-full bg-surface-container-high/40 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-36 -right-36 w-96 h-96 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none" />
@@ -92,7 +92,7 @@ export default function Login() {
               </div>
               <h1 className="font-headline-lg text-headline-lg text-on-surface">Iniciar Sesión en GEOEDUCA</h1>
               <p className="font-body-md text-body-md text-on-surface-variant mt-1.5 max-w-md">
-                Plataforma oficial de control biométrico y asistencia escolar en tiempo real.
+                Control de asistencia de la Institución Educativa Mariscal Castilla, El Tambo, Huancayo.
               </p>
             </div>
 
