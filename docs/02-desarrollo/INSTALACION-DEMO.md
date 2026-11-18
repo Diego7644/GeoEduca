@@ -2,7 +2,7 @@
 
 GeoEduca se instala con Docker, las migraciones y `db:seed`. No hace falta importar una base existente.
 
-El repositorio público no incluye nombres ni DNI identificables. Los tres estudiantes de una instalación nueva son sintéticos y cubren 1.º A, 3.º B y 5.º C. La contraseña de todas las cuentas de esta plantilla es `prueba123`. La base Docker usa la clave local `geoeduca-demo`, distinta de cualquier `.env` personal.
+El repositorio público no incluye nombres ni DNI identificables. Los tres estudiantes de una instalación nueva son sintéticos y cubren 1.º A, 3.º B y 5.º C. La contraseña de esas cuentas ficticias es `prueba123`. La clave de PostgreSQL no está en el repositorio: `instalar-demo.ps1` genera una distinta en cada instalación y la guarda solo en `backend/.env`.
 
 ## Windows
 

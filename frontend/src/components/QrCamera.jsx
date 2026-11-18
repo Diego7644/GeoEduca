@@ -55,10 +55,15 @@ export default function QrCamera({ onCode }) {
     setActive(false);
   };
 
-  useEffect(() => () => {
-    const instance = scanner.current;
-    scanner.current = null;
-    releaseScanner(instance, document.getElementById(regionId));
+  useEffect(() => {
+    const id = regionId;
+    return () => {
+      const instance = scanner.current;
+      scanner.current = null;
+      releaseScanner(instance, document.getElementById(id)).catch(() => {
+        /* Al desmontar ya no hay pantalla donde mostrar el fallo de cierre. */
+      });
+    };
   }, [regionId]);
 
   const start = async () => {
@@ -79,7 +84,14 @@ export default function QrCamera({ onCode }) {
       if (seen.current) return;
       seen.current = true;
       const value = String(text || '').trim();
-      stop().finally(() => onCode(value));
+      stop()
+        .catch(() => {
+          /* El código leído se entrega aunque el cierre de la cámara falle. */
+        })
+        .then(() => onCode(value))
+        .catch(() => {
+          /* El panel ya muestra el error de validación si onCode lo rechaza. */
+        });
     };
 
     let lastError = null;
@@ -136,12 +148,28 @@ export default function QrCamera({ onCode }) {
       />
       <div className="flex flex-col sm:flex-row gap-2">
         {!active && (
-          <button type="button" onClick={start} className="min-h-11 px-4 py-2 rounded-lg bg-secondary text-on-secondary font-semibold">
+          <button
+            type="button"
+            onClick={() => {
+              start().catch((err) => {
+                busy.current = false;
+                setActive(false);
+                setError(cameraFailureMessage(err, { secure: window.isSecureContext, mediaDevices: Boolean(navigator.mediaDevices?.getUserMedia) }));
+              });
+            }}
+            className="min-h-11 px-4 py-2 rounded-lg bg-secondary text-on-secondary font-semibold"
+          >
             Abrir cámara
           </button>
         )}
         {active && (
-          <button type="button" onClick={stop} className="min-h-11 px-4 py-2 rounded-lg bg-surface-container-high font-semibold">
+          <button
+            type="button"
+            onClick={() => {
+              stop().catch(() => setError('No se pudo cerrar la cámara. Vuelve a abrirla o recarga el panel.'));
+            }}
+            className="min-h-11 px-4 py-2 rounded-lg bg-surface-container-high font-semibold"
+          >
             Cerrar cámara
           </button>
         )}

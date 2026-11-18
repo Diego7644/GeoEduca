@@ -12,6 +12,14 @@ if (Test-Path $envFile) {
 }
 
 Copy-Item $demo $envFile
+$alphabet = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'.ToCharArray()
+$bytes = New-Object byte[] 24
+[System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
+$dbPassword = -join ($bytes | ForEach-Object { $alphabet[$_ % $alphabet.Length] })
+$lines = Get-Content $envFile
+$lines = $lines | ForEach-Object { if ($_ -like 'DB_PASSWORD=*') { "DB_PASSWORD=$dbPassword" } else { $_ } }
+[System.IO.File]::WriteAllLines($envFile, $lines)
+Write-Host 'Se creo una contrasena nueva de PostgreSQL solo en backend/.env. No forma parte del repositorio.'
 $busy = Get-NetTCPConnection -LocalPort 5432 -State Listen -ErrorAction SilentlyContinue
 if ($busy) {
     $lines = Get-Content $envFile
